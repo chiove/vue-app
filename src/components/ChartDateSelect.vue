@@ -7,7 +7,7 @@
     <div class="date-select" v-if="displayState">
       <van-datetime-picker
         v-model="currentDate"
-        type="year-month"
+        type="date"
         @cancel="cancel"
         @confirm="confirm"
         :max-date="maxDate"
@@ -22,7 +22,7 @@
   import { DatetimePicker } from 'vant'
   import units from "../units/tools"
   Vue.use(DatetimePicker)
-  const fullDate = units.getCurrentTime("year")
+  const fullDate = units.getCurrentTime("date")
   export default {
     components:{DatetimePicker},
     name: "chart-date-select",
@@ -36,9 +36,9 @@
     data() {
       return {
         currentDate: new Date(),
-        maxDate:new Date(fullDate.year,fullDate.month),
+        maxDate:new Date(fullDate.year,fullDate.month,fullDate.day),
         displayState:false,
-        dateValue:`${fullDate.year}年${fullDate.month}月`
+        dateValue:`${fullDate.year}年${fullDate.month}月${fullDate.day}`
       };
     },
     methods: {
@@ -47,6 +47,8 @@
           return `${value}年`;
         } else if (type === 'month') {
           return `${value}月`
+        } else if(type === 'day'){
+          return `${value}日`
         }
         return value;
       },
@@ -55,10 +57,11 @@
       },
       confirm:function (value) {
         this.displayState=false;
-        this.dateValue = `${value.getFullYear()}年${value.getMonth()+1}月`;
+        this.dateValue = `${value.getFullYear()}年${value.getMonth()+1}月${value.getDate()}日`;
         const selectDate = {
           year:value.getFullYear(),
-          month:value.getMonth()+1
+          month:value.getMonth()+1,
+          day:value.getDate()
         }
         this.$emit('selectDate',selectDate);
       },

@@ -7,7 +7,7 @@
     <div class="content-container">
       <div class="left-container" v-if="tabLeftActive">
           <div class="daily-statistical">
-            <!--<date-select v-on:selectDate="listenEvent" :fontSize="fontSize" :formate="format"></date-select>-->
+            <chart-date-select v-on:selectDate="listenEvent"></chart-date-select>
           </div>
       </div>
       <div class="right-container" v-if="tabRightActive">
@@ -20,9 +20,9 @@
 
 <script>
   import teacherCheckTab from '../components/TeacherCheckTab'
-  import dateSelect from '../components/DateSelect'
+  import chartDateSelect from '../components/ChartDateSelect'
   export default {
-    components:{teacherCheckTab,dateSelect},
+    components:{teacherCheckTab,chartDateSelect},
     name: "chart-statistical",
     created:function () {
 
@@ -50,7 +50,7 @@
         }
       },
       listenEvent:function (data) {
-
+          console.log(data)
       }
     }
   }

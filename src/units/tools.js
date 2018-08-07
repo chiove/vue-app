@@ -41,6 +41,8 @@ getCurrentTime:function getCurrentTime(type){
       currentdate = {year:year,month:Number(month)}
     }else if(type&&type==="hour"){
       currentdate =hours+":"+minutes+":"+seconds;
+    }else if(type&&type==="date"){
+      currentdate = {year:year,month:Number(month),day:Number(strDate)}
     }
     return currentdate ;
   }
