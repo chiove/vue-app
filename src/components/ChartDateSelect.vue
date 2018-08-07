@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="date-select-item">
-      <span @click="dateSelect">{{dateValue}}</span>
+      <span @click="dateSelect" class="date-select-text">{{dateValue}}</span>
       <img  class="select-down" src="../assets/selectDown.png">
     </div>
     <div class="date-select" v-if="displayState">
@@ -18,58 +18,58 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import { DatetimePicker } from 'vant'
-  import units from "../units/tools"
-  Vue.use(DatetimePicker)
-  const fullDate = units.getCurrentTime("date")
-  export default {
-    components:{DatetimePicker},
-    name: "chart-date-select",
-    created:function () {
+import Vue from 'vue'
+import { DatetimePicker } from 'vant'
+import units from '../units/tools'
+Vue.use(DatetimePicker)
+const fullDate = units.getCurrentTime('date')
+export default {
+  components: {DatetimePicker},
+  name: 'chart-date-select',
+  created: function () {
+    const selectDate = {
+      year: fullDate.year,
+      month: fullDate.month
+    }
+    this.$emit('selectDate', selectDate)
+  },
+  data () {
+    return {
+      currentDate: new Date(),
+      maxDate: new Date(fullDate.year, fullDate.month, fullDate.day),
+      displayState: false,
+      dateValue: `${fullDate.year}年${fullDate.month}月${fullDate.day}日`
+    }
+  },
+  methods: {
+    formatter (type, value) {
+      if (type === 'year') {
+        return `${value}年`
+      } else if (type === 'month') {
+        return `${value}月`
+      } else if (type === 'day') {
+        return `${value}日`
+      }
+      return value
+    },
+    cancel: function () {
+      this.displayState = false
+    },
+    confirm: function (value) {
+      this.displayState = false
+      this.dateValue = `${value.getFullYear()}年${value.getMonth() + 1}月${value.getDate()}日`
       const selectDate = {
-        year:fullDate.year,
-        month:fullDate.month
+        year: value.getFullYear(),
+        month: value.getMonth() + 1,
+        day: value.getDate()
       }
-      this.$emit('selectDate',selectDate)
+      this.$emit('selectDate', selectDate)
     },
-    data() {
-      return {
-        currentDate: new Date(),
-        maxDate:new Date(fullDate.year,fullDate.month,fullDate.day),
-        displayState:false,
-        dateValue:`${fullDate.year}年${fullDate.month}月${fullDate.day}`
-      };
-    },
-    methods: {
-      formatter(type, value) {
-        if (type === 'year') {
-          return `${value}年`;
-        } else if (type === 'month') {
-          return `${value}月`
-        } else if(type === 'day'){
-          return `${value}日`
-        }
-        return value;
-      },
-      cancel:function () {
-        this.displayState=false
-      },
-      confirm:function (value) {
-        this.displayState=false;
-        this.dateValue = `${value.getFullYear()}年${value.getMonth()+1}月${value.getDate()}日`;
-        const selectDate = {
-          year:value.getFullYear(),
-          month:value.getMonth()+1,
-          day:value.getDate()
-        }
-        this.$emit('selectDate',selectDate);
-      },
-      dateSelect:function () {
-        this.displayState=true
-      }
+    dateSelect: function () {
+      this.displayState = true
     }
   }
+}
 </script>
 
 <style scoped>
@@ -78,6 +78,9 @@
     font-size:28px;
     font-family:PingFang-SC-Medium;
     color:rgba(63,180,255,1);
+  }
+  .date-select-text{
+    font-size: 36px;
   }
   .select-down{
     height: 10px;
