@@ -188,7 +188,6 @@
     line-height:100px;
   }
   .data-form-line {
-    width:690px;
     height:2px;
     background:rgba(236,236,236,1);
     margin: auto;
@@ -214,7 +213,6 @@
     right: 11px;
   }
   .data-form-submit{
-    width:690px;
     height:94px;
     background:rgba(61,168,245,1);
     border-radius:8px;
