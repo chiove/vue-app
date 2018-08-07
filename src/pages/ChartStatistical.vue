@@ -6,18 +6,25 @@
     </div>
     <div class="content-container">
       <div class="left-container" v-if="tabLeftActive">
-          1111
+          <div class="daily-statistical">
+            <date-select v-on:selectDate="listenEvent" :fontSize="fontSize" :formate="format"></date-select>
+          </div>
       </div>
-      <div class="right-container" v-if="tabRightActive">222</div>
+      <div class="right-container" v-if="tabRightActive">
+        222
+      </div>
     </div>
-    <teacher-check-tab :pageName="pageName"></teacher-check-tab>
+    <teacher-check-tab :pageName="pageName">
+
+    </teacher-check-tab>
   </div>
 </template>
 
 <script>
   import teacherCheckTab from '../components/TeacherCheckTab'
+  import dateSelect from '../components/DateSelect'
   export default {
-    components:{teacherCheckTab},
+    components:{teacherCheckTab,dateSelect},
     name: "chart-statistical",
     created:function () {
 
@@ -26,7 +33,9 @@
       return {
         tabLeftActive:true,
         tabRightActive:false,
-        pageName:"ChartStatistical"
+        pageName:"ChartStatistical",
+        fontSize:'0.48rem',
+        format:'year-month-day'
       }
     },
     methods:{
@@ -41,6 +50,9 @@
           this.tabLeftActive=false
           this.tabRightActive=true
         }
+      },
+      listenEvent:function (data) {
+        alert(data)
       }
     }
   }
@@ -73,5 +85,12 @@
   }
   .content-container{
     height: 985px;
+    overflow-y: auto;
   }
+  .daily-statistical{
+    margin-top: 50px;
+    text-align: center;
+    font-size: 36px;
+  }
+
 </style>
