@@ -1,0 +1,77 @@
+<template>
+  <div class="sign-user">
+    <div class="sign-user-name">
+      <img class="sign-user-img" src="../assets/head.png">
+      <div class="sign-user-content">
+        <div class="sign-user-names">
+          张晓强
+        </div>
+        <div class="sign-user-times">
+          累计打卡：300次
+        </div>
+      </div>
+    </div>
+    <div class="sign-status">
+      未打卡
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+    name: "sign-user"
+}
+</script>
+
+<style scoped>
+  .sign-user{
+    width:690px;
+    height:178px;
+    background:rgba(255,255,255,1);
+    border-radius:6px;
+    box-shadow:6px 0 27px rgba(61,168,245,0.14);
+    position: absolute;
+    top: 350px;
+    left: 50%;
+    margin-left: -345px;
+    z-index: 99;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .sign-user-name{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-left: 17px;
+  }
+  .sign-user-img{
+    height: 118px;
+    width: 118px;
+  }
+  .sign-user-content{
+    margin-left: 22px;
+  }
+  .sign-user-names{
+    font-size:32px;
+    font-family:PingFang-SC-Medium;
+    color:rgba(51,51,51,1);
+  }
+  .sign-user-times{
+    font-size:26px;
+    font-family:PingFang-SC-Medium;
+    color:rgba(153,153,153,1);
+  }
+  .sign-status{
+    padding: 0 12px;
+    height:44px;
+    background:rgba(203,203,203,1);
+    border-radius:8px;
+    font-size:28px;
+    font-family:PingFang-SC-Medium;
+    color:rgba(255,255,255,1);
+    box-shadow:18px 0 29px rgba(170,170,170,0.24);
+    line-height: 44px;
+    margin-right: 30px;
+  }
+</style>
