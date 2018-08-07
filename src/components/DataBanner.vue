@@ -58,7 +58,9 @@ export default {
 <style scoped>
   .data-banner{
     height: 487px;
-    background-image: url("../assets/dataBanner.png");
+    max-width: 1125px;
+    width: 100%;
+    background: url("../assets/dataBanner.png") 100% 100% no-repeat;
     overflow: hidden;
   }
   .data-information{
