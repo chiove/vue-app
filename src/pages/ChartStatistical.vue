@@ -7,16 +7,14 @@
     <div class="content-container">
       <div class="left-container" v-if="tabLeftActive">
           <div class="daily-statistical">
-            <date-select v-on:selectDate="listenEvent" :fontSize="fontSize" :formate="format"></date-select>
+            <!--<date-select v-on:selectDate="listenEvent" :fontSize="fontSize" :formate="format"></date-select>-->
           </div>
       </div>
       <div class="right-container" v-if="tabRightActive">
         222
       </div>
     </div>
-    <teacher-check-tab :pageName="pageName">
-
-    </teacher-check-tab>
+    <teacher-check-tab :pageName="pageName"></teacher-check-tab>
   </div>
 </template>
 
@@ -52,7 +50,7 @@
         }
       },
       listenEvent:function (data) {
-        alert(data)
+
       }
     }
   }

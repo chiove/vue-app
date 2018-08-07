@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="date-select-item" :style="{'padding':padding,'margin':margin}">
-      <span @click="dateSelect" :style="{'font-size':fontSize}">{{dateValue}}</span>
+      <span @click="dateSelect">{{dateValue}}</span>
       <img  class="select-down" src="../assets/selectDown.png">
     </div>
     <div class="date-select" v-if="displayState">
@@ -33,7 +33,7 @@ export default {
     }
     this.$emit('selectDate',selectDate)
   },
-  props:["padding","margin","fontSize","format"],
+  props:["padding","margin"],
   data() {
     return {
       currentDate: new Date(),
@@ -82,10 +82,9 @@ export default {
     width: 16px;
     margin-left: 6px;
     position: relative;
-    top: -5px;
+    top: -4px;
   }
   .date-select{
-    font-size: 24px;
     width: 100%;
     max-width: 1125px;
     position: absolute;
