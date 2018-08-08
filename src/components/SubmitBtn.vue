@@ -3,7 +3,7 @@
       <div class="submit-back" @click="submitAlert">
           提交反馈
       </div>
-      <van-popup v-model="show">
+      <van-popup v-model="show" class="submit-alert-container">
         <div class="submit-alert">
           <div class="submit-title">反馈结果</div>
           <div class="submit-content">
@@ -23,24 +23,24 @@ import Vue from 'vue'
 import { Popup } from 'vant'
 Vue.use(Popup)
 export default {
-  name: "submit-btn",
-  data() {
+  name: 'submit-btn',
+  data () {
     return {
-      show: false,
+      show: false
     }
   },
-  methods:{
-      submitAlert:function () {
-        this.show = true;
-      },
-      cancel:function () {
-        this.show = false;
-        this.$refs.feedBackValue.value=""
-      },
-      confirm:function () {
-        this.show = false;
-        console.log("获取textarea值:", this.$refs.feedBackValue.value)
-      }
+  methods: {
+    submitAlert: function () {
+      this.show = true
+    },
+    cancel: function () {
+      this.show = false
+      this.$refs.feedBackValue.value = ''
+    },
+    confirm: function () {
+      this.show = false
+      console.log('获取textarea值:', this.$refs.feedBackValue.value)
+    }
   }
 }
 </script>
@@ -48,9 +48,9 @@ export default {
 <style scoped>
   .submit-container{
     height: 116px;
+    padding: 0 30px;
   }
   .submit-back{
-    width:661px;
     height:84px;
     line-height: 84px;
     background:rgba(61,168,245,1);

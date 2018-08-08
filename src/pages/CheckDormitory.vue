@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="search-select">
-        <div class="search-select-item" @click="dormitoryFun">
+        <div class="search-select-item-first" @click="dormitoryFun">
           <span :class="{'color-primary':dormitoryActive}">{{dormitoryTitle}}</span>
           <img :src="dormitoryActive?selectIconActive:selectIcon">
         </div>
@@ -53,102 +53,102 @@
 </template>
 
 <script>
-  import teacherCheckTab from '../components/TeacherCheckTab'
-  import dormitorySelect from '../components/DormitorySelect'
-  import checkRoomList from '../components/CheckRoomList'
-    export default {
-      components:{teacherCheckTab,dormitorySelect,checkRoomList},
-      name: "check-dormitory",
-      data(){
-        return {
-          inputState:true,
-          pageName:"CheckDormitory",
-          selectIcon:require("../assets/selectDown.png"),
-          numberIcon:require("../assets/numberSelect.png"),
-          selectIconActive:require("../assets/selectDownActive.png"),
-          numberIconActive:require("../assets/numberSelectActive.png"),
-          dormitoryTitle:"宿舍选择",
-          checkTitle:"查寝状态",
-          sortTitle:"考寝状态",
-          dormitoryChildTitle:"寝室选择",
-          dormitoryActive:false,
-          sortActive:false,
-          checkActive:false,
-          params:{},
-          checkData:[
-            {
-              id:"1",
-              text:"已查寝"
-            },
-            {
-              id:"2",
-              text:"未查寝"
-            }
-          ],
-          sortData:[
-            {
-              id:"1",
-              text:"未归人数从高到低"
-            },
-            {
-              id:"2",
-              text:"未归人数从低到高"
-            },
-            {
-              id:"3",
-              text:"晚归人数从高到低"
-            },
-            {
-              id:"4",
-              text:"晚归人数从低到高"
-            },
-          ]
-        }
-      },
-      methods:{
-        inputContent:function () {
-          this.$router.push({path:"/searchStudents"})
-          this.inputState=false
-          // this.$refs.inputFocus.focus()
+import teacherCheckTab from '../components/TeacherCheckTab'
+import dormitorySelect from '../components/DormitorySelect'
+import checkRoomList from '../components/CheckRoomList'
+export default {
+  components: {teacherCheckTab, dormitorySelect, checkRoomList},
+  name: 'check-dormitory',
+  data () {
+    return {
+      inputState: true,
+      pageName: 'CheckDormitory',
+      selectIcon: require('../assets/selectDown.png'),
+      numberIcon: require('../assets/numberSelect.png'),
+      selectIconActive: require('../assets/selectDownActive.png'),
+      numberIconActive: require('../assets/numberSelectActive.png'),
+      dormitoryTitle: '宿舍选择',
+      checkTitle: '查寝状态',
+      sortTitle: '考寝状态',
+      dormitoryChildTitle: '寝室选择',
+      dormitoryActive: false,
+      sortActive: false,
+      checkActive: false,
+      params: {},
+      checkData: [
+        {
+          id: '1',
+          text: '已查寝'
         },
-       /* valueChange:function () {
+        {
+          id: '2',
+          text: '未查寝'
+        }
+      ],
+      sortData: [
+        {
+          id: '1',
+          text: '未归人数从高到低'
+        },
+        {
+          id: '2',
+          text: '未归人数从低到高'
+        },
+        {
+          id: '3',
+          text: '晚归人数从高到低'
+        },
+        {
+          id: '4',
+          text: '晚归人数从低到高'
+        }
+      ]
+    }
+  },
+  methods: {
+    inputContent: function () {
+      this.$router.push({path: '/searchStudents'})
+      this.inputState = false
+      // this.$refs.inputFocus.focus()
+    },
+    /* valueChange:function () {
           if(this.$refs.inputFocus.value===""){
             this.inputState=true
           }
-        },*/
-        dormitoryFun:function () {
-          this.sortActive=false
-          this.checkActive=false
-          this.dormitoryActive? this.dormitoryActive=false:this.dormitoryActive=true
-        },
-        checkFun:function () {
-          this.sortActive=false
-          this.dormitoryActive=false
-          this.checkActive? this.checkActive=false:this.checkActive=true
-        },
-        sortFun:function () {
-          this.checkActive=false
-          this.dormitoryActive=false
-          this.sortActive? this.sortActive=false:this.sortActive=true
-        },
-        getSearchValue:function (e,type) {
-          if(e.target.dataset.index===undefined){
-            return
-          }else{
-            if(type==="check"){
-              this.checkTitle = e.target.innerText
-            }
-            if(type==="sort"){
-              this.sortTitle = e.target.innerText
-            }
-            this.params[type] = e.target.dataset.index
-          }
-          this.sortActive=false
-          this.checkActive=false
-          this.dormitoryActive=false
+        }, */
+    dormitoryFun: function () {
+      this.sortActive = false
+      this.checkActive = false
+      this.dormitoryActive ? this.dormitoryActive = false : this.dormitoryActive = true
+    },
+    checkFun: function () {
+      this.sortActive = false
+      this.dormitoryActive = false
+      this.checkActive ? this.checkActive = false : this.checkActive = true
+    },
+    sortFun: function () {
+      this.checkActive = false
+      this.dormitoryActive = false
+      this.sortActive ? this.sortActive = false : this.sortActive = true
+    },
+    getSearchValue: function (e, type) {
+      if (e.target.dataset.index === undefined) {
+        return
+      } else {
+        if (type === 'check') {
+          this.checkTitle = e.target.innerText
         }
+        if (type === 'sort') {
+          this.sortTitle = e.target.innerText
+        }
+        this.params[type] = e.target.dataset.index
       }
+      this.sortActive = false
+      this.checkActive = false
+      this.dormitoryActive = false
     }
+  }
+}
 </script>
 
 <style scoped>
@@ -163,11 +163,11 @@
   }
   .search-input{
     position: relative;
-    width:690px;
+    padding: 0 30px;
     height:80px;
     background:rgba(247,247,247,.07);
     border-radius:8px;
-    margin: 32px auto 0 auto;
+    margin: 32px 0 0 0;
     overflow: hidden;
   }
   .search-form{
@@ -179,11 +179,11 @@
   }
 
   .search-placeholder{
-    width:690px;
     height:80px;
     position: absolute;
+    width: calc(100% - 60px);
     top: 0;
-    left: 0;
+    left: 30px;
     line-height: 80px;
     text-align: center;
     background:rgba(247,247,247,1);
@@ -201,8 +201,9 @@
   .search-select{
     height: 99px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
+    padding: 0 30px;
   }
   .search-select-item,.number-select-icon{
     font-size:28px;
@@ -213,13 +214,21 @@
     justify-content: center;
     align-items: center;
   }
-  .search-select-item span,.number-select-icon span{
+  .search-select-item-first{
+    font-size:28px;
+    font-family:PingFang-SC-Medium;
+    color:rgba(85,85,85,1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .search-select-item span,.number-select-icon span,.search-select-item-first span{
     width: 120px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .search-select-item img{
+  .search-select-item img,.search-select-item-first img{
     width: 14px;
     height: 9px;
   }
@@ -237,6 +246,9 @@
     top: 0;
     width: 100%;
     max-width: 1125px;
+  }
+  .search-result-list{
+    padding: 0 30px;
   }
   .list-item{
     padding: 40px 0 40px 40px;

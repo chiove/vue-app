@@ -26,19 +26,18 @@
 </template>
 
 <script>
-    export default {
-        name: "check-room-list"
-    }
+export default {
+  name: 'check-room-list'
+}
 </script>
 
 <style scoped>
 .check-room-container{
-  width:690px;
   height:273px;
   background:rgba(255,255,255,1);
   border-radius:8px;
   box-shadow:6px 0 13px rgba(40,40,40,0.14);
-  margin: 22px auto;
+  margin: 22px 0;
 }
   .check-room-head{
     width:655px;

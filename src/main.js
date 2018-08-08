@@ -4,7 +4,8 @@ import 'lib-flexible'
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'lib-flexible/flexible'
+import './css/reset.css'
+import './css/common.css'
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
@@ -17,4 +18,3 @@ new Vue({
     eventHub: new Vue()
   }
 })
-

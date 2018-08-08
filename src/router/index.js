@@ -17,10 +17,16 @@ import CheckPersonalInformation from '@/pages/CheckPersonalInformation'/* 查寝
 import DailyPersonalInformation from '@/pages/DailyPersonalInformation'/* 日统计个人信息 */
 import WeekPersonalInformation from '@/pages/WeekPersonalInformation'/* 周统计个人信息 */
 import LateBackList from '@/pages/LateBackList'/* 晚归列表 */
+import router from '@/pages/router'/* 路由 */
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/',
+      name: 'router',
+      component: router
+    },
     {
       path: '/pastoralCare',
       name: 'pastoralCare',

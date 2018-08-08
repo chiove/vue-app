@@ -23,46 +23,46 @@
 <script>
 import teacherCheckTab from '../components/TeacherCheckTab'
 export default {
-  components:{teacherCheckTab},
-  name: "search-students",
-  created:function () {
+  components: {teacherCheckTab},
+  name: 'search-students',
+  created: function () {
 
   },
-  data(){
-      return {
-        searchParam:"",
-        resultView:false,
-        searchData:[
-          {
-            id:"1",
-            name:"梁朝伟",
-            number:"21213213"
-          },
-          {
-            id:"1",
-            name:"刘德华",
-            number:"21213213"
-          },
-        ]
-      }
-  },
-  methods:{
-      cleanFun:function () {
-        this.$refs.nameNumber.value = ""
-        this.resultView = false
-      },
-      searchFun:function () {
-        this.searchParam = this.$refs.nameNumber.value
-        this.resultView = true
-        console.log("查询参数:",this.searchParam)
-      },
-      getParams:function (e) {
-        if(e.target.dataset.index===undefined){
-          return false
-        }else{
-          console.log("详情参数",e.target.dataset.index)
+  data () {
+    return {
+      searchParam: '',
+      resultView: false,
+      searchData: [
+        {
+          id: '1',
+          name: '梁朝伟',
+          number: '21213213'
+        },
+        {
+          id: '1',
+          name: '刘德华',
+          number: '21213213'
         }
+      ]
+    }
+  },
+  methods: {
+    cleanFun: function () {
+      this.$refs.nameNumber.value = ''
+      this.resultView = false
+    },
+    searchFun: function () {
+      this.searchParam = this.$refs.nameNumber.value
+      this.resultView = true
+      console.log('查询参数:', this.searchParam)
+    },
+    getParams: function (e) {
+      if (e.target.dataset.index === undefined) {
+        return false
+      } else {
+        console.log('详情参数', e.target.dataset.index)
       }
+    }
   }
 }
 </script>

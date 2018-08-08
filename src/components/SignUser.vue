@@ -1,40 +1,43 @@
 <template>
-  <div class="sign-user">
-    <div class="sign-user-name">
-      <img class="sign-user-img" src="../assets/head.png">
-      <div class="sign-user-content">
-        <div class="sign-user-names">
-          张晓强
-        </div>
-        <div class="sign-user-times">
-          累计打卡：300次
+  <div class="sign-user-container">
+    <div class="sign-user">
+      <div class="sign-user-name">
+        <img class="sign-user-img" src="../assets/head.png">
+        <div class="sign-user-content">
+          <div class="sign-user-names">
+            张晓强
+          </div>
+          <div class="sign-user-times">
+            累计打卡：300次
+          </div>
         </div>
       </div>
-    </div>
-    <div class="sign-status">
-      未打卡
+      <div class="sign-status">
+        未打卡
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-    name: "sign-user"
+  name: 'sign-user'
 }
 </script>
 
 <style scoped>
+  .sign-user-container{
+    padding: 0 30px;
+    position: absolute;
+    top: 350px;
+    z-index: 99;
+    width: calc(100% - 60px);
+  }
   .sign-user{
-    width:690px;
     height:178px;
     background:rgba(255,255,255,1);
     border-radius:6px;
     box-shadow:6px 0 27px rgba(61,168,245,0.14);
-    position: absolute;
-    top: 350px;
-    left: 50%;
-    margin-left: -345px;
-    z-index: 99;
     display: flex;
     justify-content: space-between;
     align-items: center;

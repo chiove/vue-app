@@ -1,5 +1,5 @@
 <template>
-  <div class="sign-time" :style="{'background':`url(${backGroundImg}) 440px 100%`}">
+  <div class="sign-time" :style="{backgroundImage:`url(${backGroundImg})`,backgroundSize:'15rem 6rem'}">
     <div class="sign-time-text">18:00-23:00</div>
     <div class="sign-time-remark">
       <div>请在归寝时间范围内打卡哟！</div>
@@ -10,23 +10,23 @@
 
 <script>
 export default {
-  props:["data"],
-  name: "sign-banner",
-  created:function () {
+  props: ['data'],
+  name: 'sign-banner',
+  created: function () {
     console.log(this.data)
-    if(this.data.state==="sucess"){
-      this.backGroundImg =require("../assets/sucess.png")
-    }else if(this.data.state==="warning"){
-      this.backGroundImg = require("../assets/warning.png")
-    }else if(this.data.state==="danger"){
-      this.backGroundImg = require("../assets/danger.png")
-    }else {
-      this.backGroundImg = require("../assets/primary.png")
+    if (this.data.state === 'sucess') {
+      this.backGroundImg = require('../assets/sucess.png')
+    } else if (this.data.state === 'warning') {
+      this.backGroundImg = require('../assets/warning.png')
+    } else if (this.data.state === 'danger') {
+      this.backGroundImg = require('../assets/danger.png')
+    } else {
+      this.backGroundImg = require('../assets/primary.png')
     }
   },
-  data(){
+  data () {
     return {
-      backGroundImg:require("../assets/primary.png"),
+      backGroundImg: require('../assets/primary.png')
     }
   }
 }
@@ -34,7 +34,7 @@ export default {
 
 <style scoped>
   .sign-time{
-    height: 436px;
+    height: 435px;
     text-align: center;
     color: rgba(255,255,255,.8);
     overflow:hidden;

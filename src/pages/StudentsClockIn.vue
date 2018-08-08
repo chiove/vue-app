@@ -8,30 +8,30 @@
 </template>
 
 <script>
-import signBanner from "../components/SignBanner"
-import signContent from "../components/signContent"
-import signTab from "../components/signTab"
-import signUser from "../components/signUser"
+import signBanner from '../components/SignBanner'
+import signContent from '../components/signContent'
+import signTab from '../components/signTab'
+import signUser from '../components/signUser'
 const data = {
-    state:"warning",
-    name:"张晓强",
-    times:23
-  }
+  state: 'warning',
+  name: '张晓强',
+  times: 23
+}
 
 export default {
-  components: {signBanner,signContent,signTab,signUser},
+  components: {signBanner, signContent, signTab, signUser},
   name: 'students-clock-in',
-  created:function () {
+  created: function () {
 
   },
-  data() {
+  data () {
     return {
-      pageName:"StudentsClockIn",
-      data:data
+      pageName: 'StudentsClockIn',
+      data: data
     }
   },
-    methods: {
-    }
+  methods: {
+  }
 }
 </script>
 

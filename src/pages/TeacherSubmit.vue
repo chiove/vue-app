@@ -19,16 +19,16 @@
 </template>
 
 <script>
-import submitBtn from "../components/submitBtn"
-import dataBanner from "../components/dataBanner"
-import historySelect from "../components/historySelect"
-import historyList from "../components/StudentHistoryList"
+import submitBtn from '../components/submitBtn'
+import dataBanner from '../components/dataBanner'
+import historySelect from '../components/historySelect'
+import historyList from '../components/StudentHistoryList'
 export default {
-  components: {submitBtn,dataBanner,historySelect,historyList},
-  name: "teacher-submit",
-  data:function () {
+  components: {submitBtn, dataBanner, historySelect, historyList},
+  name: 'teacher-submit',
+  data: function () {
     return {
-      pageName:""
+      pageName: ''
     }
   }
 }
@@ -36,7 +36,8 @@ export default {
 
 <style scoped>
   .history-details-container{
-    height: 528px;
+    height: 508px;
+    padding: 0 30px;
     overflow-y: auto;
   }
 </style>

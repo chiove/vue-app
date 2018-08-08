@@ -1,26 +1,28 @@
 <template>
   <div class="body-container">
-    <div class="room-details-header">
-      <div class="room-details-title">
-        <span class="room-details-room">104寝室</span>
-        <span>（楼栋名）</span>
+    <div class="room-details-header-container">
+      <div class="room-details-header">
+        <div class="room-details-title">
+          <span class="room-details-room">104寝室</span>
+          <span>（楼栋名）</span>
+        </div>
+        <div class="room-details-line"></div>
+        <div class="room-details-state">
+          <div>
+            <div class="room-details-state-number">4</div>
+            <div class="room-details-state-text">寝室人数</div>
+          </div>
+          <div>
+            <div class="room-details-state-number">4</div>
+            <div class="room-details-state-text">未归人数</div>
+          </div>
+          <div>
+            <div class="room-details-state-number">4</div>
+            <div class="room-details-state-text">晚归人数</div>
+          </div>
+        </div>
+        <div class="room-details-flag">未查寝</div>
       </div>
-      <div class="room-details-line"></div>
-      <div class="room-details-state">
-        <div>
-          <div class="room-details-state-number">4</div>
-          <div class="room-details-state-text">寝室人数</div>
-        </div>
-        <div>
-          <div class="room-details-state-number">4</div>
-          <div class="room-details-state-text">未归人数</div>
-        </div>
-        <div>
-          <div class="room-details-state-number">4</div>
-          <div class="room-details-state-text">晚归人数</div>
-        </div>
-      </div>
-      <div class="room-details-flag">未查寝</div>
     </div>
     <div class="room-details-body">
       <div class="room-details-container">
@@ -74,66 +76,66 @@
 </template>
 
 <script>
-import { Popup } from 'vant';
-import Vue from 'vue';
-Vue.use(Popup);
-let timer;
+import { Popup } from 'vant'
+import Vue from 'vue'
+Vue.use(Popup)
+let timer
 export default {
-  components:{Popup},
-  name: "room-details",
-  data(){
-   return {
-     beginCheck: false,
-     endCheck:false,
-     listData:[
-       {
-          show:false,
-          state:"",
-          itemState:"background-default",
-          itemStateText:"查勤"
-       },
-       {
-         show:false,
-         state:"",
-         itemState:"background-default",
-         itemStateText:"查勤"
-       },
-     ]
-   }
+  components: {Popup},
+  name: 'room-details',
+  data () {
+    return {
+      beginCheck: false,
+      endCheck: false,
+      listData: [
+        {
+          show: false,
+          state: '',
+          itemState: 'background-default',
+          itemStateText: '查勤'
+        },
+        {
+          show: false,
+          state: '',
+          itemState: 'background-default',
+          itemStateText: '查勤'
+        }
+      ]
+    }
   },
-  methods:{
-    checkState:function (e,i) {
+  methods: {
+    checkState: function (e, i) {
       const _this = this
       timer = setTimeout(function () {
-          _this.listData[i].show = true
+        _this.listData[i].show = true
       }, 1000)
     },
-    checkClear:function () {
+    checkClear: function () {
       clearTimeout(timer)
     },
-    checkRoom:function (e,i) {
-      if(e.target.dataset.index!==undefined){
+    checkRoom: function (e, i) {
+      if (e.target.dataset.index !== undefined) {
         this.listData[i].itemState = e.target.dataset.index
-        this.listData[i].itemStateText= e.target.innerHTML
+        this.listData[i].itemStateText = e.target.innerHTML
         this.listData[i].show = false
-      }else {
+      } else {
         return false
       }
     },
-    checkBegin:function () {
-      /*开始查寝*/
-     /* const _this = this
+    checkBegin: function () {
+      /* 开始查寝 */
+      /* const _this = this
       this.beginCheck = true
       setTimeout(function () {
         _this.beginCheck = false
-      },1000)*/
-      /*结束查寝*/
+      },1000) */
+      /* 结束查寝 */
       this.endCheck = true
     },
-    checkCancel:function () {
+    checkCancel: function () {
       this.endCheck = false
     },
-    checkAffirm:function () {
+    checkAffirm: function () {
       this.endCheck = false
     }
   }
@@ -141,8 +143,10 @@ export default {
 </script>
 
 <style scoped>
+  .room-details-header-container{
+    padding: 0 30px;
+  }
 .room-details-header{
-  width:690px;
   height:282px;
   background:rgba(61,168,245,1);
   border-radius:8px;
@@ -199,12 +203,11 @@ export default {
     /*z-index: 10;*/
   }
   .room-details-body{
+    padding: 0 30px;
     height: 712px;
     overflow-y: auto;
   }
   .room-details-container{
-    width: 690px;
-    margin: 0 auto;
     display: flex;
     justify-content: space-between;
     flex-flow: row wrap;

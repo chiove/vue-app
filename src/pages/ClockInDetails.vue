@@ -110,14 +110,15 @@
 </template>
 
 <script>
-    export default {
-        name: "clock-in-details"
-    }
+export default {
+  name: 'clock-in-details'
+}
 </script>
 
 <style scoped>
   .details-container{
     background-color: #fff;
+    overflow-y: auto;
   }
 .item-container{
   padding: 70px 0 20px 127px;

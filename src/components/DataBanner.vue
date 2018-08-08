@@ -51,7 +51,7 @@
 
 <script>
 export default {
-    name: "data-banner"
+  name: 'data-banner'
 }
 </script>
 
@@ -60,7 +60,8 @@ export default {
     height: 487px;
     max-width: 1125px;
     width: 100%;
-    background: url("../assets/dataBanner.png") 100% 100% no-repeat;
+    background: url("../assets/dataBanner.png")  no-repeat;
+    background-size: 1125px 731px;
     overflow: hidden;
   }
   .data-information{

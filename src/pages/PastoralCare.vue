@@ -110,33 +110,33 @@
 
 <script>
 
-  export default {
-    components:{},
-    name: "pastoral-care",
-    created:function () {
+export default {
+  components: {},
+  name: 'pastoral-care',
+  created: function () {
 
-    },
-    data() {
-      return {
-        tabLeftActive:true,
-        tabRightActive:false,
+  },
+  data () {
+    return {
+      tabLeftActive: true,
+      tabRightActive: false
+    }
+  },
+  methods: {
+    leftActive: function () {
+      if (this.tabLeftActive !== true) {
+        this.tabLeftActive = true
+        this.tabRightActive = false
       }
     },
-    methods:{
-      leftActive:function () {
-        if(this.tabLeftActive!==true){
-          this.tabLeftActive=true
-          this.tabRightActive=false
-        }
-      },
-      rightActive:function () {
-        if(this.tabRightActive!==true){
-          this.tabLeftActive=false
-          this.tabRightActive=true
-        }
+    rightActive: function () {
+      if (this.tabRightActive !== true) {
+        this.tabLeftActive = false
+        this.tabRightActive = true
       }
     }
   }
+}
 </script>
 
 <style scoped>
@@ -145,6 +145,9 @@
   justify-content: space-between;
   align-items: center;
   background:rgba(255,255,255,1);
+}
+.left-container,.right-container{
+  overflow: auto;
 }
 .tab-left,.tab-right{
   height:127px;
@@ -166,9 +169,9 @@
 }
 .content-container{
   height: 1083px;
+  padding: 0 30px;
 }
 .care-item{
-  width:690px;
   height:162px;
   background:rgba(255,255,255,1);
   border-radius:8px;

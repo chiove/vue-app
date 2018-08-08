@@ -17,46 +17,46 @@
 
 <script>
 export default {
-  name: "sign-tab",
-  props: ["pageName"],
-  created:function () {
-      if(this.pageName === "StatisticalData"){
-        this.dataViewState.active=true;
-        this.positionState.active=false;
-      }else{
-        this.dataViewState.active=false;
-        this.positionState.active=true;
-      }
+  name: 'sign-tab',
+  props: ['pageName'],
+  created: function () {
+    if (this.pageName === 'StatisticalData') {
+      this.dataViewState.active = true
+      this.positionState.active = false
+    } else {
+      this.dataViewState.active = false
+      this.positionState.active = true
+    }
   },
-  data:function () {
-    return{
-     positionState:{
-       active:true,
-       imgUrlActive:require("../assets/positionActive.png"),
-       imgUrl:require("../assets/position.png")
-     },
-      dataViewState:{
-        active:false,
-        imgUrlActive:require("../assets/allActive.png"),
-        imgUrl:require("../assets/all.png")
+  data: function () {
+    return {
+      positionState: {
+        active: true,
+        imgUrlActive: require('../assets/positionActive.png'),
+        imgUrl: require('../assets/position.png')
+      },
+      dataViewState: {
+        active: false,
+        imgUrlActive: require('../assets/allActive.png'),
+        imgUrl: require('../assets/all.png')
       }
     }
   },
-  methods:{
-    position:function () {
-      const flag = this.positionState.active;
-      if(flag!==true){
-        this.dataViewState.active=false;
-        this.positionState.active=true;
-        this.$router.push({path:"/studentsClockIn"})
+  methods: {
+    position: function () {
+      const flag = this.positionState.active
+      if (flag !== true) {
+        this.dataViewState.active = false
+        this.positionState.active = true
+        this.$router.push({path: '/studentsClockIn'})
       }
     },
-    dataView:function () {
-      const flag = this.dataViewState.active;
-      if(flag!==true){
-        this.positionState.active=false;
-        this.dataViewState.active=true;
-        this.$router.push({path:"/dataStatistical"})
+    dataView: function () {
+      const flag = this.dataViewState.active
+      if (flag !== true) {
+        this.positionState.active = false
+        this.dataViewState.active = true
+        this.$router.push({path: '/dataStatistical'})
       }
     }
   }
