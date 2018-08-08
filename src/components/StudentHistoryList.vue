@@ -23,7 +23,6 @@ export default {
 .history-icon{
   width:14px;
   height:14px;
-  margin-left: 36px;
   border-radius: 14px;
 }
 .history-text{
@@ -41,6 +40,5 @@ export default {
 .history-details-img{
   width: 15px;
   height: 25px;
-  margin-right: 10px;
 }
 </style>

@@ -154,7 +154,7 @@
     height:890px;
     background:rgba(255,255,255,1);
     padding: 0 32px;
-    overflow: auto;
+    overflow-y: auto;
   }
 
 </style>

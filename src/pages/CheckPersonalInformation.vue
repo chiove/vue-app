@@ -165,7 +165,7 @@
     background:rgba(255,255,255,1);
     border-radius:30px 30px 0 0;
     padding: 0 32px;
-    overflow: auto;
+    overflow-y: auto;
   }
   .data-form-item{
     height: 126px;
@@ -223,8 +223,5 @@
     font-size:36px;
     font-family:PingFang-SC-Medium;
     color:rgba(255,255,255,1);
-  }
-  .data-form-picker{
-
   }
 </style>

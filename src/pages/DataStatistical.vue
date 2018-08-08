@@ -41,5 +41,6 @@ export default {
   .history-details-container{
     height: 546px;
     overflow-y: auto;
+    padding: 0 32px;
   }
 </style>
