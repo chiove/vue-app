@@ -5,6 +5,7 @@
   position: relative;
   background-color: #F7F7F7;
   overflow: hidden;
+  margin: auto;
 }
 .icon-default{
   background:rgba(203,203,203,1);
