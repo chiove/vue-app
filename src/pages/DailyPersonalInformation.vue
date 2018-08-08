@@ -47,12 +47,6 @@
         <img class="data-form-select" src="../assets/selectRight.png" alt="">
       </div>
       <div class="data-form-line"></div>
-      <div class="data-form-item-remark">备注</div>
-      <div class="data-form-remark">
-        <textarea name="" id="" placeholder="请输入"></textarea>
-        <div class="data-form-tips">0/30</div>
-      </div>
-      <div class="data-form-submit">提交</div>
     </div>
     <van-popup v-model="show" position="bottom">
       <van-picker
@@ -73,7 +67,7 @@
   Vue.use(Picker)
   export default {
     components:{Popup,Picker},
-    name: "personal-information",
+    name: "daily-personal-information",
     data(){
       return {
         show:false,
@@ -165,6 +159,7 @@
     background:rgba(255,255,255,1);
     border-radius:30px 30px 0 0;
     padding: 0 32px;
+    overflow: auto;
   }
   .data-form-item{
     height: 126px;
@@ -180,50 +175,9 @@
     height: 25px;
     width: 15px;
   }
-  .data-form-item-remark{
-    height: 116px;
-    font-size:36px;
-    font-family:PingFang-SC-Medium;
-    color:rgba(51,51,51,1);
-    line-height:100px;
-  }
   .data-form-line {
     height:2px;
     background:rgba(236,236,236,1);
     margin: auto;
-  }
-  .data-form-remark{
-    height:228px;
-    border-radius:8px;
-    position: relative;
-  }
-  .data-form-remark textarea{
-    height: 100%;
-    width: 100%;
-    background:rgba(238,238,238,.45);
-    border: none;
-  }
-  .data-form-tips{
-    font-size:30px;
-    font-family:PingFang-SC-Medium;
-    color:rgba(153,153,153,1);
-    padding: 0 30px;
-    position: absolute;
-    bottom: 21px;
-    right: 11px;
-  }
-  .data-form-submit{
-    height:94px;
-    background:rgba(61,168,245,1);
-    border-radius:8px;
-    text-align: center;
-    margin-top: 59px;
-    line-height: 94px;
-    font-size:36px;
-    font-family:PingFang-SC-Medium;
-    color:rgba(255,255,255,1);
-  }
-  .data-form-picker{
-
   }
 </style>

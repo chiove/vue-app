@@ -13,7 +13,9 @@ import CheckDormitory from '@/pages/CheckDormitory'/* 辅导员查寝 */
 import SearchStudents from '@/pages/SearchStudents'/* 辅导员查寝,查询学生列表 */
 import ClockInDetails from '@/pages/ClockInDetails'/* 打卡详情 */
 import RoomDetails from '@/pages/RoomDetails'/* 寝室详情 */
-import PersonalInformation from '@/pages/PersonalInformation'/* 查寝个人信息 */
+import CheckPersonalInformation from '@/pages/CheckPersonalInformation'/* 查寝个人信息 */
+import DailyPersonalInformation from '@/pages/DailyPersonalInformation'/* 日统计个人信息 */
+import WeekPersonalInformation from '@/pages/WeekPersonalInformation'/* 周统计个人信息 */
 import LateBackList from '@/pages/LateBackList'/* 晚归列表 */
 Vue.use(Router)
 
@@ -85,14 +87,24 @@ export default new Router({
       component: RoomDetails
     },
     {
-      path: '/personalInformation',
-      name: 'PersonalInformation',
-      component: PersonalInformation
+      path: '/checkPersonalInformation',
+      name: 'CheckPersonalInformation',
+      component: CheckPersonalInformation
     },
     {
-      path: '/',
+      path: '/lateBackList',
       name: 'LateBackList',
       component: LateBackList
+    },
+    {
+      path: '/dailyPersonalInformation',
+      name: 'DailyPersonalInformation',
+      component: DailyPersonalInformation
+    },
+    {
+      path: '/weekPersonalInformation',
+      name: 'WeekPersonalInformation',
+      component: WeekPersonalInformation
     }
   ]
 })
