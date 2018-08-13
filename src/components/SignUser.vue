@@ -2,10 +2,10 @@
   <div class="sign-user-container">
     <div class="sign-user">
       <div class="sign-user-name">
-        <img class="sign-user-img" src="../assets/head.png">
+        <img class="sign-user-img" :src="data.profilePhoto">
         <div class="sign-user-content">
           <div class="sign-user-names">
-            张晓强
+            {{data.studentName}}
           </div>
           <div class="sign-user-times">
             累计打卡：300次
@@ -21,7 +21,8 @@
 
 <script>
 export default {
-  name: 'sign-user'
+  name: 'sign-user',
+  props:['data']
 }
 </script>
 

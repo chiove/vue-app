@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",
+    "axios": "^0.18.0",
     "echarts": "^4.1.0",
     "keep-alive": "^0.1.0",
     "lib-flexible": "^0.3.2",

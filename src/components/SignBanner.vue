@@ -1,6 +1,6 @@
 <template>
   <div class="sign-time" :style="{backgroundImage:`url(${backGroundImg})`,backgroundSize:'15rem 6rem'}">
-    <div class="sign-time-text">18:00-23:00</div>
+    <div class="sign-time-text">{{data.clockStartTime}}-{{data.clockEndTime}}</div>
     <div class="sign-time-remark">
       <div>请在归寝时间范围内打卡哟！</div>
       <div>超过归寝时间请联系宿舍管理员修改状态</div>
@@ -9,18 +9,20 @@
 </template>
 
 <script>
+
 export default {
   props: ['data'],
   name: 'sign-banner',
-  created: function () {
-    console.log(this.data)
+  mounted: function () {
     if (this.data.state === 'sucess') {
       this.backGroundImg = require('../assets/sucess.png')
     } else if (this.data.state === 'warning') {
       this.backGroundImg = require('../assets/warning.png')
     } else if (this.data.state === 'danger') {
       this.backGroundImg = require('../assets/danger.png')
-    } else {
+    } else if(this.data.state === 'primary'){
+      this.backGroundImg = require('../assets/primary.png')
+    } else if (this.data.state === 'default'){
       this.backGroundImg = require('../assets/primary.png')
     }
   },

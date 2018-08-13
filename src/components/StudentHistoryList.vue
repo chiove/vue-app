@@ -9,7 +9,8 @@
 
 <script>
 export default {
-    name: "student-history-list"
+  name: "student-history-list",
+  props:['data']
 }
 </script>
 

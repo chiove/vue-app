@@ -28,9 +28,6 @@ const maxDate = units.getCurrentTime("year")
 export default {
       components:{DatetimePicker},
       name: "history-select",
-      created:function () {
-
-      },
       data() {
         return {
           datetimePicker:DatetimePicker,
@@ -53,8 +50,9 @@ export default {
           this.displayState=false
         },
         confirm:function (value) {
-          this.displayState=false;
-          this.dateValue = `${value.getFullYear()}年${value.getMonth()+1}月`;
+          this.displayState=false
+          this.dateValue = `${value.getFullYear()}年${value.getMonth()+1}月`
+          this.$emit("selectDate",`${value.getFullYear()}-${value.getMonth()+1}`)
         },
         dateSelect:function () {
           this.displayState=true

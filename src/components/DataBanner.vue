@@ -2,44 +2,44 @@
     <div class="data-banner">
       <div class="data-information">
         <div class="data-left">
-          <img class="sign-user-img" src="../assets/head.png">
+          <img class="sign-user-img" :src="data.profilePhoto">
           <div>
             <div class="data-name">
-              <span class="data-name-text">刘震云</span>
-              <span class="data-information-text">2018级5班</span>
+              <span class="data-name-text">{{data.studentName}}</span>
+              <span class="data-information-text">{{data.classNames}}</span>
             </div>
             <div class="data-information-text align-middle">
               <img class="data-school" src="../assets/school.png">
-              <span>重庆工业职业技术学院</span>
+              <span>{{data.collegeName}}</span>
             </div>
             <div class="data-information-text align-middle">
               <img class="data-professional" src="../assets/professional.png">
-              <span>视觉与传达专业</span>
+              <span>{{data.majorName}}</span>
             </div>
             <div class="data-information-text">
-              <span class="data-information-teacher">辅导员:王老师</span>
-              <span>学号:2018130512</span>
+              <span class="data-information-teacher">辅导员:{{data.instructorName}}</span>
+              <span>学号:{{data.studentCode}}</span>
             </div>
           </div>
         </div>
         <div class="data-right">
-          608室4床
+          {{data.dormitoryName}}室{{data.bedCode}}床
         </div>
       </div>
       <div class="data-line"></div>
       <div class="data-number">
         <div class="data-number-text data-late">
-          <div>2</div>
+          <div>{{data.totalStayOutLate}}</div>
           <div>累计晚归</div>
         </div>
         <div class="data-align"></div>
         <div class="data-number-text">
-          <div>300</div>
+          <div>{{data.totalClock}}</div>
           <div>累计到勤</div>
         </div>
         <div class="data-align"></div>
         <div class="data-number-text data-back">
-          <div>1</div>
+          <div>{{data.totalStayOut}}</div>
           <div>累计未归</div>
         </div>
       </div>
@@ -51,7 +51,8 @@
 
 <script>
 export default {
-  name: 'data-banner'
+  name: 'data-banner',
+  props:['data']
 }
 </script>
 
