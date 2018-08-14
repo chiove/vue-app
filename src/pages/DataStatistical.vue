@@ -1,6 +1,6 @@
 <template>
   <div class="body-container">
-    <data-banner></data-banner>
+    <data-banner :data="pageData"></data-banner>
     <history-select @selectDate="selectDate"></history-select>
     <div class="history-details-container">
       <history-list v-for="(item,index) in historyListData" v-bind:key="index" :data="item"></history-list>
@@ -19,24 +19,24 @@ export default {
   components: {signTab,dataBanner,historySelect,historyList},
   name: "statistical-data",
   mounted:function () {
-    const studentIformation = axios.getStudent("传入学生ID")/*获取学生信息*/
-    const clocktimes = getStudentsClocktimes("传入学生ID")/*获取晚归，到勤，未归*/
-    const studentClockHistory = studentClockHistory(this.selectDateSearch,'传入学生ID')/*根据学生ID和日期查询全部历史*/
-    this.profilePhoto = require(`${studentIformation.data.profilePhoto}`)
-    this.studentName = studentIformation.data.studentName
-    this.classNames = studentIformation.data.className
-    this.majorName = studentIformation.data.majorName
-    this.instructorName = studentIformation.data.instructorName
-    this.studentCode = studentIformation.data.studentCode
-    this.dormitoryName = studentIformation.data.dormitoryName
-    this.bedCode = studentIformation.data.bedCode
-    this.studentName = studentIformation.data.studentName
+    const studentIformation = axios.getStudent(this.pageData.studentId)/*获取学生信息*/
+    const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)/*获取晚归，到勤，未归*/
+    const studentClockHistoryYM = axios.studentClockHistoryYM(this.selectDateSearch.year,this.selectDateSearch.month,this.pageData.studentId)/*根据学生ID和日期查询全部历史*/
+    this.pageData.profilePhoto = require(`${studentIformation.data.profilePhoto}`)
+    this.pageData.studentName = studentIformation.data.studentName
+    this.pageData.classNames = studentIformation.data.className
+    this.pageData.majorName = studentIformation.data.majorName
+    this.pageData.instructorName = studentIformation.data.instructorName
+    this.pageData.studentCode = studentIformation.data.studentCode
+    this.pageData.dormitoryName = studentIformation.data.dormitoryName
+    this.pageData.bedCode = studentIformation.data.bedCode
+    this.pageData.studentName = studentIformation.data.studentName
     /*获取晚归，到勤，未归*/
-    this.totalStayOutLate = clocktimes.data.totalStayOutLate
-    this.totalClock = clocktimes.data.totalClock
-    this.totalStayOut = clocktimes.data.totalStayOut
+    this.pageData.totalStayOutLate = clocktimes.data.totalStayOutLate
+    this.pageData.totalClock = clocktimes.data.totalClock
+    this.pageData.totalStayOut = clocktimes.data.totalStayOut
     /*根据学生ID和日期查询全部历史*/
-    this.historyListData = studentClockHistory.data
+    this.historyListData = studentClockHistoryYM.data
   },
   data() {
     return {
@@ -44,6 +44,7 @@ export default {
       selectDateSearch:'',
       historyListData:[],
       pageData:{
+        studentId:0,
         profilePhoto:'',
         studentName:'',
         classNames:'',

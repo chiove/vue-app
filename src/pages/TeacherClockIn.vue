@@ -1,8 +1,8 @@
 <template>
   <div class="body-container">
-    <teacher-clock-in-banner :data="data"></teacher-clock-in-banner>
-    <sign-content :data="{data}" :notPosition="notPosition"></sign-content>
-    <sign-user :data="data"></sign-user>
+    <teacher-clock-in-banner :data="pageData"></teacher-clock-in-banner>
+    <sign-content :data="pageData" :notPosition="notPosition"></sign-content>
+    <sign-user :data="pageData"></sign-user>
   </div>
 </template>
 
@@ -10,20 +10,25 @@
   import teacherClockInBanner from '../components/TeacherClockInBanner'
   import signContent from "../components/signContent"
   import signUser from "../components/signUser"
-  const data = {
-    state:"warning",
-    name:"张晓强",
-    times:23,
-  }
+  import axios from '../units/axios'
+  import getHour from '../units/tools'
 export default {
-components:{teacherClockInBanner,signContent,signUser},
-name: "teacher-clock-in",
-data(){
+  components:{teacherClockInBanner,signContent,signUser},
+  name: "teacher-clock-in",
+  mounted:function(){
+
+  },
+  data(){
     return {
       notPosition:true,
-      data:data
+      pageData:{
+        studentId:0,
+        clockStartTime:'',
+        clockEndTime:'',
+        state:''
+      }
     }
-}
+  }
 }
 </script>
 

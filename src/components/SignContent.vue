@@ -1,6 +1,6 @@
 <template>
   <div class="sign-content">
-    <div class="sign-in" :style="{boxShadow:state.boxShadow,backgroundColor:state.backgroundColor}">
+    <div class="sign-in" :style="{boxShadow:state.boxShadow,backgroundColor:state.backgroundColor}" @click="studentClockFun">
       <div class="sign-in-text">{{state.text}}</div>
       <div class="sign-in-time">{{sign.timeNow}}</div>
     </div>
@@ -64,8 +64,13 @@ export default {
     }
   },
   methods:{
-    getTime:function () {
-
+    studentClockFun:function () {
+      this.$emit("studentClockFun",{
+        deviceId:'',
+        posLatitude:0,
+        posLongitude:0,
+        studentId:0
+      })
     }
   }
 }

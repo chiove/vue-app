@@ -1,7 +1,7 @@
 <template>
   <div class="body-container">
      <sign-banner :data="pageData"></sign-banner>
-     <sign-content :data="pageData"></sign-content>
+     <sign-content :data="pageData" @studentClockFun="listenStudentClockFun"></sign-content>
      <sign-user :data="pageData"></sign-user>
      <sign-tab :pageName = "pageName"></sign-tab>
   </div>
@@ -14,46 +14,69 @@ import signTab from '../components/signTab'
 import signUser from '../components/signUser'
 import axios from '../units/axios'
 import getHour from '../units/tools'
-
 export default {
   components: {signBanner, signContent, signTab, signUser},
   name: 'students-clock-in',
   mounted: function () {
-    /*/!*时间范围*!/
-    const systemConfig = axios.getSystemConfig()/!*获取系统配置*!/
-    const studentIformation = axios.getStudent("传入学生ID")/!*获取学生信息*!/
-    const nowClockStartTime = Number(getHour('hour'))
-    const clockStartNumber = Number(this.clockStartTime.substring(0,2)
-    const clockEndNumber = Number(this.clockEndTime.substring(0,2)
-    this.clockStartTime =  systemConfig.clockStartTime
-    this.clockEndTime =  systemConfig.clockEndTime
-    this.profilePhoto = require(`${studentIformation.data.profilePhoto}`)
-    this.studentName = studentIformation.data.studentName
+    /*获取系统配置*/
+    const systemConfig = axios.getSystemConfig()
+    const nowClockStartTime = Number(getHour('hour'))/*获取学生当前考勤状态*/
+    this.pageData.clockStartTime =  systemConfig.clockStartTime
+    this.pageData.clockEndTime =  systemConfig.clockEndTime
+    const clockStartNumber = Number(this.clockStartTime.substring(0,4)
+    const clockEndNumber = Number(this.clockEndTime.substring(0,4)
     if(Number(this.clockStartTime.substring(0,2))<nowClockStartTime){
-      this.state = 'default'
+      this.pageData.state = 'default'
     }else if(clockStartNumber<=nowClockStartTime&&nowClockStartTime<clockEndNumber){
-      this.state = 'primary'
+      this.pageData.state = 'primary'
     }else if(nowClockStartTime>clockEndNumber&&nowClockStartTime<24){
-      this.state = 'warning'
+      this.pageData.state = 'warning'
     }else if('打卡成功返回状态'){
-      this.state = 'sucess'
+      this.pageData.state = 'sucess'
     }else{
+      this.pageData.state = 'danger'
+    }
+    /*获取学生信息*/
+    const studentIformation = axios.getStudent(this.pageData.studentId)
+    this.pageData.profilePhoto = studentIformation.data.profilePhoto
+    this.pageData.studentName = studentIformation.data.studentName
+    /*获取晚归，到勤，未归*/
+    const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)
+    this.pageData.totalClock = clocktimes.data.totalClock
+    /*获取学生当前考勤状态*/
+    const studentClockStatus = axios.studentClockStatus(this.pageData.studentId)
+    this.pageData.checkData = studentClockStatus.data
+  },
+  updated:function(){
+    if(this.clockStatus===2){
+      this.state = 'sucess'
+    }else if(this.clockStatus===3){
+      this.state = 'warning'
+    }else if(this.clockStatus===4){
       this.state = 'danger'
-    }*/
+    }
   },
   data () {
     return {
       pageName: 'StudentsClockIn',
       pageData: {
+        studentId:0,
         clockStartTime:'18:00',
         clockEndTime:'23:00',
         state:'sucess',
         profilePhoto:'',
-        studentName:''
+        studentName:'',
+        clockStatus: 0,
+        checkData:0,
+        totalClock:0
       }
     }
   },
   methods: {
+    listenStudentClockFun:function (data) {
+      const state = axios.studentClock(data)
+      this.clockStatus = state.data.clockStatus
+    }
   }
 }
 </script>

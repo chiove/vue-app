@@ -14,14 +14,9 @@ export default {
   props:["data"],
   name: "teacher-clock-in-banner",
   created:function () {
-    console.log(this.data)
     if(this.data.state==="sucess"){
       this.backGroundImg =require("../assets/sucess.png")
-    }else if(this.data.state==="warning"){
-      this.backGroundImg = require("../assets/warning.png")
-    }else if(this.data.state==="danger"){
-      this.backGroundImg = require("../assets/danger.png")
-    }else {
+    }else if(this.data.state==="default"){
       this.backGroundImg = require("../assets/primary.png")
     }
   },

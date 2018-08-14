@@ -52,7 +52,10 @@ export default {
         confirm:function (value) {
           this.displayState=false
           this.dateValue = `${value.getFullYear()}年${value.getMonth()+1}月`
-          this.$emit("selectDate",`${value.getFullYear()}-${value.getMonth()+1}`)
+          this.$emit("selectDate",{
+            year:value.getFullYear(),
+            month:value.getMonth()+1
+          })
         },
         dateSelect:function () {
           this.displayState=true

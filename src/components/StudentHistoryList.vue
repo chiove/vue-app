@@ -1,8 +1,8 @@
 <template>
     <div class="history-list">
-      <div class="history-icon icon-danger"></div>
-      <div class="history-text">2018年7月19日 20:23:12</div>
-      <div class="history-state color-danger">未归</div>
+      <div class="history-icon" :class="classState"></div>
+      <div class="history-text">{{data.year}}年{{data.month}}月{{data.day}}日 {{data.lastUpdateTime}}</div>
+      <div class="history-state" :class="classState">{{textState}}</div>
       <img class="history-details-img" src="../assets/iconRight.png" >
     </div>
 </template>
@@ -10,7 +10,25 @@
 <script>
 export default {
   name: "student-history-list",
-  props:['data']
+  props:['data'],
+  mounted:function () {
+    if(data.clockStatus===2){
+      this.classState = 'icon-sucess'
+      this.textState = '到勤'
+    }else if(data.clockStatus===3){
+      this.classState = 'icon-warning'
+      this.textState = '晚归'
+    }else if(data.clockStatus===4){
+      this.classState = 'icon-danger'
+      this.textState = '未归'
+    }
+  },
+  data(){
+    return {
+      classState:'',
+      textState:''
+    }
+  }
 }
 </script>
 
