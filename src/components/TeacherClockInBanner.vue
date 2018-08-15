@@ -13,7 +13,7 @@ const fullDate = units.getCurrentTime("year")
 export default {
   props:["data"],
   name: "teacher-clock-in-banner",
-  created:function () {
+  mounted:function () {
     if(this.data.state==="sucess"){
       this.backGroundImg =require("../assets/sucess.png")
     }else if(this.data.state==="default"){
@@ -28,7 +28,11 @@ export default {
   },
   methods: {
     historyList:function () {
-      this.$router.push({path:"/teacherHistoryMemory"})
+      this.$router.push({path:"/teacherHistoryMemory", params: {
+          instructorId: this.data.instructorId,
+          year:fullDate.year,
+          month:fullDate.month
+        }})
     }
   }
 }

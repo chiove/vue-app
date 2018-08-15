@@ -4,7 +4,7 @@
       <div class="sign-in-text">{{state.text}}</div>
       <div class="sign-in-time">{{sign.timeNow}}</div>
     </div>
-    <div class="sign-location" v-if="position">
+    <div class="sign-location">
       <img class="sign-img" src="../assets/true.png"/>
       <span class="sign-location-text">已进入签到范围：重庆工业职业技术...</span>
       <span class="sign-location-btn">重新定位</span>
@@ -15,14 +15,10 @@
 <script>
 import units from "../units/tools"
 export default {
-  props:["data","notPosition"],
+  props:["data"],
   name: "sign-content",
   mounted:function () {
     const _this = this;
-    /*是否显示定位*/
-    if(this.notPosition){
-      this.position=false
-    }
     /*本地时间*/
     setInterval(function () {
       _this.sign.timeNow = units.getCurrentTime("hour");
@@ -59,8 +55,7 @@ export default {
         boxShadow:'',
         backgroundColor:'',
         text:''
-      },
-      position:true
+      }
     }
   },
   methods:{

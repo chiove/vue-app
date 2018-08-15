@@ -18,43 +18,48 @@ export default {
   components: {signBanner, signContent, signTab, signUser},
   name: 'students-clock-in',
   mounted: function () {
-    /*获取系统配置*/
+   /* /!*获取系统配置*!/
     const systemConfig = axios.getSystemConfig()
-    const nowClockStartTime = Number(getHour('hour'))/*获取学生当前考勤状态*/
-    this.pageData.clockStartTime =  systemConfig.clockStartTime
-    this.pageData.clockEndTime =  systemConfig.clockEndTime
-    const clockStartNumber = Number(this.clockStartTime.substring(0,4)
-    const clockEndNumber = Number(this.clockEndTime.substring(0,4)
+    const nowClockStartTime = Number(getHour('hour'))/!*获取学生当前考勤状态*!/
+    this.pageData.clockStartTime =  systemConfig.clockStartTime.substring(0,4)
+    this.pageData.clockEndTime =  systemConfig.clockEndTime.substring(0,4)
+    const clockStartNumber = Number(this.clockStartTime.substring(0,2)
+    const clockEndNumber = Number(this.clockEndTime.substring(0,2)
     if(Number(this.clockStartTime.substring(0,2))<nowClockStartTime){
       this.pageData.state = 'default'
     }else if(clockStartNumber<=nowClockStartTime&&nowClockStartTime<clockEndNumber){
       this.pageData.state = 'primary'
     }else if(nowClockStartTime>clockEndNumber&&nowClockStartTime<24){
       this.pageData.state = 'warning'
-    }else if('打卡成功返回状态'){
-      this.pageData.state = 'sucess'
     }else{
       this.pageData.state = 'danger'
     }
-    /*获取学生信息*/
+    /!*获取学生信息*!/
     const studentIformation = axios.getStudent(this.pageData.studentId)
     this.pageData.profilePhoto = studentIformation.data.profilePhoto
     this.pageData.studentName = studentIformation.data.studentName
-    /*获取晚归，到勤，未归*/
+    /!*获取晚归，到勤，未归*!/
     const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)
     this.pageData.totalClock = clocktimes.data.totalClock
-    /*获取学生当前考勤状态*/
+    /!*获取学生当前考勤状态*!/
     const studentClockStatus = axios.studentClockStatus(this.pageData.studentId)
-    this.pageData.checkData = studentClockStatus.data
+    this.pageData.clockStatus = studentClockStatus.data
+    if(this.pageData.clockStatus===1){
+      this.pageData.state = 'default'
+    }else if(this.pageData.clockStatus===2){
+      this.pageData.state = 'sucess'
+    }else if(this.pageData.clockStatus===3){
+      this.pageData.state = 'warning'
+    }else if(this.pageData.clockStatus===4){
+      this.pageData.state = 'danger'
+    }else{
+      this.pageData.state = 'primary'
+    }*/
   },
   updated:function(){
-    if(this.clockStatus===2){
-      this.state = 'sucess'
-    }else if(this.clockStatus===3){
-      this.state = 'warning'
-    }else if(this.clockStatus===4){
-      this.state = 'danger'
-    }
+    /*if(this.pageData.clockStateCode === "000000"){
+      this.pageData.state = 'sucess'
+    }*/
   },
   data () {
     return {
@@ -67,15 +72,15 @@ export default {
         profilePhoto:'',
         studentName:'',
         clockStatus: 0,
-        checkData:0,
-        totalClock:0
+        totalClock:0,
+        clockStateCode:''
       }
     }
   },
   methods: {
     listenStudentClockFun:function (data) {
       const state = axios.studentClock(data)
-      this.clockStatus = state.data.clockStatus
+      this.pageData.clockStateCode = state.code
     }
   }
 }

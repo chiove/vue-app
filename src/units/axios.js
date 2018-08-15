@@ -103,7 +103,7 @@ export default {
     this.axiosGet(`/select-data/user/${userId}`)
   },
     /*3. 辅导员操作接口-根据年月辅导员考勤统计 GET /instructor-clock/stat-by-year-month*/
-  getTeacherTotal:function (instructorId,month,year) {
+  getTeacherTotal:function (year,month,instructorId) {
     this.axiosGet('/instructor-clock/stat-by-year-month',{
       instructorId:instructorId,
       month:month,

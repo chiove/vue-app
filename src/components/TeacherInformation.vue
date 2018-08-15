@@ -5,10 +5,10 @@
         <img class="sign-user-img" :src="require(`${data.profilePhoto}`)">
         <div class="sign-user-content">
           <div class="sign-user-names">
-            {{data.studentName}}
+            {{data.name}}
           </div>
           <div class="sign-user-times">
-            累计打卡：{{data.totalClock}}次
+            累计打卡：{{data.totalClockCount}}次
           </div>
         </div>
       </div>
@@ -20,26 +20,22 @@
 </template>
 
 <script>
-export default {
-  name: 'sign-user',
-  props:['data'],
-  mounted:function () {
-    if(data.clockStatus===1){
-      this.checkDataText = '未打卡'
-    }else if (data.clockStatus===2) {
-      this.checkDataText = '到勤'
-    }else if (data.clockStatus===3){
-      this.checkDataText = '晚归'
-    }else if (data.clockStatus===4){
-      this.checkDataText = '未归'
-    }
-  },
-  data(){
-    return {
-      checkDataText:''
+  export default {
+    name: 'teacher-information',
+    props:['data'],
+    mounted:function () {
+      if(this.data.state==='sucess'){
+        this.checkDataText = '未打卡'
+      }else if (this.data.state==='default') {
+        this.checkDataText = '已打卡'
+      }
+    },
+    data(){
+      return {
+        checkDataText:''
+      }
     }
   }
-}
 </script>
 
 <style scoped>

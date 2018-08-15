@@ -33,21 +33,29 @@
 
 <script>
 import dateSelect from '../components/DateSelect'
-import dataList from '../json/memoryList.json'
+import axios from '../units/axios'
+
 export default {
     components:{dateSelect},
     name: "history-memory",
-    created:function () {
-
+    mounted:function () {
+      const instructorId = this.$route.params.instructorId
+      const year = this.$route.params.year
+      const month = this.$route.params.month
+      this.dateDataList = axios.getTeacherTotal(year,month,instructorId).data
     },
     data:function () {
       return {
+        dateDataList:'',
         padding:"0.68rem 0.533333rem"
       }
     },
     methods: {
       listenEvent:function (data) {
-        console.log(data)
+        const instructorId = this.$route.params.instructorId
+        const year = data.year
+        const month =data.month
+        this.dateDataList = axios.getTeacherTotal(year,month,instructorId).data
       }
     }
 }
