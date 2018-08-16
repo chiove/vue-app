@@ -26,6 +26,7 @@
     "vant": "^1.1.14",
     "vue": "^2.5.2",
     "vue-amap": "^0.5.8",
+    "vue-pull-to": "^0.1.6",
     "vue-router": "^3.0.1"
   },
   "devDependencies": {

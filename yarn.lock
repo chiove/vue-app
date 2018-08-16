@@ -7866,6 +7866,12 @@ vue-loader@^13.3.0:
     vue-style-loader "^3.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
+vue-pull-to@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/vue-pull-to/-/vue-pull-to-0.1.6.tgz#07688e6ae062a94041bd78ac6d59fdc0eb060dc5"
+  dependencies:
+    vue "^2.2.6"
+
 vue-router@^3.0.1:
   version "3.0.1"
   resolved "http://registry.npm.taobao.org/vue-router/download/vue-router-3.0.1.tgz#d9b05ad9c7420ba0f626d6500d693e60092cc1e9"
@@ -7887,6 +7893,10 @@ vue-template-compiler@^2.5.2:
 vue-template-es2015-compiler@^1.5.3, vue-template-es2015-compiler@^1.6.0:
   version "1.6.0"
   resolved "http://registry.npm.taobao.org/vue-template-es2015-compiler/download/vue-template-es2015-compiler-1.6.0.tgz#dc42697133302ce3017524356a6c61b7b69b4a18"
+
+vue@^2.2.6:
+  version "2.5.17"
+  resolved "https://registry.yarnpkg.com/vue/-/vue-2.5.17.tgz#0f8789ad718be68ca1872629832ed533589c6ada"
 
 vue@^2.5.2:
   version "2.5.16"

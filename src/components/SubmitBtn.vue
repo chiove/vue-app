@@ -19,11 +19,13 @@
 </template>
 
 <script>
+  import axios from '../units/axios'
 import Vue from 'vue'
 import { Popup } from 'vant'
 Vue.use(Popup)
 export default {
   name: 'submit-btn',
+  props:['data'],
   data () {
     return {
       show: false
@@ -39,7 +41,8 @@ export default {
     },
     confirm: function () {
       this.show = false
-      console.log('获取textarea值:', this.$refs.feedBackValue.value)
+      const remark = this.$refs.feedBackValue.value
+      axios.putTeacherCare(this.data.studentId,remark)
     }
   }
 }

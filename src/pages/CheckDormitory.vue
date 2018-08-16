@@ -2,7 +2,6 @@
   <div class="body-container">
     <div class="search-bar">
       <div class="search-input" @click="inputContent">
-        <!--<input class="search-form" ref="inputFocus" @input="valueChange" type="text" placeholder=""/>-->
         <div class="search-placeholder" v-if="inputState">
           <img src="../assets/search.png">
           <span class="search-placeholder-text">搜索学号/姓名</span>

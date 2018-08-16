@@ -64,7 +64,7 @@ export default {
         deviceId:'',
         posLatitude:0,
         posLongitude:0,
-        studentId:0
+        studentId:1
       })
     }
   }

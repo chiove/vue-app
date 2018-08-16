@@ -10,9 +10,9 @@
     </div>
     <div class="search-result-container">
       <div class="search-result-list" v-if="resultView" @click="getParams">
-        <div class="result-item" v-for="(item,index) in searchData" :data-index="item.id">
-          <div class="result-name">{{item.name}}</div>
-          <div class="result-number">学号：{{item.number}}</div>
+        <div class="result-item">
+          <div class="result-name">{{name}}</div>
+          <div class="result-number">学号：{{code}}</div>
         </div>
       </div>
     </div>
@@ -22,28 +22,19 @@
 
 <script>
 import teacherCheckTab from '../components/TeacherCheckTab'
+import axios from '../units/axios'
 export default {
   components: {teacherCheckTab},
   name: 'search-students',
-  created: function () {
+  mounted: function () {
 
   },
   data () {
     return {
-      searchParam: '',
       resultView: false,
-      searchData: [
-        {
-          id: '1',
-          name: '梁朝伟',
-          number: '21213213'
-        },
-        {
-          id: '1',
-          name: '刘德华',
-          number: '21213213'
-        }
-      ]
+      code:'',
+      name:'',
+      studentId:1
     }
   },
   methods: {
@@ -52,15 +43,24 @@ export default {
       this.resultView = false
     },
     searchFun: function () {
-      this.searchParam = this.$refs.nameNumber.value
+      const searchParam = this.$refs.nameNumber.value
       this.resultView = true
-      console.log('查询参数:', this.searchParam)
+      const data = {
+        name:searchParam,
+        code:searchParam
+      }
+      this.code = axios.getSearchStudentList(data).code
+      this.name = axios.getSearchStudentList(data).name
+      this.studentId = axios.getSearchStudentList(data).studentId
     },
     getParams: function (e) {
       if (e.target.dataset.index === undefined) {
         return false
       } else {
-        console.log('详情参数', e.target.dataset.index)
+        this.$router.push({path:'/teacherSubmit',params: {
+            studentId:this.studentId
+          }
+        })
       }
     }
   }
@@ -117,7 +117,7 @@ export default {
     line-height: 80px;
   }
   .search-result-container{
-    height: 880px;
+    height: 980px;
     overflow-y: auto;
   }
   .search-result-list{

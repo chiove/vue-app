@@ -2,7 +2,7 @@
   <div class="sign-user-container">
     <div class="sign-user">
       <div class="sign-user-name">
-        <img class="sign-user-img" :src="require(`${data.profilePhoto}`)">
+        <img class="sign-user-img" :src="data.profilePhoto">
         <div class="sign-user-content">
           <div class="sign-user-names">
             {{data.studentName}}
@@ -24,19 +24,19 @@ export default {
   name: 'sign-user',
   props:['data'],
   mounted:function () {
-    if(data.clockStatus===1){
+    if(this.data.clockStatus===1){
       this.checkDataText = '未打卡'
-    }else if (data.clockStatus===2) {
+    }else if (this.data.clockStatus===2) {
       this.checkDataText = '到勤'
-    }else if (data.clockStatus===3){
+    }else if (this.data.clockStatus===3){
       this.checkDataText = '晚归'
-    }else if (data.clockStatus===4){
+    }else if (this.data.clockStatus===4){
       this.checkDataText = '未归'
     }
   },
   data(){
     return {
-      checkDataText:''
+      checkDataText:'',
     }
   }
 }

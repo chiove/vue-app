@@ -5,138 +5,152 @@
       <div :class="{'tab-right':true,'tab-active':tabRightActive}" @click="rightActive">未关怀</div>
     </div>
     <div class="content-container">
-      <div class="left-container" v-if="tabLeftActive">
-        <div class="care-item">
-          <div class="care-item-left">
-            <img class="care-item-img" src="../assets/head.png">
-          </div>
-          <div class="care-item-center">
-            <div class="care-item-name">梁朝伟<span class="care-item-class">(132班)</span></div>
-            <div class="care-item-number">
-              学号：2018130212
+      <div class="left-container" v-if="tabLeftActive" @click="careItemFun">
+        <pull-to :bottom-load-method="refreshLeft" class="file-lists">
+          <div class="care-item" v-for="(item,index) in careListYes" v-bind:key="index" :data-index="item.studentId">
+            <div class="care-item-left">
+              <img class="care-item-img" :src="item.profilePhoto">
+            </div>
+            <div class="care-item-center">
+              <div class="care-item-name">{{item.studentName}}<span class="care-item-class">({{item.className}}班)</span></div>
+              <div class="care-item-number">
+                学号：{{item.studentCode}}
+              </div>
+            </div>
+            <div class="care-item-right">
+              <div class="care-item-task">
+                任务时间
+              </div>
+              <div class="care-item-date">
+                {{item.taskDate}}
+              </div>
             </div>
           </div>
-          <div class="care-item-right">
-            <div class="care-item-task">
-              任务时间
-            </div>
-            <div class="care-item-date">
-              2018年7月23日
-            </div>
-          </div>
-        </div>
-        <div class="care-item">
-          <div class="care-item-left">
-            <img class="care-item-img" src="../assets/head.png">
-          </div>
-          <div class="care-item-center">
-            <div class="care-item-name">梁朝伟<span class="care-item-class">(132班)</span></div>
-            <div class="care-item-number">
-              学号：2018130212
-            </div>
-          </div>
-          <div class="care-item-right">
-            <div class="care-item-task">
-              任务时间
-            </div>
-            <div class="care-item-date">
-              2018年7月23日
-            </div>
-          </div>
-        </div>
+        </pull-to>
       </div>
-      <div class="right-container" v-if="tabRightActive">
-        <div class="care-item">
-          <div class="care-item-left">
-            <img class="care-item-img" src="../assets/head.png">
-          </div>
-          <div class="care-item-center">
-            <div class="care-item-name">梁朝伟<span class="care-item-class">(132班)</span></div>
-            <div class="care-item-number">
-              学号：2018130212
+      <div class="right-container" v-if="tabRightActive"  @click="careItemFun">
+        <pull-to :bottom-load-method="refreshRight" class="file-lists">
+          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index">
+            <div class="care-item-left">
+              <img class="care-item-img" :src="item.profilePhoto">
+            </div>
+            <div class="care-item-center">
+              <div class="care-item-name">{{item.studentName}}<span class="care-item-class">({{item.className}}班)</span></div>
+              <div class="care-item-number">
+                学号：{{item.studentCode}}
+              </div>
+            </div>
+            <div class="care-item-right">
+              <div class="care-item-task">
+                任务时间
+              </div>
+              <div class="care-item-date">
+                {{item.taskDate}}
+              </div>
             </div>
           </div>
-          <div class="care-item-right">
-            <div class="care-item-task">
-              任务时间
-            </div>
-            <div class="care-item-date">
-              2018年7月23日
-            </div>
-          </div>
-        </div>
-        <div class="care-item">
-          <div class="care-item-left">
-            <img class="care-item-img" src="../assets/head.png">
-          </div>
-          <div class="care-item-center">
-            <div class="care-item-name">梁朝伟<span class="care-item-class">(132班)</span></div>
-            <div class="care-item-number">
-              学号：2018130212
-            </div>
-          </div>
-          <div class="care-item-right">
-            <div class="care-item-task">
-              任务时间
-            </div>
-            <div class="care-item-date">
-              2018年7月23日
-            </div>
-          </div>
-        </div>
-        <div class="care-item">
-          <div class="care-item-left">
-            <img class="care-item-img" src="../assets/head.png">
-          </div>
-          <div class="care-item-center">
-            <div class="care-item-name">梁朝伟<span class="care-item-class">(132班)</span></div>
-            <div class="care-item-number">
-              学号：2018130212
-            </div>
-          </div>
-          <div class="care-item-right">
-            <div class="care-item-task">
-              任务时间
-            </div>
-            <div class="care-item-date">
-              2018年7月23日
-            </div>
-          </div>
-        </div>
+        </pull-to>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
+  import PullTo from 'vue-pull-to'
+  import axios from '../units/axios'
+  export default {
+    components: {PullTo},
+    name: 'pastoral-care',
+    mounted: function () {
+      this.refreshLeft()
+      this.refreshRight()
+    },
+    data () {
+      return {
+        tabLeftActive: true,
+        tabRightActive: false,
 
-export default {
-  components: {},
-  name: 'pastoral-care',
-  created: function () {
-
-  },
-  data () {
-    return {
-      tabLeftActive: true,
-      tabRightActive: false
-    }
-  },
-  methods: {
-    leftActive: function () {
-      if (this.tabLeftActive !== true) {
-        this.tabLeftActive = true
-        this.tabRightActive = false
+        careStatus:1,
+        instructorId:0,
+        pageNoLeft:1,
+        pageNoRight:1,
+        pageSize:10,
+        careListYes:[],
+        careListNot:[]
       }
     },
-    rightActive: function () {
-      if (this.tabRightActive !== true) {
-        this.tabLeftActive = false
-        this.tabRightActive = true
+    methods: {
+      refreshLeft(loaded) {
+        this.pageNoLeft++
+        const params = {
+          careStatus:1,
+          instructorId:1,
+          pageNo:this.pageNoLeft,
+          pageSize:10
+        }
+        const _this = this
+        axios.ajax.get('http://219.153.12.197:31001/care-instructor', {
+          params:params
+        })
+          .then(function (response) {
+            if(_this.pageNoLeft === response.data.totalPages){
+              loaded('done')
+            }
+            _this.careListYes.push(...response.data.result)
+            console.log(response)
+            loaded('done')
+          })
+          .catch(function (error) {
+            _this.pageNoLeft --
+            console.log(error)
+          })
+      },
+      refreshRight(loaded) {
+        this.pageNoRight++
+        const params = {
+          careStatus:2,
+          instructorId:1,
+          pageNo:this.pageNoRight,
+          pageSize:10
+        }
+        const _this = this
+        axios.ajax.get('http://219.153.12.197:31001/care-instructor', {
+          params:params
+        })
+          .then(function (response) {
+            if(_this.pageNoRight === response.data.totalPages){
+              loaded('done')
+            }
+            _this.careListNot.push(...response.data.result)
+            console.log(response)
+            loaded('done')
+          })
+          .catch(function (error) {
+            _this.pageNoRight --
+            console.log(error)
+          })
+      },
+      leftActive: function () {
+        if (this.tabLeftActive !== true) {
+          this.tabLeftActive = true
+          this.tabRightActive = false
+        }
+      },
+      rightActive: function () {
+        if (this.tabRightActive !== true) {
+          this.tabLeftActive = false
+          this.tabRightActive = true
+        }
+      },
+      careItemFun:function (e) {
+        this.$router.push({path:'/teacherSubmit',params: {
+            studentId: e.target.dataset.index
+          }
+        })
       }
     }
   }
-}
 </script>
 
 <style scoped>
@@ -148,6 +162,7 @@ export default {
 }
 .left-container,.right-container{
   overflow: auto;
+  height: 100%;
 }
 .tab-left,.tab-right{
   height:127px;
@@ -219,4 +234,7 @@ export default {
   color:rgba(85,85,85,1);
   margin-right: 22px;
 }
+  .file-lists{
+    height: 100%;
+  }
 </style>

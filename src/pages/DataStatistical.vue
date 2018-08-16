@@ -19,9 +19,8 @@ export default {
   components: {signTab,dataBanner,historySelect,historyList},
   name: "statistical-data",
   mounted:function () {
-   /* const studentIformation = axios.getStudent(this.pageData.studentId)/!*获取学生信息*!/
-    const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)/!*获取晚归，到勤，未归*!/
-    const studentClockHistoryYM = axios.studentClockHistoryYM(this.selectDateSearch.year,this.selectDateSearch.month,this.pageData.studentId)/!*根据学生ID和日期查询全部历史*!/
+    /*获取学生信息*/
+    const studentIformation = axios.getStudent(this.pageData.studentId)
     this.pageData.profilePhoto = require(`${studentIformation.data.profilePhoto}`)
     this.pageData.studentName = studentIformation.data.studentName
     this.pageData.classNames = studentIformation.data.className
@@ -31,20 +30,25 @@ export default {
     this.pageData.dormitoryName = studentIformation.data.dormitoryName
     this.pageData.bedCode = studentIformation.data.bedCode
     this.pageData.studentName = studentIformation.data.studentName
-    /!*获取晚归，到勤，未归*!/
-    this.pageData.totalStayOutLate = clocktimes.data.totalStayOutLate
-    this.pageData.totalClock = clocktimes.data.totalClock
-    this.pageData.totalStayOut = clocktimes.data.totalStayOut
-    /!*根据学生ID和日期查询全部历史*!/
-    this.historyListData = studentClockHistoryYM.data*/
+    /*获取晚归，到勤，未归*/
+    const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)
+    this.pageData.totalStayOutLate = clocktimes.data.data.totalStayOutLate
+    this.pageData.totalClock = clocktimes.data.data.totalClock
+    this.pageData.totalStayOut = clocktimes.data.data.totalStayOut
+    /*根据学生ID和日期查询全部历史*/
+    const studentClockHistoryYM = axios.studentClockHistoryYM(this.selectDateSearch.year,this.selectDateSearch.month,this.pageData.studentId)
+    this.historyListData = studentClockHistoryYM.data
   },
   data() {
     return {
       pageName:"StatisticalData",
-      selectDateSearch:'',
+      selectDateSearch:{
+        year:2018,
+        month:8
+      },
       historyListData:[],
       pageData:{
-        studentId:0,
+        studentId:1,
         profilePhoto:'',
         studentName:'',
         classNames:'',

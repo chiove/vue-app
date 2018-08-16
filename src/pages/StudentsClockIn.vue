@@ -13,18 +13,19 @@ import signContent from '../components/signContent'
 import signTab from '../components/signTab'
 import signUser from '../components/signUser'
 import axios from '../units/axios'
-import getHour from '../units/tools'
+import units from '../units/tools'
 export default {
   components: {signBanner, signContent, signTab, signUser},
   name: 'students-clock-in',
   mounted: function () {
-   /* /!*获取系统配置*!/
+    /*获取系统配置*/
     const systemConfig = axios.getSystemConfig()
-    const nowClockStartTime = Number(getHour('hour'))/!*获取学生当前考勤状态*!/
+    const nowClockStartTime = Number(units.getCurrentTime('hour'))/*获取学生当前考勤状态*/
     this.pageData.clockStartTime =  systemConfig.clockStartTime.substring(0,4)
     this.pageData.clockEndTime =  systemConfig.clockEndTime.substring(0,4)
-    const clockStartNumber = Number(this.clockStartTime.substring(0,2)
-    const clockEndNumber = Number(this.clockEndTime.substring(0,2)
+    const clockStartNumber = Number(this.clockStartTime.substring(0,2))
+    const clockEndNumber = Number(this.clockEndTime.substring(0,2))
+
     if(Number(this.clockStartTime.substring(0,2))<nowClockStartTime){
       this.pageData.state = 'default'
     }else if(clockStartNumber<=nowClockStartTime&&nowClockStartTime<clockEndNumber){
@@ -34,14 +35,14 @@ export default {
     }else{
       this.pageData.state = 'danger'
     }
-    /!*获取学生信息*!/
+    /*获取学生信息*/
     const studentIformation = axios.getStudent(this.pageData.studentId)
     this.pageData.profilePhoto = studentIformation.data.profilePhoto
     this.pageData.studentName = studentIformation.data.studentName
-    /!*获取晚归，到勤，未归*!/
+    /*获取晚归，到勤，未归*/
     const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)
     this.pageData.totalClock = clocktimes.data.totalClock
-    /!*获取学生当前考勤状态*!/
+    /*获取学生当前考勤状态*/
     const studentClockStatus = axios.studentClockStatus(this.pageData.studentId)
     this.pageData.clockStatus = studentClockStatus.data
     if(this.pageData.clockStatus===1){
@@ -54,12 +55,12 @@ export default {
       this.pageData.state = 'danger'
     }else{
       this.pageData.state = 'primary'
-    }*/
+    }
   },
   updated:function(){
-    /*if(this.pageData.clockStateCode === "000000"){
+    if(this.pageData.clockStateCode === "000000"){
       this.pageData.state = 'sucess'
-    }*/
+    }
   },
   data () {
     return {
@@ -71,7 +72,7 @@ export default {
         state:'sucess',
         profilePhoto:'',
         studentName:'',
-        clockStatus: 0,
+        clockStatus:0,
         totalClock:0,
         clockStateCode:''
       }
@@ -79,8 +80,8 @@ export default {
   },
   methods: {
     listenStudentClockFun:function (data) {
-      const state = axios.studentClock(data)
-      this.pageData.clockStateCode = state.code
+    /*  const state = axios.studentClock(data)
+      this.pageData.clockStateCode = state.code*/
     }
   }
 }

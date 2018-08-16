@@ -15,30 +15,31 @@
     components:{teacherClockInBanner,teacherContent,teacherInformation},
     name: "teacher-clock-in",
     mounted:function(){
-      /*/!*根据辅导员ID统计总打卡次数*!/
-      const teacherClockTimes = axios.getTeacherClockTimes(this.pageData.instructorId)
+      /*根据辅导员ID统计总打卡次数*/
+      const teacherClockTimes = axios.getTeacherClockTimes()
       this.pageData.totalClockCount = teacherClockTimes.data.totalClockCount
-      /!*根据辅导员ID查询当前考勤状态*!/
+      /*根据辅导员ID查询当前考勤状态*/
       const teacherCheck=axios.getTeacherCheck(this.pageData.instructorId)
       if(teacherCheck.data===1){
         this.pageData.state = 'default'
       }else if(teacherCheck.data===2){
         this.pageData.state = 'sucess'
       }
-      /!*根据用户ID查询基本信息*!/
+      /*根据用户ID查询基本信息*/
       const teacherBaseInformation = axios.getTeacherBaseInformation(this.pageData.instructorId)
       this.pageData.name = teacherBaseInformation.data.name
-      this.pageData.profilePhoto = teacherBaseInformation.data.profilePhoto*/
+      this.pageData.profilePhoto = teacherBaseInformation.data.profilePhoto
+      console.log(teacherCheck,teacherBaseInformation)
     },
     updated:function(){
-      /*if(this.pageData.clockStateCode === "000000"){
+      if(this.pageData.clockStateCode === "000000"){
         this.pageData.state = 'sucess'
-      }*/
+      }
     },
     data(){
       return {
         pageData:{
-          instructorId:0,
+          instructorId:1,
           state:'',
           clockStateCode:'',
           totalClockCount:0,
