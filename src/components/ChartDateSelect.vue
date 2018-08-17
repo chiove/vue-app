@@ -26,12 +26,13 @@ const fullDate = units.getCurrentTime('date')
 export default {
   components: {DatetimePicker},
   name: 'chart-date-select',
-  created: function () {
+  mounted: function () {
     const selectDate = {
       year: fullDate.year,
-      month: fullDate.month
+      month: fullDate.month,
+      day:fullDate.day
     }
-    this.$emit('selectDate', selectDate)
+    this.$emit('selectDateChart', selectDate)
   },
   data () {
     return {
@@ -63,7 +64,7 @@ export default {
         month: value.getMonth() + 1,
         day: value.getDate()
       }
-      this.$emit('selectDate', selectDate)
+      this.$emit('selectDateChart', selectDate)
     },
     dateSelect: function () {
       this.displayState = true

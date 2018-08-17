@@ -26,7 +26,7 @@ const fullDate = units.getCurrentTime("year")
 export default {
   components:{DatetimePicker},
   name: "date-select",
-  created:function () {
+  mounted:function () {
     const selectDate = {
       year:fullDate.year,
       month:fullDate.month

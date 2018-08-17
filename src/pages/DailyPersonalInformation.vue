@@ -68,10 +68,16 @@
   export default {
     components:{Popup,Picker},
     name: "daily-personal-information",
+    mounted:function(){
+
+    },
     data(){
       return {
         show:false,
-        columns:['到勤','晚归','未归']
+        columns:['到勤','晚归','未归'],
+
+
+
       }
     },
     methods:{
@@ -83,7 +89,8 @@
       },
       cancel:function () {
         this.show = false
-      }
+      },
+
     }
   }
 </script>

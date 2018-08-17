@@ -90,7 +90,7 @@
           pageSize:10
         }
         const _this = this
-        axios.ajax.get('http://219.153.12.197:31001/care-instructor', {
+        axios.ajax.get('/api/care-instructor', {
           params:params
         })
           .then(function (response) {
@@ -115,7 +115,7 @@
           pageSize:10
         }
         const _this = this
-        axios.ajax.get('http://219.153.12.197:31001/care-instructor', {
+        axios.ajax.get('/api/care-instructor', {
           params:params
         })
           .then(function (response) {
@@ -163,6 +163,7 @@
 .left-container,.right-container{
   overflow: auto;
   height: 100%;
+  position: relative;
 }
 .tab-left,.tab-right{
   height:127px;

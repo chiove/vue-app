@@ -7,7 +7,7 @@
     <div class="content-container">
       <div class="left-container" v-if="tabLeftActive">
           <div class="daily-statistical">
-            <chart-date-select v-on:selectDate="listenEvent"></chart-date-select>
+            <chart-date-select v-on:selectDateChart="listenEvent"></chart-date-select>
             <div class="daily-statistical-charts">
               <ve-ring :data="chartData" :settings="chartSettings"></ve-ring>
             </div>
@@ -16,9 +16,12 @@
       <div class="right-container" v-if="tabRightActive">
         <div class="week-statistical">
           <div class="week-statistical-title">
-            <div>
-              <span>第一周</span>
+            <div @click="weekSelectFun">
+              <span>第{{week}}周</span>
               <img class="week-statistical-select-down" src="../assets/selectDown.png" alt="">
+            </div>
+            <div class="week-statistical-total" v-if="weekTotal" @click="confirmWeekFun">
+              <div class="week-statistical-total-item" v-for="item in [1,2,3,4,5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6]" :data-index="item">{{item}}</div>
             </div>
             <div>应打卡人数：200</div>
           </div>
@@ -87,8 +90,9 @@ Vue.use(VeRing)
 export default {
   components: {teacherCheckTab, chartDateSelect, VeRing},
   name: 'chart-statistical',
-  created: function () {
-
+  mounted: function () {
+    /*周统计*/
+    const weekStatistics = this.$http.getWeekTotal(this.userId,clockStatus,weekNumber)
   },
   data () {
     this.chartSettings = {
@@ -101,7 +105,11 @@ export default {
     return {
       tabLeftActive: true,
       tabRightActive: false,
+      weekTotal:false,
+      week:1,
       pageName: 'ChartStatistical',
+
+      userId:1,
       chartData: {
         columns: ['状态', '人数'],
         rows: [
@@ -125,8 +133,23 @@ export default {
         this.tabRightActive = true
       }
     },
+    weekSelectFun:function(){
+      this.weekTotal = true
+    },
+    confirmWeekFun:function(e){
+      if(e.target.getAttribute('class')==='week-statistical-total'){
+        return
+      }
+      this.week = e.target.dataset.index
+      this.weekTotal = false
+    },
     listenEvent: function (data) {
-      console.log(data)
+      console.log(data);
+      this.dailySearch(data.year,data.month,data.day,data.userId)
+    },
+    dailySearch:function (year,month,day,userId) {
+      const dailyList= this.$http.getDailyTotal(year,month,day,userId)
+      console.log(dailyList)
     }
   }
 }
@@ -211,5 +234,26 @@ export default {
   }
   .week-statistical-person{
     color:rgba(153,153,153,1);
+  }
+  .week-statistical-total{
+    position: absolute;
+    background:rgba(255,255,255,1);
+    display: flex;
+    justify-content: flex-start;
+    max-width: 1125px;
+    width: 100%;
+    height: 400px;
+    left: 0;
+    top: 256px;
+    z-index: 99;
+    flex-flow: row wrap;
+  }
+  .week-statistical-total-item{
+    width:14.2%;
+    text-align: center;
+    font-size:34px;
+    font-family:PingFang-SC-Medium;
+    color:rgba(85,85,85,1);
+    align-self: center;
   }
 </style>

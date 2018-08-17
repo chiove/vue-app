@@ -55,6 +55,7 @@
 import teacherCheckTab from '../components/TeacherCheckTab'
 import dormitorySelect from '../components/DormitorySelect'
 import checkRoomList from '../components/CheckRoomList'
+import axios from 'axios'
 export default {
   components: {teacherCheckTab, dormitorySelect, checkRoomList},
   name: 'check-dormitory',
@@ -74,6 +75,7 @@ export default {
       sortActive: false,
       checkActive: false,
       params: {},
+      userId:1,
       checkData: [
         {
           id: '1',
@@ -115,10 +117,12 @@ export default {
             this.inputState=true
           }
         }, */
+    /*查询楼栋*/
     dormitoryFun: function () {
       this.sortActive = false
       this.checkActive = false
       this.dormitoryActive ? this.dormitoryActive = false : this.dormitoryActive = true
+      console.log(this.$http.getSystemConfig())
     },
     checkFun: function () {
       this.sortActive = false
