@@ -21,56 +21,21 @@
               <img class="week-statistical-select-down" src="../assets/selectDown.png" alt="">
             </div>
             <div class="week-statistical-total" v-if="weekTotal" @click="confirmWeekFun">
-              <div class="week-statistical-total-item" v-for="item in [1,2,3,4,5,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6]" :data-index="item">{{item}}</div>
+              <div class="week-statistical-total-item" v-for="(item,index) in weekList" :data-index="item" v-bind:key="index">{{item}}</div>
             </div>
-            <div>应打卡人数：200</div>
+            <div>应打卡人数：{{needClockNumber}}</div>
           </div>
-          <div class="week-statistical-item">
+          <div class="week-statistical-item" @click="stayOutLateFun">
             <div>晚归</div>
             <div>
-              <span class="week-statistical-person">30人</span>
+              <span class="week-statistical-person">{{lateNumber}}人</span>
               <img class="week-statistical-icon" src="../assets/selectRight.png" alt="">
             </div>
           </div>
-          <div class="week-statistical-item">
-            <div>晚归</div>
+          <div class="week-statistical-item"  @click="stayOutFun">
+            <div>未归</div>
             <div>
-              <span class="week-statistical-person">30人</span>
-              <img class="week-statistical-icon" src="../assets/selectRight.png" alt="">
-            </div>
-          </div>
-          <div class="week-statistical-item">
-            <div>晚归</div>
-            <div>
-              <span class="week-statistical-person">30人</span>
-              <img class="week-statistical-icon" src="../assets/selectRight.png" alt="">
-            </div>
-          </div>
-          <div class="week-statistical-item">
-            <div>晚归</div>
-            <div>
-              <span class="week-statistical-person">30人</span>
-              <img class="week-statistical-icon" src="../assets/selectRight.png" alt="">
-            </div>
-          </div>
-          <div class="week-statistical-item">
-            <div>晚归</div>
-            <div>
-              <span class="week-statistical-person">30人</span>
-              <img class="week-statistical-icon" src="../assets/selectRight.png" alt="">
-            </div>
-          </div>
-          <div class="week-statistical-item">
-          <div>晚归</div>
-          <div>
-            <span class="week-statistical-person">30人</span>
-            <img class="week-statistical-icon" src="../assets/selectRight.png" alt="">
-          </div>
-        </div>
-          <div class="week-statistical-item">
-            <div>晚归</div>
-            <div>
-              <span class="week-statistical-person">30人</span>
+              <span class="week-statistical-person">{{notNumber}}人</span>
               <img class="week-statistical-icon" src="../assets/selectRight.png" alt="">
             </div>
           </div>
@@ -91,8 +56,9 @@ export default {
   components: {teacherCheckTab, chartDateSelect, VeRing},
   name: 'chart-statistical',
   mounted: function () {
-    /*周统计*/
-    const weekStatistics = this.$http.getWeekTotal(this.userId,clockStatus,weekNumber)
+    console.log(this.$http.getSystemConfig())
+    /*初始化查询周统计*/
+   this.weekSearch()
   },
   data () {
     this.chartSettings = {
@@ -105,51 +71,106 @@ export default {
     return {
       tabLeftActive: true,
       tabRightActive: false,
-      weekTotal:false,
-      week:1,
+      weekTotal:false,/*总周数面板控制*/
+      week:1,/*当前第几周*/
       pageName: 'ChartStatistical',
-
-      userId:1,
-      chartData: {
+      needClockNumber:0, /*应打卡人数*/
+      lateNumber:0,/*晚归人数*/
+      notNumber:0,/*未归人数*/
+      userId:1,/*用户id*/
+      clockStatus:0,/*打卡状态*/
+      weekList:[1,2,3],/*循环周列表*/
+      chartData: {/*图表数据*/
         columns: ['状态', '人数'],
         rows: [
-          { '状态': '到勤', '人数': 160 },
-          { '状态': '晚归', '人数': 20 },
-          { '状态': '未归', '人数': 20 }
+          { '状态': '到勤', '人数': 0 },
+          { '状态': '晚归', '人数': 0 },
+          { '状态': '未归', '人数': 0 }
         ]
       }
     }
   },
   methods: {
+    /*tab切换*/
     leftActive: function () {
       if (this.tabLeftActive !== true) {
         this.tabLeftActive = true
         this.tabRightActive = false
       }
     },
+    /*tab切换*/
     rightActive: function () {
       if (this.tabRightActive !== true) {
         this.tabLeftActive = false
         this.tabRightActive = true
       }
     },
+    /*控制周选择面板*/
     weekSelectFun:function(){
       this.weekTotal = true
     },
+    /*周选择*/
     confirmWeekFun:function(e){
       if(e.target.getAttribute('class')==='week-statistical-total'){
         return
       }
       this.week = e.target.dataset.index
       this.weekTotal = false
+      /*选择周数查询列表*/
+      this.weekSearch()
     },
+    /*监听日期选择*/
     listenEvent: function (data) {
-      console.log(data);
       this.dailySearch(data.year,data.month,data.day,data.userId)
     },
+    /*图表查询*/
     dailySearch:function (year,month,day,userId) {
       const dailyList= this.$http.getDailyTotal(year,month,day,userId)
-      console.log(dailyList)
+      this.chartData.rows = [
+        { '状态': '到勤', '人数': dailyList.data.clockNum},
+        { '状态': '晚归', '人数': dailyList.data.stayOutLateNum },
+        { '状态': '未归', '人数': dailyList.data.stayOutNum }
+      ]
+    },
+    /*周统计查询*/
+    weekSearch:function () {
+      /*查询应打卡人数*/
+      const weekStatistics = this.$http.getWeekTotal(this.userId,this.week);
+      this.needClockNumber = weekStatistics.data.totalNum
+      this.lateNumber =  weekStatistics.data.stayOutLateNum
+      this.notNumber =  weekStatistics.data.stayOutLateNum
+      /*周数列表*/
+      const weekTotal = this.$http.getWeekList()
+      for (let week=1;week<weekTotal.length;week++)
+      {
+        this.weekList.push(week)
+      }
+    },
+    /*打开晚归详细页面*/
+    stayOutLateFun:function () {
+      const _this = this
+      this.$router.push({
+        name:'LateBackList',
+        params:{
+          userId:_this.userId,
+          clockStatus:3,
+          weekNumber:_this.week,
+          stayOutLateNumber:this.lateNumber
+        }
+      })
+    },
+    /*打开未归详细页面*/
+    stayOutFun:function () {
+      const _this = this
+      this.$router.push({
+        name:'LateBackList',
+        params:{
+          userId:_this.userId,
+          clockStatus:4,
+          weekNumber:_this.week,
+          stayOutNumber:_this.notNumber
+        }
+      })
     }
   }
 }

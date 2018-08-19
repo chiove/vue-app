@@ -80,8 +80,8 @@ export default {
   },
   methods: {
     listenStudentClockFun:function (data) {
-    /*  const state = axios.studentClock(data)
-      this.pageData.clockStateCode = state.code*/
+      const state = axios.studentClock(data)
+      this.pageData.clockStateCode = state.code
     }
   }
 }

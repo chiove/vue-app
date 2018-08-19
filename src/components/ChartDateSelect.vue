@@ -96,5 +96,6 @@ export default {
     max-width: 1125px;
     position: absolute;
     bottom: 0;
+    z-index: 99;
   }
 </style>

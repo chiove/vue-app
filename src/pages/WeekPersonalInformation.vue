@@ -3,57 +3,36 @@
     <div class="data-banner">
       <div class="data-information">
         <div class="data-left">
-          <img class="sign-user-img" src="../assets/head.png">
+          <img class="sign-user-img" :src="profilePhoto">
           <div>
             <div class="data-name">
-              <span class="data-name-text">刘震云</span>
-              <span class="data-information-text">2018级5班</span>
+              <span class="data-name-text">{{studentName}}</span>
+              <span class="data-information-text">{{classNames}}</span>
             </div>
             <div class="data-information-text align-middle">
               <img class="data-school" src="../assets/school.png">
-              <span>重庆工业职业技术学院</span>
+              <span>{{collegeName}}</span>
             </div>
             <div class="data-information-text align-middle">
               <img class="data-professional" src="../assets/professional.png">
-              <span>视觉与传达专业</span>
+              <span>{{majorName}}</span>
             </div>
             <div class="data-information-text">
-              <span class="data-information-teacher">辅导员:王老师</span>
-              <span>学号:2018130512</span>
+              <span class="data-information-teacher">辅导员:{{instructorName}}</span>
+              <span>学号:{{studentCode}}</span>
             </div>
           </div>
         </div>
         <div class="data-right">
-          608室4床
+          {{bedCode}}
         </div>
       </div>
     </div>
     <div class="data-form-title">
-      第一周
+      {{weekNumber}}
     </div>
     <div class="data-form">
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
-      <history-list></history-list>
+      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :data="item"></history-list>
     </div>
   </div>
 </template>
@@ -63,13 +42,54 @@
   export default {
     components:{historyList},
     name: "week-personal-information",
+    mounted:function(){
+      /*接受路由传参*/
+      this.studentId = this.$route.params.studentId
+      this.weekNumber = this.$route.params.weekNumber
+      /*获取学生信息*/
+      this.getStudentsDetails()
+      /*根据学生ID和日期查询全部历史*/
+      this.getStudentsHistoryList()
+    },
     data(){
       return {
-
+        historyListData:[],
+        studentId:0,/*学生ID*/
+        weekNumber:1,/*当前周数*/
+        profilePhoto:'',/*头像地址*/
+        studentName:'',/*学生姓名*/
+        classNames:'',/*班级*/
+        collegeName:'',/*学院名称*/
+        majorName:'',/*专业名称*/
+        instructorName:'',/*辅导专员*/
+        studentCode:'',/*学号*/
+        dormitoryName:'',/*专业*/
+        bedCode:'',/*床号*/
       }
     },
     methods:{
+      /*获取学生信息*/
+        getStudentsDetails:function () {
+          const studentIformation = this.$http.getStudent(this.studentId)
+          this.profilePhoto = studentIformation.data.profilePhoto
+          this.studentName = studentIformation.data.studentName
+          this.classNames = studentIformation.data.className
+          this.majorName = studentIformation.data.majorName
+          this.instructorName = studentIformation.data.instructorName
+          this.studentCode = studentIformation.data.studentCode
+          this.dormitoryName = studentIformation.data.dormitoryName
+          this.bedCode = studentIformation.data.bedCode
+        },
+        /*根据当前周获取日期*/
+        getHistoryDate:function(){
 
+        },
+        /*根据学生ID和日期查询全部历史*/
+        getStudentsHistoryList:function () {
+          this.getHistoryDate()
+          const studentClockHistoryYM = this.$http.studentClockHistoryYM(this.year,this.month,this.studentId)
+          this.historyListData = studentClockHistoryYM.data
+        }
     }
   }
 </script>

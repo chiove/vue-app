@@ -216,5 +216,9 @@ export default {
       clockStatus:clockStatus,
       weekNumber:weekNumber
     })
+  },
+  /*周数列表/select-data/week-info/all*/
+  getWeekList:function () {
+    this.axiosGet('/api/select-data/week-info/all')
   }
 }

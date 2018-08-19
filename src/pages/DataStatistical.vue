@@ -21,7 +21,7 @@ export default {
   mounted:function () {
     /*获取学生信息*/
     const studentIformation = axios.getStudent(this.pageData.studentId)
-    this.pageData.profilePhoto = require(`${studentIformation.data.profilePhoto}`)
+    this.pageData.profilePhoto = studentIformation.data.profilePhoto
     this.pageData.studentName = studentIformation.data.studentName
     this.pageData.classNames = studentIformation.data.className
     this.pageData.majorName = studentIformation.data.majorName
@@ -48,19 +48,19 @@ export default {
       },
       historyListData:[],
       pageData:{
-        studentId:1,
-        profilePhoto:'',
-        studentName:'',
-        classNames:'',
-        collegeName:'',
-        majorName:'',
-        instructorName:'',
-        studentCode:'',
-        dormitoryName:'',
-        bedCode:'',
-        totalStayOutLate:'',
-        totalClock:'',
-        totalStayOut:'',
+        studentId:0,/*学生ID*/
+        profilePhoto:'',/*头像地址*/
+        studentName:'',/*学生姓名*/
+        classNames:'',/*班级*/
+        collegeName:'',/*学院名称*/
+        majorName:'',/*专业名称*/
+        instructorName:'',/*辅导专员*/
+        studentCode:'',/*学号*/
+        dormitoryName:'',/*专业*/
+        bedCode:'',/*床号*/
+        totalStayOutLate:'',/*晚归总数*/
+        totalClock:'',/*到勤总数*/
+        totalStayOut:'',/*未归总数*/
       }
     }
   },
