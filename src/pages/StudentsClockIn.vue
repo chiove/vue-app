@@ -18,49 +18,7 @@ export default {
   components: {signBanner, signContent, signTab, signUser},
   name: 'students-clock-in',
   mounted: function () {
-    /*获取系统配置*/
-    const systemConfig = axios.getSystemConfig()
-    const nowClockStartTime = Number(units.getCurrentTime('hour'))/*获取学生当前考勤状态*/
-    this.pageData.clockStartTime =  systemConfig.clockStartTime.substring(0,4)
-    this.pageData.clockEndTime =  systemConfig.clockEndTime.substring(0,4)
-    const clockStartNumber = Number(this.clockStartTime.substring(0,2))
-    const clockEndNumber = Number(this.clockEndTime.substring(0,2))
 
-    if(Number(this.clockStartTime.substring(0,2))<nowClockStartTime){
-      this.pageData.state = 'default'
-    }else if(clockStartNumber<=nowClockStartTime&&nowClockStartTime<clockEndNumber){
-      this.pageData.state = 'primary'
-    }else if(nowClockStartTime>clockEndNumber&&nowClockStartTime<24){
-      this.pageData.state = 'warning'
-    }else{
-      this.pageData.state = 'danger'
-    }
-    /*获取学生信息*/
-    const studentIformation = axios.getStudent(this.pageData.studentId)
-    this.pageData.profilePhoto = studentIformation.data.profilePhoto
-    this.pageData.studentName = studentIformation.data.studentName
-    /*获取晚归，到勤，未归*/
-    const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)
-    this.pageData.totalClock = clocktimes.data.totalClock
-    /*获取学生当前考勤状态*/
-    const studentClockStatus = axios.studentClockStatus(this.pageData.studentId)
-    this.pageData.clockStatus = studentClockStatus.data
-    if(this.pageData.clockStatus===1){
-      this.pageData.state = 'default'
-    }else if(this.pageData.clockStatus===2){
-      this.pageData.state = 'sucess'
-    }else if(this.pageData.clockStatus===3){
-      this.pageData.state = 'warning'
-    }else if(this.pageData.clockStatus===4){
-      this.pageData.state = 'danger'
-    }else{
-      this.pageData.state = 'primary'
-    }
-  },
-  updated:function(){
-    if(this.pageData.clockStateCode === "000000"){
-      this.pageData.state = 'sucess'
-    }
   },
   data () {
     return {
@@ -79,9 +37,94 @@ export default {
     }
   },
   methods: {
+    /*获取系统配置*/
+    getSystemConfig:function () {
+      const _this = this
+      this.$http.get('/api/system-config').then(function (res) {
+        if(res){
+          _this.pageData.clockStartTime =  res.data.data.clockStartTime.substring(0,4)
+          _this.pageData.clockEndTime =  res.data.data.clockEndTime.substring(0,4)
+          /*获取当前时间*/
+          const nowClockStartTime = Number(units.getCurrentTime('hour'))
+          const clockStartNumber = Number(_this.clockStartTime.substring(0,2))
+          const clockEndNumber = Number(_this.clockEndTime.substring(0,2))
+          if(Number(_this.clockStartTime.substring(0,2))<nowClockStartTime){
+            _this.pageData.state = 'default'
+          }else if(clockStartNumber<=nowClockStartTime&&nowClockStartTime<clockEndNumber){
+            _this.pageData.state = 'primary'
+          }else if(nowClockStartTime>clockEndNumber&&nowClockStartTime<24){
+            _this.pageData.state = 'warning'
+          }else{
+            _this.pageData.state = 'danger'
+          }
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*获取学生信息*/
+    getStudentDetailsListData:function (studentId) {
+      const _this = this
+      this.$http.get(`/api/student/${studentId}`).then(function (res) {
+        if(res){
+          _this.pageData.profilePhoto = res.data.data.profilePhoto
+          _this.pageData.studentName = res.data.data.studentName
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*获取打卡次数*/
+    getStudentsClocktimes:function (studentId) {
+      const _this = this
+      this.$http.get(`/student-clock/${studentId}/stat/`).then(function (res) {
+        if(res){
+          _this.pageData.totalClock = res.data.data.totalClock
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*获取学生当前考勤状态*/
+    getStudentClockStatus:function (studentId) {
+      const _this = this
+      this.$http.get('/api/student-clock-status',{
+        params:{
+          studentId:studentId
+        }
+      }).then(function (res) {
+        if(res){
+          _this.pageData.clockStatus = res.data.data
+          if(_this.pageData.clockStatus===1){
+            _this.pageData.state = 'default'
+          }else if(_this.pageData.clockStatus===2){
+            _this.pageData.state = 'sucess'
+          }else if(_this.pageData.clockStatus===3){
+            _this.pageData.state = 'warning'
+          }else if(_this.pageData.clockStatus===4){
+            _this.pageData.state = 'danger'
+          }else{
+            _this.pageData.state = 'primary'
+          }
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*打卡监听子组件事件*/
     listenStudentClockFun:function (data) {
-      const state = axios.studentClock(data)
-      this.pageData.clockStateCode = state.code
+      const _this = this
+      this.$http.get('/api/student-clock',{
+        params:data
+      }).then(function (res) {
+        if(res){
+          if(res.data.data.code === "000000"){
+            this.pageData.state = 'sucess'
+          }
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }
