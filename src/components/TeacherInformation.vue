@@ -2,7 +2,7 @@
   <div class="sign-user-container">
     <div class="sign-user">
       <div class="sign-user-name">
-        <img class="sign-user-img" :src="require(`${data.profilePhoto}`)">
+        <img class="sign-user-img" :src="data.profilePhoto">
         <div class="sign-user-content">
           <div class="sign-user-names">
             {{data.name}}
@@ -12,7 +12,7 @@
           </div>
         </div>
       </div>
-      <div class="sign-status">
+      <div class="sign-status" :style="{backgroundColor:backgroundColorText}">
         {{checkDataText}}
       </div>
     </div>
@@ -23,16 +23,22 @@
   export default {
     name: 'teacher-information',
     props:['data'],
-    mounted:function () {
-      if(this.data.state==='sucess'){
+    updated:function () {
+      if(this.data.clockStatus===1){
         this.checkDataText = '未打卡'
-      }else if (this.data.state==='default') {
+        this.backgroundColorText = '#CBCBCB'
+      }else if (this.data.clockStatus===2) {
         this.checkDataText = '已打卡'
+        this.backgroundColorText = 'rgba(67,209,136,1)'
+      }else{
+        this.checkDataText = '未打卡'
+        this.backgroundColorText = '#CBCBCB'
       }
     },
     data(){
       return {
-        checkDataText:''
+        checkDataText:'',
+        backgroundColorText:''
       }
     }
   }

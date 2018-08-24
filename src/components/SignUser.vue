@@ -12,7 +12,7 @@
           </div>
         </div>
       </div>
-      <div class="sign-status">
+      <div class="sign-status" :style="{backgroundColor:backgroundColorText}">
         {{checkDataText}}
       </div>
     </div>
@@ -23,20 +23,28 @@
 export default {
   name: 'sign-user',
   props:['data'],
-  mounted:function () {
-    if(this.data.clockStatus===1){
+  updated:function () {
+    if(this.data.clockStatus===0){
       this.checkDataText = '未打卡'
+      this.backgroundColorText = '#CBCBCB'
+    }else if(this.data.clockStatus===1){
+      this.checkDataText = '未打卡'
+      this.backgroundColorText = '#CBCBCB'
     }else if (this.data.clockStatus===2) {
       this.checkDataText = '到勤'
+      this.backgroundColorText = 'rgba(67,209,136,1)'
     }else if (this.data.clockStatus===3){
       this.checkDataText = '晚归'
+      this.backgroundColorText = 'rgba(244,160,45,1)'
     }else if (this.data.clockStatus===4){
       this.checkDataText = '未归'
+      this.backgroundColorText = 'rgba(253,85,63,1)'
     }
   },
   data(){
     return {
       checkDataText:'',
+      backgroundColorText:''
     }
   }
 }
@@ -85,7 +93,6 @@ export default {
   .sign-status{
     padding: 0 12px;
     height:44px;
-    background:rgba(203,203,203,1);
     border-radius:8px;
     font-size:28px;
     font-family:PingFang-SC-Medium;

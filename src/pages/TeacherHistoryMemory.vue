@@ -6,26 +6,10 @@
       <div class="memory-title">
         <span>打卡记录</span>
       </div>
-      <div class="memory-content">
+      <div class="memory-content" v-for="(item,index) in dateDataList" v-bind:key="index">
         <div class="memory-item">
           <span class="memory-icon"></span>
-          <span>2018年7月20日</span>
-          <span class="memory-item-time">23:23:23</span>
-        </div>
-        <div class="memory-item">
-          <span class="memory-icon"></span>
-          <span>2018年7月20日</span>
-          <span class="memory-item-time">23:23:23</span>
-        </div>
-        <div class="memory-item">
-          <span class="memory-icon"></span>
-          <span>2018年7月20日</span>
-          <span class="memory-item-time">23:23:23</span>
-        </div>
-        <div class="memory-item">
-          <span class="memory-icon"></span>
-          <span>2018年7月20日</span>
-          <span class="memory-item-time">23:23:23</span>
+          <span class="memory-item-time">{{item}}</span>
         </div>
       </div>
     </div>
@@ -33,30 +17,48 @@
 
 <script>
 import dateSelect from '../components/DateSelect'
-import axios from '../units/axios'
-
 export default {
     components:{dateSelect},
     name: "history-memory",
     mounted:function () {
-      const instructorId = this.$route.params.instructorId
-      const year = this.$route.params.year
-      const month = this.$route.params.month
-      this.dateDataList = axios.getTeacherTotal(year,month,instructorId).data
+      this.instructorId = this.$route.params.instructorId
+      this.year = this.$route.params.year
+      this.month = this.$route.params.month
+      this.getTeacherHistoryList()
     },
     data:function () {
       return {
-        dateDataList:'',
-        padding:"0.68rem 0.533333rem"
+        dateDataList:[],
+        padding:"0.68rem 0.533333rem",
+        instructorId:'',
+        year:'',
+        month:''
       }
     },
     methods: {
       listenEvent:function (data) {
-        const instructorId = this.$route.params.instructorId
-        const year = data.year
-        const month =data.month
-        this.dateDataList = axios.getTeacherTotal(year,month,instructorId).data
-      }
+        this.year = data.year
+        this.month =data.month
+        if(this.instructorId!==''){
+          this.getTeacherHistoryList()
+        }
+      },
+      /*查询辅导员历史签到*/
+      getTeacherHistoryList(){
+        this.$http.get('/api/instructor-clock/stat-by-year-month',{
+          params:{
+            instructorId:this.instructorId,
+            year:this.year,
+            month:this.month
+          }
+        }).then(function (res) {
+          if(res){
+            this.dateDataList = res.data.data
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
     }
 }
 </script>

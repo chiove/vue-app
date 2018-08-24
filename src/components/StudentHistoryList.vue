@@ -1,8 +1,8 @@
 <template>
-    <div class="history-list">
+    <div class="history-list" @click="viewDetailsFun">
       <div class="history-icon" :class="classState"></div>
       <div class="history-text">{{data.year}}年{{data.month}}月{{data.day}}日 {{data.lastUpdateTime}}</div>
-      <div class="history-state" :class="classState">{{textState}}</div>
+      <div class="history-state" :class="colorState">{{textState}}</div>
       <img class="history-details-img" src="../assets/iconRight.png" >
     </div>
 </template>
@@ -10,23 +10,42 @@
 <script>
 export default {
   name: "student-history-list",
-  props:['data'],
+  props:['data','studentId'],
   mounted:function () {
-    if(data.clockStatus===2){
-      this.classState = 'icon-sucess'
+    if(this.data.clockStatus===2){
+      this.classState = 'icon-success'
+      this.colorState = 'color-success'
       this.textState = '到勤'
-    }else if(data.clockStatus===3){
+    }else if(this.data.clockStatus===3){
       this.classState = 'icon-warning'
+      this.colorState = 'color-warning'
       this.textState = '晚归'
-    }else if(data.clockStatus===4){
+    }else if(this.data.clockStatus===4){
       this.classState = 'icon-danger'
+      this.colorState = 'color-danger'
       this.textState = '未归'
+    }else{
+      this.classState = 'icon-default'
+      this.colorState = 'color-default'
+      this.textState = '未打卡'
     }
   },
   data(){
     return {
       classState:'',
-      textState:''
+      textState:'',
+      colorState:''
+    }
+  },
+  methods:{
+    viewDetailsFun(){
+      this.$router.push({
+        name:'ClockInDetails',
+        params:{
+          data:this.data,
+          studentId:this.studentId
+        }
+      })
     }
   }
 }
@@ -55,6 +74,8 @@ export default {
   font-size:28px;
   font-family:PingFang-SC-Medium;
   margin-right: 80px;
+  text-align: center;
+  border-radius: 2px;
 }
 .history-details-img{
   width: 15px;

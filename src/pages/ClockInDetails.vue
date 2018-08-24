@@ -111,7 +111,41 @@
 
 <script>
 export default {
-  name: 'clock-in-details'
+  name: 'clock-in-details',
+  mounted:function () {
+    this.data = this.$route.params.data
+    this.studentId = this.$route.params.studentId
+    this.getDayHistoryList()
+  },
+  activated:function(){
+    this.data = this.$route.params.data
+    this.studentId = this.$route.params.studentId
+    this.getDayHistoryList()
+  },
+  data(){
+    return {
+      data:{},/*接受的参数*/
+      date:'',/*日期参数*/
+      studentId:'',/*学生ID*/
+      dataList:[]/*当天全部日期*/
+    }
+  },
+  methods:{
+    getDayHistoryList(){
+      this.$http.get('/api/student-clock-history',{
+        params:{
+          studentId:this.studentId,
+          date:`${this.data.year}-${this.data.month}-${this.data.day}`
+        }
+      }).then(function (res) {
+        if(res){
+          this.dataList = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
+  }
 }
 </script>
 

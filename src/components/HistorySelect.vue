@@ -28,13 +28,22 @@ const maxDate = units.getCurrentTime("year")
 export default {
       components:{DatetimePicker},
       name: "history-select",
+      mounted:function(){
+        /*派发系统时间*/
+        this.$emit("selectDate",{
+          year:this.year,
+          month:this.month
+        })
+      },
       data() {
         return {
           datetimePicker:DatetimePicker,
           currentDate: new Date(maxDate.year,maxDate.month),
           maxDate:new Date(maxDate.year,maxDate.month),
           displayState:false,
-          dateValue:`${maxDate.year}年${maxDate.month}月`
+          dateValue:`${maxDate.year}年${maxDate.month}月`,
+          year:new Date().getFullYear(),
+          month:new Date().getMonth()+1
         };
       },
       methods: {
@@ -52,6 +61,8 @@ export default {
         confirm:function (value) {
           this.displayState=false
           this.dateValue = `${value.getFullYear()}年${value.getMonth()+1}月`
+          this.year = value.getFullYear()
+          this.month = value.getMonth()+1
           this.$emit("selectDate",{
             year:value.getFullYear(),
             month:value.getMonth()+1

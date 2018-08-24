@@ -13,27 +13,50 @@ const fullDate = units.getCurrentTime("year")
 export default {
   props:["data"],
   name: "teacher-clock-in-banner",
-  mounted:function () {
-    if(this.data.state==="sucess"){
-      this.backGroundImg =require("../assets/sucess.png")
-    }else if(this.data.state==="default"){
+  mounted:function(){
+    if(this.clockStatus===2){
+      this.backGroundImg =require("../assets/success.png")
+    }else{
       this.backGroundImg = require("../assets/primary.png")
+    }
+  },
+  updated:function () {
+    if(this.data.clockStatus===2){
+      this.clockStatus=2
     }
   },
   data(){
     return {
       backGroundImg:require("../assets/primary.png"),
-      dateValue:`${fullDate.year}年${fullDate.month}月`
+      dateValue:`${fullDate.year}年${fullDate.month}月`,
+      clockStatus:''
     }
   },
   methods: {
     historyList:function () {
-      this.$router.push({path:"/teacherHistoryMemory", params: {
+      this.$router.push({
+        name:"TeacherHistoryMemory",
+        params: {
           instructorId: this.data.instructorId,
           year:fullDate.year,
           month:fullDate.month
-        }})
-    }
+        }
+      })
+    },
+    /*根据辅导员ID查询当前考勤状态*/
+    getTeacherCheckStatus(){
+      this.$http.get('/api/instructor-clock-status',{
+        params:{
+          instructorId:this.data.instructorId
+        }
+      }).then(function (res) {
+        if(res){
+          this.clockStatus = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
   }
 }
 </script>

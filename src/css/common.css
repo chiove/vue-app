@@ -19,7 +19,7 @@
   background:rgba(252,154,22,1);
   box-shadow:0px 0px 9px rgba(252,154,22,0.65);
 }
-.icon-sucess{
+.icon-success{
   background:rgba(64,201,132,1);
   box-shadow:0px 0px 9px rgba(64,201,132,0.65);
 }
@@ -51,7 +51,7 @@
 .color-warning{
   color: rgba(252,154,22,1);
 }
-.color-sucess{
+.color-success{
   color:rgba(64,201,132,1);
 }
 .color-primary{

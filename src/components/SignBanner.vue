@@ -13,17 +13,17 @@
 export default {
   props: ['data'],
   name: 'sign-banner',
-  mounted: function () {
-    if (this.data.state === 'sucess') {
-      this.backGroundImg = require('../assets/sucess.png')
-    } else if (this.data.state === 'warning') {
+  updated: function () {
+    if(this.data.clockStatus===0){
+      this.backGroundImg = require('../assets/primary.png')
+    }else if (this.data.clockStatus===1) {
+      this.backGroundImg = require('../assets/primary.png')
+    } else if (this.data.clockStatus===2) {
+      this.backGroundImg = require('../assets/success.png')
+    } else if (this.data.clockStatus===3) {
       this.backGroundImg = require('../assets/warning.png')
-    } else if (this.data.state === 'danger') {
+    } else if(this.data.clockStatus===4){
       this.backGroundImg = require('../assets/danger.png')
-    } else if(this.data.state === 'primary'){
-      this.backGroundImg = require('../assets/primary.png')
-    } else if (this.data.state === 'default'){
-      this.backGroundImg = require('../assets/primary.png')
     }
   },
   data () {

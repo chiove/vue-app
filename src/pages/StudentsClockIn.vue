@@ -12,27 +12,32 @@ import signBanner from '../components/SignBanner'
 import signContent from '../components/signContent'
 import signTab from '../components/signTab'
 import signUser from '../components/signUser'
-import axios from '../units/axios'
 import units from '../units/tools'
 export default {
   components: {signBanner, signContent, signTab, signUser},
   name: 'students-clock-in',
   mounted: function () {
-
+    console.log(this.pageData.clockStatus)
+    this.getSystemConfig()/*获取系统配置*/
+    this.getStudentClockStatus(this.pageData.studentId)/*获取学生当前考勤状态*/
+    this.checkClockStatus()/*判断页面是否打卡*/
+    this.getStudentDetailsListData(this.pageData.studentId)/*获取学生信息*/
+    this.getStudentsClocktimes(this.pageData.studentId)/*获取总打卡次数*/
   },
   data () {
     return {
       pageName: 'StudentsClockIn',
       pageData: {
-        studentId:0,
-        clockStartTime:'18:00',
-        clockEndTime:'23:00',
-        state:'sucess',
-        profilePhoto:'',
-        studentName:'',
-        clockStatus:0,
-        totalClock:0,
-        clockStateCode:''
+        checkDevice:'',/*检查设备*/
+        studentId:201760230413,/*学生ID*/
+        clockStartTime:'',/*开始打卡时间*/
+        clockEndTime:'',/*结束打卡时间*/
+        clockAddressSettingList:[],/*系统设定的打卡地址参数*/
+        profilePhoto:'',/*头像*/
+        studentName:'',/*学生姓名*/
+        clockStatus:'',/*学生当前考勤状态 0时间未到禁止打卡，1未打卡，2到勤，3晚归，4未归*/
+        totalClock:0,/*打卡次数*/
+        clockStateCode:''/**/
       }
     }
   },
@@ -42,20 +47,18 @@ export default {
       const _this = this
       this.$http.get('/api/system-config').then(function (res) {
         if(res){
-          _this.pageData.clockStartTime =  res.data.data.clockStartTime.substring(0,4)
-          _this.pageData.clockEndTime =  res.data.data.clockEndTime.substring(0,4)
-          /*获取当前时间*/
-          const nowClockStartTime = Number(units.getCurrentTime('hour'))
-          const clockStartNumber = Number(_this.clockStartTime.substring(0,2))
-          const clockEndNumber = Number(_this.clockEndTime.substring(0,2))
-          if(Number(_this.clockStartTime.substring(0,2))<nowClockStartTime){
-            _this.pageData.state = 'default'
-          }else if(clockStartNumber<=nowClockStartTime&&nowClockStartTime<clockEndNumber){
-            _this.pageData.state = 'primary'
-          }else if(nowClockStartTime>clockEndNumber&&nowClockStartTime<24){
-            _this.pageData.state = 'warning'
-          }else{
-            _this.pageData.state = 'danger'
+          const data = res.data.data
+          _this.pageData.clockStartTime =  data.clockStartTime.substring(0,5)
+          _this.pageData.clockEndTime =  data.clockEndTime.substring(0,5)
+          _this.pageData.checkDevice = data.checkDevice
+          _this.pageData.clockAddressSettingList = data.clockAddressSettingList
+          const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
+          if(nowClockStartTime<_this.pageData.clockStartTime){
+            _this.pageData.clockStatus = 0
+          }else if(_this.pageData.clockStartTime<=nowClockStartTime&&nowClockStartTime<=_this.pageData.clockEndTime){
+            _this.pageData.clockStatus = 1
+          }else if(nowClockStartTime>_this.pageData.clockEndTime){
+            _this.pageData.clockStatus = 4
           }
         }
       }).catch(function (error) {
@@ -77,7 +80,7 @@ export default {
     /*获取打卡次数*/
     getStudentsClocktimes:function (studentId) {
       const _this = this
-      this.$http.get(`/student-clock/${studentId}/stat/`).then(function (res) {
+      this.$http.get(`/api/student-clock/${studentId}/stat/`).then(function (res) {
         if(res){
           _this.pageData.totalClock = res.data.data.totalClock
         }
@@ -95,37 +98,36 @@ export default {
       }).then(function (res) {
         if(res){
           _this.pageData.clockStatus = res.data.data
-          if(_this.pageData.clockStatus===1){
-            _this.pageData.state = 'default'
-          }else if(_this.pageData.clockStatus===2){
-            _this.pageData.state = 'sucess'
-          }else if(_this.pageData.clockStatus===3){
-            _this.pageData.state = 'warning'
-          }else if(_this.pageData.clockStatus===4){
-            _this.pageData.state = 'danger'
-          }else{
-            _this.pageData.state = 'primary'
-          }
         }
       }).catch(function (error) {
         console.log(error)
       })
     },
+    /*判断是否打卡状态*/
+    checkClockStatus(){
+      /*获取当前时间*/
+
+    },
     /*打卡监听子组件事件*/
-    listenStudentClockFun:function (data) {
+    listenStudentClockFun:function () {
       const _this = this
-      this.$http.get('/api/student-clock',{
-        params:data
-      }).then(function (res) {
-        if(res){
-          if(res.data.data.code === "000000"){
-            this.pageData.state = 'sucess'
-          }
-        }
-      }).catch(function (error) {
-        console.log(error)
-      })
-    }
+      if(this.pageData.clockStatus ===1 ){
+         this.$http.get('/api/student-clock',{
+           params:data
+         }).then(function (res) {
+           if(res){
+             if(res.data.data.code === "000000"){
+               _this.pageData.state = 'success'
+             }
+           }
+         }).catch(function (error) {
+           console.log(error)
+         })
+      }else{
+        return false
+      }
+
+    },
   }
 }
 </script>

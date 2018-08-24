@@ -19,7 +19,7 @@
 export default {
   name: 'sign-tab',
   props: ['pageName'],
-  created: function () {
+  updated: function () {
     if (this.pageName === 'StatisticalData') {
       this.dataViewState.active = true
       this.positionState.active = false
