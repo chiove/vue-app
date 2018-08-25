@@ -2,7 +2,7 @@
   <div class="body-container">
     <div class="search-bar">
       <div class="search-input" @click="inputContent">
-        <div class="search-placeholder" v-if="inputState">
+        <div class="search-placeholder">
           <img src="../assets/search.png">
           <span class="search-placeholder-text">搜索学号/姓名</span>
         </div>
@@ -75,7 +75,7 @@ export default {
       sortActive: false,
       checkActive: false,
       params: {},
-      userId:1,
+      userId:100725,
       checkData: [
         {
           id: '1',
@@ -108,15 +108,13 @@ export default {
   },
   methods: {
     inputContent: function () {
-      this.$router.push({path: '/searchStudents'})
-      this.inputState = false
-      // this.$refs.inputFocus.focus()
+      this.$router.push({
+        name: 'SearchStudents',
+        params:{
+          userId:this.userId
+        }
+      })
     },
-    /* valueChange:function () {
-          if(this.$refs.inputFocus.value===""){
-            this.inputState=true
-          }
-        }, */
     /*查询楼栋*/
     dormitoryFun: function () {
       this.sortActive = false

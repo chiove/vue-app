@@ -23,7 +23,7 @@
 export default {
   name: 'sign-user',
   props:['data'],
-  updated:function () {
+  mounted:function () {
     if(this.data.clockStatus===0){
       this.checkDataText = '未打卡'
       this.backgroundColorText = '#CBCBCB'
@@ -45,6 +45,26 @@ export default {
     return {
       checkDataText:'',
       backgroundColorText:''
+    }
+  },
+  watch:{
+    'data.isRequested':function(val){
+        if(this.data.clockStatus===0){
+          this.checkDataText = '未打卡'
+          this.backgroundColorText = '#CBCBCB'
+        }else if(this.data.clockStatus===1){
+          this.checkDataText = '未打卡'
+          this.backgroundColorText = '#CBCBCB'
+        }else if (this.data.clockStatus===2) {
+          this.checkDataText = '到勤'
+          this.backgroundColorText = 'rgba(67,209,136,1)'
+        }else if (this.data.clockStatus===3){
+          this.checkDataText = '晚归'
+          this.backgroundColorText = 'rgba(244,160,45,1)'
+        }else if (this.data.clockStatus===4){
+          this.checkDataText = '未归'
+          this.backgroundColorText = 'rgba(253,85,63,1)'
+        }
     }
   }
 }

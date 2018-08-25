@@ -3,28 +3,28 @@
     <div class="data-banner">
       <div class="data-information">
         <div class="data-left">
-          <img class="sign-user-img" src="../assets/head.png">
+          <img class="sign-user-img" :src="profilePhoto">
           <div>
             <div class="data-name">
-              <span class="data-name-text">刘震云</span>
-              <span class="data-information-text">2018级5班</span>
+              <span class="data-name-text">{{studentName}}</span>
+              <span class="data-information-text">{{classNames}}</span>
             </div>
             <div class="data-information-text align-middle">
               <img class="data-school" src="../assets/school.png">
-              <span>重庆工业职业技术学院</span>
+              <span>{{collegeName}}</span>
             </div>
             <div class="data-information-text align-middle">
               <img class="data-professional" src="../assets/professional.png">
-              <span>视觉与传达专业</span>
+              <span>{{majorName}}</span>
             </div>
             <div class="data-information-text">
-              <span class="data-information-teacher">辅导员:王老师</span>
-              <span>学号:2018130512</span>
+              <span class="data-information-teacher">辅导员:{{instructorName}}</span>
+              <span>学号:{{studentCode}}</span>
             </div>
           </div>
         </div>
         <div class="data-right">
-          608室4床
+          {{bedCode}}
         </div>
       </div>
     </div>
@@ -74,13 +74,46 @@
   export default {
     components:{Popup,Picker},
     name: "personal-information",
+    mounted(){
+      this.studentId = this.$route.params.studentId
+      this.getStudentsInfo(this.studentId)/*获取学生信息*/
+    },
     data(){
       return {
         show:false,
-        columns:['到勤','晚归','未归']
+        studentId:'',
+        columns:['到勤','晚归','未归'],
+        profilePhoto:'',/*头像地址*/
+        studentName:'',/*学生姓名*/
+        classNames:'',/*班级*/
+        collegeName:'',/*学院名称*/
+        majorName:'',/*专业名称*/
+        instructorName:'',/*辅导专员*/
+        studentCode:'',/*学号*/
+        dormitoryName:'',/*专业*/
+        bedCode:'',/*床号*/
       }
     },
     methods:{
+      /*获取学生信息*/
+      getStudentsInfo(studentId){
+        this.$http.get(`/api/student/${studentId}`).then(function (res) {
+          if(res){
+            const data = res.data.data
+            this.profilePhoto = data.profilePhoto
+            this.collegeName = data.collegeName
+            this.studentName = data.studentName
+            this.classNames = data.className
+            this.majorName = data.majorName
+            this.instructorName = data.instructorName
+            this.studentCode = data.studentCode
+            this.dormitoryName = data.dormitoryName
+            this.bedCode = data.bedCode
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
       checkFun:function () {
         this.show = true
       },

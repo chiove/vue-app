@@ -19,10 +19,10 @@
 </template>
 
 <script>
-  import axios from '../units/axios'
 import Vue from 'vue'
-import { Popup } from 'vant'
+import { Popup ,Toast} from 'vant'
 Vue.use(Popup)
+  Vue.use(Toast)
 export default {
   name: 'submit-btn',
   props:['data'],
@@ -40,9 +40,17 @@ export default {
       this.$refs.feedBackValue.value = ''
     },
     confirm: function () {
-      this.show = false
       const remark = this.$refs.feedBackValue.value
-      axios.putTeacherCare(this.data.studentId,remark)
+      this.$http.put(`/api/care?careId=${this.data}&remark=${remark}`).then(function (res) {
+        if(res){
+          if(res.data.code==='000000'){
+            Toast.success('提交成功');
+            this.show = false
+          }
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }

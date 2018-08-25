@@ -2,105 +2,70 @@
   <div class="body-container">
    <div class="details-container">
      <div class="item-container">
-       <div class="details-title color-sucess">到勤</div>
-       <div class="details-user">
+       <div class="details-title color-success">到勤</div>
+       <div class="details-user" v-for="(item ,index) in arrivedList" v-bind:key="index">
          <div class="details-content">
            <div class="details-name">
              <img src="../assets/details-user.png">
              <span>
-               梁朝伟
+               {{item.operatorName}}
              </span>
            </div>
            <div class="details-state">
-             <img src="../assets/details-check.png">
+             <img src="../assets/details-clock.png" v-if="item.appName==='学生打卡'">
+             <img src="../assets/details-check.png" v-else="item.appName==='晚归查寝'">
            </div>
          </div>
          <div class="details-time">
            <img src="../assets/details-time.png">
            <span>
-             2018年7月20日 23:23:23
+             {{date}}&nbsp;{{item.operateTime}}
            </span>
          </div>
        </div>
      </div>
      <div class="item-container">
        <div class="details-title color-warning">晚归</div>
-       <div class="details-user">
+       <div class="details-user" v-for="(item ,index) in stayOutLateList" v-bind:key="index">
          <div class="details-content">
            <div class="details-name">
              <img src="../assets/details-user.png">
              <span>
-               梁朝伟
+               {{item.operatorName}}
              </span>
            </div>
            <div class="details-state">
-             <img src="../assets/details-clock.png">
+             <img src="../assets/details-clock.png" v-if="item.appName==='学生打卡'">
+             <img src="../assets/details-check.png" v-else="item.appName==='晚归查寝'">
            </div>
          </div>
          <div class="details-time">
            <img src="../assets/details-time.png">
            <span>
-             2018年7月20日 23:23:23
-           </span>
-         </div>
-       </div>
-       <div class="details-user">
-         <div class="details-content">
-           <div class="details-name">
-             <img src="../assets/details-user.png">
-             <span>
-               梁朝伟
-             </span>
-           </div>
-           <div class="details-state">
-             <img src="../assets/details-check.png">
-           </div>
-         </div>
-         <div class="details-time">
-           <img src="../assets/details-time.png">
-           <span>
-             2018年7月20日 23:23:23
+             {{date}}&nbsp;{{item.operateTime}}
            </span>
          </div>
        </div>
      </div>
      <div class="item-container">
        <div class="details-title color-danger">未归</div>
-       <div class="details-user">
+       <div class="details-user" v-for="(item ,index) in stayOutList" v-bind:key="index">
          <div class="details-content">
            <div class="details-name">
              <img src="../assets/details-user.png">
              <span>
-               梁朝伟
+               {{item.operatorName}}
              </span>
            </div>
            <div class="details-state">
-             <img src="../assets/details-check.png">
+             <img src="../assets/details-clock.png" v-if="item.appName==='学生打卡'">
+             <img src="../assets/details-check.png" v-else="item.appName==='晚归查寝'">
            </div>
          </div>
          <div class="details-time">
            <img src="../assets/details-time.png">
            <span>
-             2018年7月20日 23:23:23
-           </span>
-         </div>
-       </div>
-       <div class="details-user">
-         <div class="details-content">
-           <div class="details-name">
-             <img src="../assets/details-user.png">
-             <span>
-               梁朝伟
-             </span>
-           </div>
-           <div class="details-state">
-             <img src="../assets/details-check.png">
-           </div>
-         </div>
-         <div class="details-time">
-           <img src="../assets/details-time.png">
-           <span>
-             2018年7月20日 23:23:23
+             {{date}}&nbsp;{{item.operateTime}}
            </span>
          </div>
        </div>
@@ -127,7 +92,9 @@ export default {
       data:{},/*接受的参数*/
       date:'',/*日期参数*/
       studentId:'',/*学生ID*/
-      dataList:[]/*当天全部日期*/
+      stayOutLateList:[],/*晚归列表*/
+      stayOutList:[],/*未归列表*/
+      arrivedList:[]/*到勤列表*/
     }
   },
   methods:{
@@ -139,7 +106,17 @@ export default {
         }
       }).then(function (res) {
         if(res){
-          this.dataList = res.data.data
+          const _this = this
+         res.data.data.forEach(function (item,index) {
+            if(item.clockStatus === 2){
+              _this.arrivedList.push(item)
+            }else if(item.clockStatus === 3){
+              _this.stayOutLateList.push(item)
+            }else if(item.clockStatus === 4){
+              _this.stayOutList.push(item)
+            }
+         })
+          console.log(this.arrivedList)
         }
       }).catch(function (error) {
         console.log(error)

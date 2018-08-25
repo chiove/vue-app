@@ -13,16 +13,13 @@ const fullDate = units.getCurrentTime("year")
 export default {
   props:["data"],
   name: "teacher-clock-in-banner",
-  mounted:function(){
-    if(this.clockStatus===2){
-      this.backGroundImg =require("../assets/success.png")
-    }else{
-      this.backGroundImg = require("../assets/primary.png")
-    }
-  },
-  updated:function () {
-    if(this.data.clockStatus===2){
-      this.clockStatus=2
+  watch:{
+    'data.isRequested':function(val){
+      if(this.data.clockStatus===2){
+        this.backGroundImg =require("../assets/success.png")
+      }else{
+        this.backGroundImg = require("../assets/primary.png")
+      }
     }
   },
   data(){

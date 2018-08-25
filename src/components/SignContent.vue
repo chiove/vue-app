@@ -18,35 +18,11 @@ export default {
   props:["data"],
   name: "sign-content",
   mounted:function () {
-    const _this = this;
+    const _this = this
     /*本地时间*/
     setInterval(function () {
-      _this.sign.timeNow = units.getCurrentTime("hour");
+      _this.sign.timeNow = units.getCurrentTime("hour")
     },1000)
-  },
-  updated:function(){
-    /*状态改变*/
-    if(this.data.clockStatus===0){
-      this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
-      this.state.backgroundColor = '#CBCBCB'
-      this.state.text = '打卡时间未到'
-    }else if (this.data.clockStatus===1) {
-      this.state.boxShadow = '4px 0 16px rgba(61,168,245,0.57)'
-      this.state.backgroundColor = '#3DA8F5'
-      this.state.text = '签到打卡'
-    } else if (this.data.clockStatus===2) {
-      this.state.boxShadow = '0px 4px 16px 0px rgba(64,197,130,0.57)'
-      this.state.backgroundColor = 'rgba(67,209,136,1)'
-      this.state.text = '打卡成功'
-    } else if (this.data.clockStatus===3) {
-      this.state.boxShadow = '0px 4px 16px 0px rgba(252,154,22,0.57)'
-      this.state.backgroundColor = 'rgba(244,160,45,1)'
-      this.state.text = '晚归'
-    } else if(this.data.clockStatus===4){
-      this.state.boxShadow = '0px 4px 16px 0px rgba(255,65,65,0.57)'
-      this.state.backgroundColor = 'rgba(253,85,63,1)'
-      this.state.text = '未归'
-    }
   },
   data:function () {
     return{
@@ -60,6 +36,11 @@ export default {
       }
     }
   },
+  watch:{
+    'data.isRequested':function(val){
+      this.changeStyle()
+    }
+  },
   methods:{
     studentClockFun:function () {
       this.$emit("studentClockFun",{
@@ -68,7 +49,31 @@ export default {
         posLongitude:0,
         studentId:1
       })
-    }
+    },
+    changeStyle(){
+      /*状态改变*/
+      if(this.data.clockStatus===0){
+        this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
+        this.state.backgroundColor = '#CBCBCB'
+        this.state.text = '打卡时间未到'
+      }else if (this.data.clockStatus===1) {
+        this.state.boxShadow = '4px 0 16px rgba(61,168,245,0.57)'
+        this.state.backgroundColor = '#3DA8F5'
+        this.state.text = '签到打卡'
+      } else if (this.data.clockStatus===2) {
+        this.state.boxShadow = '0px 4px 16px 0px rgba(64,197,130,0.57)'
+        this.state.backgroundColor = 'rgba(67,209,136,1)'
+        this.state.text = '打卡成功'
+      } else if (this.data.clockStatus===3) {
+        this.state.boxShadow = '0px 4px 16px 0px rgba(252,154,22,0.57)'
+        this.state.backgroundColor = 'rgba(244,160,45,1)'
+        this.state.text = '晚归'
+      } else if(this.data.clockStatus===4){
+        this.state.boxShadow = '0px 4px 16px 0px rgba(255,65,65,0.57)'
+        this.state.backgroundColor = 'rgba(253,85,63,1)'
+        this.state.text = '未归'
+      }
+    },
   }
 }
 </script>

@@ -18,12 +18,22 @@
 <script>
   export default {
     name: "teacher-check-tab",
-    props: ["pageName"],
-    created:function () {
-      if(this.pageName === "ChartStatistical"){
+    mounted:function () {
+      const componentName = this.$router.history.current.name
+      if(componentName === 'ChartStatistical'){
         this.dataViewState.active=true;
         this.positionState.active=false;
-      }else{
+      }else if(componentName === 'CheckDormitory'){
+        this.dataViewState.active=false;
+        this.positionState.active=true;
+      }
+    },
+    activated(){
+      const componentName = this.$router.history.current.name
+      if(componentName === 'ChartStatistical'){
+        this.dataViewState.active=true;
+        this.positionState.active=false;
+      }else if(componentName === 'CheckDormitory'){
         this.dataViewState.active=false;
         this.positionState.active=true;
       }

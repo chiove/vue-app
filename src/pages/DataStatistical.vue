@@ -5,7 +5,7 @@
     <div class="history-details-container">
       <history-list v-for="(item,index) in historyListData" v-bind:key="index" :data="item" :studentId="pageData.studentId"></history-list>
     </div>
-    <sign-tab :pageName="pageName"></sign-tab>
+    <sign-tab></sign-tab>
   </div>
 </template>
 

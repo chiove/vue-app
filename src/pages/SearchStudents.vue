@@ -10,9 +10,9 @@
     </div>
     <div class="search-result-container">
       <div class="search-result-list" v-if="resultView" @click="getParams">
-        <div class="result-item">
-          <div class="result-name">{{name}}</div>
-          <div class="result-number">学号：{{code}}</div>
+        <div class="result-item" v-for="(item,index) in userList" v-bind:key="index" :data-index="item.studentId">
+          <div class="result-name" :data-index="item.studentId">{{item.name}}</div>
+          <div class="result-number" :data-index="item.studentId">学号：{{item.code}}</div>
         </div>
       </div>
     </div>
@@ -26,15 +26,21 @@ import axios from '../units/axios'
 export default {
   components: {teacherCheckTab},
   name: 'search-students',
-  mounted: function () {
-
+  mounted(){
+    this.userId = this.$route.params.userId
+    this.$refs.nameNumber.value = ''
+    this.resultView = false
+  },
+  activated(){
+    this.userId = this.$route.params.userId
+    this.$refs.nameNumber.value = ''
+    this.resultView = false
   },
   data () {
     return {
       resultView: false,
-      code:'',
-      name:'',
-      studentId:1
+      userList:[],
+      userId:''
     }
   },
   methods: {
@@ -45,22 +51,27 @@ export default {
     searchFun: function () {
       const searchParam = this.$refs.nameNumber.value
       this.resultView = true
-      const data = {
-        name:searchParam,
-        code:searchParam
-      }
-      this.code = axios.getSearchStudentList(data).code
-      this.name = axios.getSearchStudentList(data).name
-      this.studentId = axios.getSearchStudentList(data).studentId
+      this.$http.get('/api/dormitory-check/query-by-name-code',{
+        params:{
+          userId :this.userId,
+          nameOrCode:searchParam
+        }
+      }).then(function (res) {
+        if(res){
+          this.userList = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
     },
     getParams: function (e) {
-      if (e.target.dataset.index === undefined) {
-        return false
-      } else {
-        this.$router.push({path:'/teacherSubmit',params: {
-            studentId:this.studentId
+      if (e.target) {
+       this.$router.push({name:'CheckPersonalInformation',params: {
+            studentId:e.target.dataset.index
           }
         })
+      } else {
+        return false
       }
     }
   }

@@ -44,7 +44,7 @@ export default new Router({
     },
     {
       path: '/teacherSubmit',
-      name: 'teacherSubmit',
+      name: 'TeacherSubmit',
       component: TeacherSubmit
     },
     {

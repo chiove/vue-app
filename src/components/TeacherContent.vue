@@ -19,25 +19,26 @@
         _this.sign.timeNow = units.getCurrentTime("hour");
       },1000)
     },
-    updated:function(){
-      /*状态改变*/
-      if (this.data.clockStatus===0) {
-        this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
-        this.state.backgroundColor = '#CBCBCB'
-        this.state.text = '打卡时间未到'
-      }else
-      if (this.data.clockStatus===1) {
-        this.state.boxShadow = '4px 0 16px rgba(61,168,245,0.57)'
-        this.state.backgroundColor = '#3DA8F5'
-        this.state.text = '查寝签到'
-      }else if (this.data.clockStatus===2) {
-        this.state.boxShadow = '0px 4px 16px 0px rgba(64,197,130,0.57)'
-        this.state.backgroundColor = 'rgba(67,209,136,1)'
-        this.state.text = '打卡成功'
-      }else if(this.data.clockStatus===4){
-        this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
-        this.state.backgroundColor = '#CBCBCB'
-        this.state.text = '已过查寝时间'
+    watch:{
+      'data.isRequested':function(val){
+        /*状态改变*/
+        if (this.data.clockStatus===0) {
+          this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
+          this.state.backgroundColor = '#CBCBCB'
+          this.state.text = '打卡时间未到'
+        }else if (this.data.clockStatus===1) {
+          this.state.boxShadow = '4px 0 16px rgba(61,168,245,0.57)'
+          this.state.backgroundColor = '#3DA8F5'
+          this.state.text = '查寝签到'
+        }else if (this.data.clockStatus===2) {
+          this.state.boxShadow = '0px 4px 16px 0px rgba(64,197,130,0.57)'
+          this.state.backgroundColor = 'rgba(67,209,136,1)'
+          this.state.text = '打卡成功'
+        }else if(this.data.clockStatus===4){
+          this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
+          this.state.backgroundColor = '#CBCBCB'
+          this.state.text = '已过查寝时间'
+        }
       }
     },
     data:function () {

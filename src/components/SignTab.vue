@@ -19,11 +19,22 @@
 export default {
   name: 'sign-tab',
   props: ['pageName'],
-  updated: function () {
-    if (this.pageName === 'StatisticalData') {
+  mounted(){
+    const componentName = this.$router.history.current.name
+    if(componentName === 'DataStatistical'){
       this.dataViewState.active = true
       this.positionState.active = false
-    } else {
+    }else if(componentName === 'StudentsClockIn'){
+      this.dataViewState.active = false
+      this.positionState.active = true
+    }
+  },
+  activated: function () {
+    const componentName = this.$router.history.current.name
+    if(componentName === 'DataStatistical'){
+      this.dataViewState.active = true
+      this.positionState.active = false
+    }else if(componentName === 'StudentsClockIn'){
       this.dataViewState.active = false
       this.positionState.active = true
     }

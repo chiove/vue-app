@@ -13,22 +13,28 @@
 export default {
   props: ['data'],
   name: 'sign-banner',
-  updated: function () {
-    if(this.data.clockStatus===0){
-      this.backGroundImg = require('../assets/primary.png')
-    }else if (this.data.clockStatus===1) {
-      this.backGroundImg = require('../assets/primary.png')
-    } else if (this.data.clockStatus===2) {
-      this.backGroundImg = require('../assets/success.png')
-    } else if (this.data.clockStatus===3) {
-      this.backGroundImg = require('../assets/warning.png')
-    } else if(this.data.clockStatus===4){
-      this.backGroundImg = require('../assets/danger.png')
-    }
+  mounted: function () {
+
   },
   data () {
     return {
-      backGroundImg: require('../assets/primary.png')
+      backGroundImg: require('../assets/primary.png'),
+      isRequested:false,
+    }
+  },
+  watch:{
+    'data.isRequested':function(val){
+      if(this.data.clockStatus===0){
+        this.backGroundImg = require('../assets/primary.png')
+      }else if (this.data.clockStatus===1) {
+        this.backGroundImg = require('../assets/primary.png')
+      } else if (this.data.clockStatus===2) {
+        this.backGroundImg = require('../assets/success.png')
+      } else if (this.data.clockStatus===3) {
+        this.backGroundImg = require('../assets/warning.png')
+      } else if(this.data.clockStatus===4){
+        this.backGroundImg = require('../assets/danger.png')
+      }
     }
   }
 }

@@ -30,7 +30,7 @@
       </div>
       <div class="right-container" v-if="tabRightActive"  @click="careItemFun">
         <pull-to :bottom-load-method="refreshRight" class="file-lists">
-          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index">
+          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index" :data-index="item.studentId">
             <div class="care-item-left">
               <img class="care-item-img" :src="item.profilePhoto">
             </div>
@@ -63,16 +63,15 @@
     components: {PullTo},
     name: 'pastoral-care',
     mounted: function () {
-      this.refreshLeft()
-      this.refreshRight()
+      this.initGetList(1)
+      this.initGetList(2)
     },
     data () {
       return {
         tabLeftActive: true,
         tabRightActive: false,
-
         careStatus:1,
-        instructorId:0,
+        instructorId:100725,
         pageNoLeft:1,
         pageNoRight:1,
         pageSize:10,
@@ -85,24 +84,26 @@
         this.pageNoLeft++
         const params = {
           careStatus:1,
-          instructorId:1,
+          instructorId:this.instructorId,
           pageNo:this.pageNoLeft,
-          pageSize:10
+          pageSize:this.pageSize
         }
-        const _this = this
-        axios.ajax.get('/api/care-instructor', {
+
+        this.$http.get('/api/care-instructor', {
           params:params
         })
           .then(function (response) {
-            if(_this.pageNoLeft === response.data.totalPages){
+            const _this = this
+            if(this.pageNoLeft === response.data.data.totalPages){
               loaded('done')
             }
-            _this.careListYes.push(...response.data.result)
-            console.log(response)
+            response.data.data.result.forEach(function (item,index) {
+              _this.careListYes.push(item)
+            })
             loaded('done')
           })
           .catch(function (error) {
-            _this.pageNoLeft --
+            this.pageNoLeft --
             console.log(error)
           })
       },
@@ -110,26 +111,48 @@
         this.pageNoRight++
         const params = {
           careStatus:2,
-          instructorId:1,
+          instructorId:this.instructorId,
           pageNo:this.pageNoRight,
-          pageSize:10
+          pageSize:this.pageSize
         }
-        const _this = this
-        axios.ajax.get('/api/care-instructor', {
+        this.$http.get('/api/care-instructor', {
           params:params
         })
           .then(function (response) {
-            if(_this.pageNoRight === response.data.totalPages){
+            const _this = this
+            if(this.pageNoRight === response.data.data.totalPages){
               loaded('done')
             }
-            _this.careListNot.push(...response.data.result)
-            console.log(response)
+            response.data.data.result.forEach(function (item,index) {
+              _this.careListNot.push(item)
+            })
             loaded('done')
           })
           .catch(function (error) {
-            _this.pageNoRight --
+            this.pageNoRight --
             console.log(error)
           })
+      },
+      /*初始化请求*/
+      initGetList(careStatus){
+        this.$http.get('/api/care-instructor',{
+          params:{
+            careStatus:careStatus,
+            instructorId:this.instructorId,
+            pageNo:1,
+            pageSize:this.pageSize
+          }
+        }).then(function (res) {
+          if(res){
+            if(careStatus===1){
+              this.careListYes = res.data.data.result
+            }else if(careStatus===2){
+              this.careListNot = res.data.data.result
+            }
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
       leftActive: function () {
         if (this.tabLeftActive !== true) {
@@ -144,7 +167,9 @@
         }
       },
       careItemFun:function (e) {
-        this.$router.push({path:'/teacherSubmit',params: {
+        this.$router.push({
+          name:'TeacherSubmit',
+          params: {
             studentId: e.target.dataset.index
           }
         })

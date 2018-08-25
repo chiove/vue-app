@@ -3,9 +3,9 @@
     <data-banner :data="pageData"></data-banner>
     <history-select @selectDate="selectDate"></history-select>
     <div class="history-details-container">
-      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :data="item"></history-list>
+      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :studentId="$route.params.studentId" :data="item"></history-list>
     </div>
-    <submit-btn :data="pageData.studentId"></submit-btn>
+    <submit-btn :data="$route.params.studentId"></submit-btn>
   </div>
 </template>
 
@@ -19,32 +19,16 @@ export default {
   components: {submitBtn, dataBanner, historySelect, historyList},
   name: 'teacher-submit',
   mounted:function(){
-    /*获取学生信息*/
-    const studentIformation = axios.getStudent(this.pageData.studentId)
-    this.pageData.profilePhoto = require(`${studentIformation.data.profilePhoto}`)
-    this.pageData.studentName = studentIformation.data.studentName
-    this.pageData.classNames = studentIformation.data.className
-    this.pageData.majorName = studentIformation.data.majorName
-    this.pageData.instructorName = studentIformation.data.instructorName
-    this.pageData.studentCode = studentIformation.data.studentCode
-    this.pageData.dormitoryName = studentIformation.data.dormitoryName
-    this.pageData.bedCode = studentIformation.data.bedCode
-    this.pageData.studentName = studentIformation.data.studentName
-    /*获取晚归，到勤，未归*/
-    const clocktimes = axios.getStudentsClocktimes(this.pageData.studentId)
-    this.pageData.totalStayOutLate = clocktimes.data.data.totalStayOutLate
-    this.pageData.totalClock = clocktimes.data.data.totalClock
-    this.pageData.totalStayOut = clocktimes.data.data.totalStayOut
-    /*根据学生ID和日期查询全部历史*/
-    const studentClockHistoryYM = axios.studentClockHistoryYM(this.selectDateSearch.year,this.selectDateSearch.month,this.pageData.studentId)
-    this.historyListData = studentClockHistoryYM.data
+    this.getStudentsInfo(this.$route.params.studentId)/*获取学生信息*/
+    this.getClockTimes(this.$route.params.studentId) /*获取晚归，到勤，未归*/
+  },
+  activated(){
+    this.getStudentsInfo(this.$route.params.studentId)/*获取学生信息*/
+    this.getClockTimes(this.$route.params.studentId) /*获取晚归，到勤，未归*/
   },
   data: function () {
     return {
-      selectDateSearch:{
-        year:2018,
-        month:8
-      },
+      selectDateSearch:{},
       historyListData:[],
       pageData:{
         studentId:1,
@@ -66,7 +50,56 @@ export default {
   methods:{
     selectDate:function (data) {
       this.selectDateSearch = data
-    }
+      this.getHistoryList()/*根据学生ID和日期查询全部历史*/
+    },
+    /*获取学生信息*/
+    getStudentsInfo(studentId){
+      this.$http.get(`/api/student/${studentId}`).then(function (res) {
+        if(res){
+          const data = res.data.data
+          this.pageData.profilePhoto = data.profilePhoto
+          this.pageData.collegeName = data.collegeName
+          this.pageData.studentName = data.studentName
+          this.pageData.classNames = data.className
+          this.pageData.majorName = data.majorName
+          this.pageData.instructorName = data.instructorName
+          this.pageData.studentCode = data.studentCode
+          this.pageData.dormitoryName = data.dormitoryName
+          this.pageData.bedCode = data.bedCode
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*获取晚归，到勤，未归*/
+    getClockTimes(studentId){
+      this.$http.get(`/api/student-clock/${studentId}/stat/`).then(function (res) {
+        if(res){
+          const data = res.data.data
+          this.pageData.totalStayOutLate = data.totalStayOutLate
+          this.pageData.totalClock = data.totalClock
+          this.pageData.totalStayOut = data.totalStayOut
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*根据学生ID和日期查询全部历史*/
+    getHistoryList(){
+      this.$http.get('/api/student-clock',{
+        params:{
+          year:this.selectDateSearch.year,
+          month:this.selectDateSearch.month,
+          studentId:this.pageData.studentId
+        }
+      }).then(function (res) {
+        if(res){
+          this.historyListData =res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
   }
 }
 </script>

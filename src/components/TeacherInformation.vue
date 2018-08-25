@@ -23,16 +23,18 @@
   export default {
     name: 'teacher-information',
     props:['data'],
-    updated:function () {
-      if(this.data.clockStatus===1){
-        this.checkDataText = '未打卡'
-        this.backgroundColorText = '#CBCBCB'
-      }else if (this.data.clockStatus===2) {
-        this.checkDataText = '已打卡'
-        this.backgroundColorText = 'rgba(67,209,136,1)'
-      }else{
-        this.checkDataText = '未打卡'
-        this.backgroundColorText = '#CBCBCB'
+    watch:{
+      'data.isRequested':function(val){
+        if(this.data.clockStatus===1){
+          this.checkDataText = '未打卡'
+          this.backgroundColorText = '#CBCBCB'
+        }else if (this.data.clockStatus===2) {
+          this.checkDataText = '已打卡'
+          this.backgroundColorText = 'rgba(67,209,136,1)'
+        }else{
+          this.checkDataText = '未打卡'
+          this.backgroundColorText = '#CBCBCB'
+        }
       }
     },
     data(){
