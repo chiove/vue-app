@@ -22,17 +22,14 @@
 
 <script>
 import teacherCheckTab from '../components/TeacherCheckTab'
-import axios from '../units/axios'
 export default {
   components: {teacherCheckTab},
   name: 'search-students',
   mounted(){
-    this.userId = this.$route.params.userId
     this.$refs.nameNumber.value = ''
     this.resultView = false
   },
   activated(){
-    this.userId = this.$route.params.userId
     this.$refs.nameNumber.value = ''
     this.resultView = false
   },
@@ -40,7 +37,7 @@ export default {
     return {
       resultView: false,
       userList:[],
-      userId:''
+      userId:100725
     }
   },
   methods: {
@@ -67,7 +64,8 @@ export default {
     getParams: function (e) {
       if (e.target) {
        this.$router.push({name:'CheckPersonalInformation',params: {
-            studentId:e.target.dataset.index
+            studentId:e.target.dataset.index,
+            userId:this.userId
           }
         })
       } else {

@@ -19,11 +19,11 @@ export default {
   data () {
     return {
       backGroundImg: require('../assets/primary.png'),
-      isRequested:false,
     }
   },
   watch:{
     'data.isRequested':function(val){
+      console.log(this.data.clockStatus)
       if(this.data.clockStatus===0){
         this.backGroundImg = require('../assets/primary.png')
       }else if (this.data.clockStatus===1) {

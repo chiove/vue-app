@@ -24,32 +24,40 @@
           </div>
         </div>
         <div class="data-right">
-          {{bedCode}}
+          {{dormitoryName}}室{{bedCode}}床
         </div>
       </div>
     </div>
     <div class="data-form-title">
-      {{weekNumber}}
+      第{{weekNumber}}周
     </div>
     <div class="data-form">
-      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :data="item"></history-list>
+      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :data="item" :studentId="studentId"></history-list>
     </div>
   </div>
 </template>
 
 <script>
-  import historyList from "../components/StudentHistoryList"
+  import historyList from "../components/weekStudentHistoryList"
   export default {
     components:{historyList},
     name: "week-personal-information",
     mounted:function(){
-      /*接受路由传参*/
-      this.studentId = this.$route.params.studentId
-      this.weekNumber = this.$route.params.weekNumber
+      this.weekNumber = localStorage.getItem('weekNumber')
+      this.studentId = localStorage.getItem('studentId')
       /*获取学生信息*/
-      this.getStudentsDetails()
+      this.getStudentsInfo()
       /*根据学生ID和日期查询全部历史*/
-      this.getStudentsHistoryList()
+      this.getHistoryList()
+    },
+    activated:function(){
+      /*接受路由传参*/
+      this.weekNumber = localStorage.getItem('weekNumber')
+      this.studentId = localStorage.getItem('studentId')
+      /*获取学生信息*/
+      this.getStudentsInfo()
+      /*根据学生ID和日期查询全部历史*/
+      this.getHistoryList()
     },
     data(){
       return {
@@ -69,27 +77,39 @@
     },
     methods:{
       /*获取学生信息*/
-        getStudentsDetails:function () {
-          const studentIformation = this.$http.getStudent(this.studentId)
-          this.profilePhoto = studentIformation.data.profilePhoto
-          this.studentName = studentIformation.data.studentName
-          this.classNames = studentIformation.data.className
-          this.majorName = studentIformation.data.majorName
-          this.instructorName = studentIformation.data.instructorName
-          this.studentCode = studentIformation.data.studentCode
-          this.dormitoryName = studentIformation.data.dormitoryName
-          this.bedCode = studentIformation.data.bedCode
-        },
-        /*根据当前周获取日期*/
-        getHistoryDate:function(){
-
-        },
-        /*根据学生ID和日期查询全部历史*/
-        getStudentsHistoryList:function () {
-          this.getHistoryDate()
-          const studentClockHistoryYM = this.$http.studentClockHistoryYM(this.year,this.month,this.studentId)
-          this.historyListData = studentClockHistoryYM.data
-        }
+      getStudentsInfo(){
+        this.$http.get(`/api/student/${this.studentId}`).then(function (res) {
+          if(res){
+            const data = res.data.data
+            this.profilePhoto = data.profilePhoto
+            this.collegeName = data.collegeName
+            this.studentName = data.studentName
+            this.classNames = data.className
+            this.majorName = data.majorName
+            this.instructorName = data.instructorName
+            this.studentCode = data.studentCode
+            this.dormitoryName = data.dormitoryName
+            this.bedCode = data.bedCode
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      /*根据学生ID和日期查询全部历史*/
+      getHistoryList(){
+          this.$http.get('/api/student-clock/list-by-week',{
+          params:{
+            weekNumber:this.weekNumber,
+            studentId:this.studentId
+          }
+        }).then(function (res) {
+          if(res){
+            this.historyListData =res.data.data
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
     }
   }
 </script>
@@ -97,7 +117,7 @@
 <style scoped>
   .data-banner{
     height: 300px;
-    background: url("../assets/dataBanner.png") 100% 100% no-repeat;
+    background: url("../assets/dataBanner.png")  no-repeat;
     overflow: hidden;
   }
   .data-information{

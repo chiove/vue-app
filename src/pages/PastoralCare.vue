@@ -58,7 +58,6 @@
 
 <script>
   import PullTo from 'vue-pull-to'
-  import axios from '../units/axios'
   export default {
     components: {PullTo},
     name: 'pastoral-care',
@@ -167,11 +166,9 @@
         }
       },
       careItemFun:function (e) {
+        localStorage.setItem('careStudentId',e.target.dataset.index)
         this.$router.push({
           name:'TeacherSubmit',
-          params: {
-            studentId: e.target.dataset.index
-          }
         })
       }
     }

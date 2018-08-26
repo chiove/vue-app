@@ -3,47 +3,51 @@
     <div class="room-details-header-container">
       <div class="room-details-header">
         <div class="room-details-title">
-          <span class="room-details-room">104寝室</span>
-          <span>（楼栋名）</span>
+          <span class="room-details-room">{{roomDetails.dormitoryId}}寝室</span>
+          <span>（{{roomDetails.dormitoryName}}）</span>
         </div>
         <div class="room-details-line"></div>
         <div class="room-details-state">
           <div>
-            <div class="room-details-state-number">4</div>
+            <div class="room-details-state-number">{{roomDetails.totalStudent}}</div>
             <div class="room-details-state-text">寝室人数</div>
           </div>
           <div>
-            <div class="room-details-state-number">4</div>
+            <div class="room-details-state-number">{{roomDetails.layOutStudent}}</div>
             <div class="room-details-state-text">未归人数</div>
           </div>
           <div>
-            <div class="room-details-state-number">4</div>
+            <div class="room-details-state-number">{{roomDetails.layOutLayStudent}}</div>
             <div class="room-details-state-text">晚归人数</div>
           </div>
         </div>
-        <div class="room-details-flag">未查寝</div>
+        <div class="room-details-flag not-check-style" v-if="roomDetails.hasChecked===false">未查寝</div>
+        <div class="room-details-flag al-check-style" v-else="roomDetails.hasChecked===true">已查寝</div>
       </div>
     </div>
     <div class="room-details-body">
       <div class="room-details-container">
-        <div class="room-details-item" v-for="(item,index) in listData" @touchstart="checkState($event,index)" @touchend="checkClear">
-          <div class="room-details-check" v-if="item.show"  @click="checkRoom($event,index)">
-            <div class="room-details-check-btn background-sucess" data-index="background-sucess">到勤</div>
-            <div class="room-details-check-btn background-warning" data-index="background-warning">晚归</div>
-            <div class="room-details-check-btn background-danger" data-index="background-danger">未归</div>
+        <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear">
+          <div class="room-details-check" v-if="item.studentId===studentId"  @click="checkRoom($event,index,item)">
+            <div class="room-details-check-btn background-success" data-index="2">到勤</div>
+            <div class="room-details-check-btn background-warning" data-index="3">晚归</div>
+            <div class="room-details-check-btn background-danger" data-index="4">未归</div>
           </div>
           <div class="room-details-item-img">
-            <img src="../assets/head.png" alt="">
+            <img :src="item.profilePhoto" alt="">
           </div>
           <div class="room-details-item-information">
-            <div class="room-details-item-name">梁朝伟</div>
-            <div  :class="['room-details-item-state',item.itemState]">{{item.itemStateText}}</div>
+            <div class="room-details-item-name">{{item.studentName}}</div>
+            <div  class="room-details-item-state background-default" v-if="item.clockStatus===1">查勤</div>
+            <div  class="room-details-item-state background-sucess" v-else-if="item.clockStatus===2">到勤</div>
+            <div  class="room-details-item-state background-warning" v-else-if="item.clockStatus===3">晚归</div>
+            <div  class="room-details-item-state background-danger" v-else="item.clockStatus===4">未归</div>
           </div>
           <div class="room-details-study-number">
-            学号：20181205154
+            学号：{{item.studentCode}}
           </div>
           <div class="room-details-item-line"></div>
-          <div class="room-details-item-position">1床</div>
+          <div class="room-details-item-position">{{item.bedCode}}床</div>
         </div>
       </div>
     </div>
@@ -76,59 +80,109 @@
 </template>
 
 <script>
-import { Popup } from 'vant'
+import { Popup,Toast } from 'vant'
 import Vue from 'vue'
 Vue.use(Popup)
+Vue.use(Toast)
 let timer
 export default {
   components: {Popup},
   name: 'room-details',
+  mounted:function(){
+    this.roomDetails = this.$route.params.roomDetails
+    this.userId = this.$route.params.userId
+    this.getUserInfo()/*查询用户名*/
+    this.getRoomDetailsList()/*查询学生列表*/
+  },
+  activated:function(){
+    this.roomDetails = this.$route.params.roomDetails
+    this.userId = this.$route.params.userId
+    this.getUserInfo()/*查询用户名*/
+    this.getRoomDetailsList()/*查询学生列表*/
+  },
   data () {
     return {
       beginCheck: false,
       endCheck: false,
-      listData: [
-        {
-          show: false,
-          state: '',
-          itemState: 'background-default',
-          itemStateText: '查勤'
-        },
-        {
-          show: false,
-          state: '',
-          itemState: 'background-default',
-          itemStateText: '查勤'
-        }
-      ]
+      roomDetails:{},/*宿舍详情*/
+      userId:'',
+      /*当天日期*/
+      date:{
+        year:new Date().getFullYear(),
+        month:new Date().getMonth()+1,
+        day:new Date().getDate()
+      },
+      studentId:'',/*学生ID 考勤参数*/
+      clockStatus:'',/*打卡状态 考勤参数*/
+      operatorName:'',/*操作人名字 考勤参数*/
+      roomDetailsList:[],
     }
   },
   methods: {
-    checkState: function (e, i) {
+    checkState: function (e, i,data) {
       const _this = this
       timer = setTimeout(function () {
-        _this.listData[i].show = true
+        _this.studentId = data.studentId
       }, 1000)
     },
     checkClear: function () {
       clearTimeout(timer)
     },
-    checkRoom: function (e, i) {
+    checkRoom: function (e, i,data) {
       if (e.target.dataset.index !== undefined) {
-        this.listData[i].itemState = e.target.dataset.index
-        this.listData[i].itemStateText = e.target.innerHTML
-        this.listData[i].show = false
+        this.roomDetailsList[i].clockStatus = Number(e.target.dataset.index)
+        this.clockStatus = Number(e.target.dataset.index)
+        this.roomDetailsList[i].studentId = Number(e.target.dataset.index)
+        this.changCheckClockStatus()/*更改考勤状态*/
       } else {
         return false
       }
     },
+    /*查询用户信息*/
+    getUserInfo(){
+      this.$http.get(`/api/select-data/user/${this.userId}`).then(function (res) {
+        if(res){
+          this.operatorName = res.data.data.name
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*更改考勤状态*/
+    changCheckClockStatus(){
+      const date = `${this.date.year}-${this.date.month}-${this.date.day}`
+      this.$http.put('/api/student-clock',{
+        appType:1,
+        id:this.studentId,
+        operatorName:this.userName,
+        operatorId:this.userId,
+        status:this.clockStatus,
+        clockDate:date
+      }).then(function (res) {
+        if(res){
+          if(res.data.code==='000000'){
+            Toast.success('更改成功')
+          }
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*查询学生列表*/
+    getRoomDetailsList(){
+      this.$http.get(`/api/dormitory/${this.roomDetails.dormitoryId}/detail/app`,{
+       params:{
+         userId:this.userId
+       }
+      }).then(function (res) {
+        if(res){
+          this.roomDetailsList = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
     checkBegin: function () {
-      /* 开始查寝 */
-      /* const _this = this
-      this.beginCheck = true
-      setTimeout(function () {
-        _this.beginCheck = false
-      },1000) */
       /* 结束查寝 */
       this.endCheck = true
     },
@@ -137,6 +191,19 @@ export default {
     },
     checkAffirm: function () {
       this.endCheck = false
+      this.$http.post('/api/dormitory-check',{
+        "dormitoryId":this.roomDetails.dormitoryId,
+        "operatorId": this.userId,
+        "operatorName": this.operatorName
+      }).then(function (res) {
+        if(res){
+          if(res.data.code==='000000'){
+            Toast.success('成功')
+          }
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
     }
   }
 }
@@ -145,6 +212,7 @@ export default {
 <style scoped>
   .room-details-header-container{
     padding: 0 30px;
+    overflow: hidden;
   }
 .room-details-header{
   height:282px;
@@ -186,12 +254,9 @@ export default {
     font-family:PingFang-SC-Medium;
   }
   .room-details-flag{
-    /*background:rgba(149,149,149,1);*/
     width:170px;
     height:54px;
-    background:rgba(211,37,37,1);
     border-radius:8px;
-    box-shadow:10px 0px 18px rgba(211,37,37,0.27);
     text-align: center;
     font-size:40px;
     line-height: 54px;
@@ -202,9 +267,17 @@ export default {
     left: 20px;
     /*z-index: 10;*/
   }
+  .al-check-style{
+    background:rgba(149,149,149,1);
+    box-shadow:10px 0px 18px rgba(149,149,149,1);
+  }
+  .not-check-style{
+    background:rgba(211,37,37,1);
+    box-shadow:10px 0px 18px rgba(211,37,37,0.27);
+  }
   .room-details-body{
     padding: 0 30px;
-    height: 712px;
+    height: 770px;
     overflow-y: auto;
   }
   .room-details-container{
@@ -233,6 +306,9 @@ export default {
     position: absolute;
     background-color: rgba(0,0,0,.5);
     border-radius:8px;
+    display: flex;
+    justify-content: center;
+    flex-flow:wrap column;
   }
   .room-details-check-btn{
     width:194px;
@@ -243,7 +319,7 @@ export default {
     color:rgba(255,255,255,1);
     text-align: center;
     line-height: 70px;
-    margin: 0 auto 39px auto;
+    margin:20px auto;
   }
   .room-details-check>.background-sucess {
     margin-top: 52px;

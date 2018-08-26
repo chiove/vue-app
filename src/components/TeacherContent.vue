@@ -22,6 +22,7 @@
     watch:{
       'data.isRequested':function(val){
         /*状态改变*/
+        console.log(this.data.clockStatus)
         if (this.data.clockStatus===0) {
           this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
           this.state.backgroundColor = '#CBCBCB'

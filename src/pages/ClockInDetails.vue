@@ -99,6 +99,9 @@ export default {
   },
   methods:{
     getDayHistoryList(){
+      this.arrivedList = []
+      this.stayOutLateList = []
+      this.stayOutList = []
       this.$http.get('/api/student-clock-history',{
         params:{
           studentId:this.studentId,
@@ -116,7 +119,6 @@ export default {
               _this.stayOutList.push(item)
             }
          })
-          console.log(this.arrivedList)
         }
       }).catch(function (error) {
         console.log(error)

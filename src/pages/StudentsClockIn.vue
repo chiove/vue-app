@@ -43,15 +43,13 @@ export default {
   methods: {
     /*获取系统配置*/
     getSystemConfig:function () {
-      this.pageData.isRequested = false
-      const _this = this
       this.$http.get('/api/system-config').then(function (res) {
         if(res){
           const data = res.data.data
-          _this.pageData.clockStartTime =  data.clockStartTime.substring(0,5)
-          _this.pageData.clockEndTime =  data.clockEndTime.substring(0,5)
-          _this.pageData.checkDevice = data.checkDevice
-          _this.pageData.clockAddressSettingList = data.clockAddressSettingList
+          this.pageData.clockStartTime =  data.clockStartTime.substring(0,5)
+          this.pageData.clockEndTime =  data.clockEndTime.substring(0,5)
+          this.pageData.checkDevice = data.checkDevice
+          this.pageData.clockAddressSettingList = data.clockAddressSettingList
           this.pageData.isRequested = true
         }
       }).catch(function (error) {
@@ -93,7 +91,7 @@ export default {
       }).then(function (res) {
         if(res){
           this.pageData.clockStatus = res.data.data
-          if(res.data.data!==2&&res.data.data!==3&&res.data.data!==4){
+          if(res.data.data===1){
            const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
            if(nowClockStartTime<this.pageData.clockStartTime){
              this.pageData.clockStatus = 0

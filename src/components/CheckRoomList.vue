@@ -1,33 +1,47 @@
 <template>
-    <div class="check-room-container">
+    <div class="check-room-container" @click="roomDetailsFun">
       <div class="check-room-head">
         <div>
-          <span class="check-room-number">104寝室</span>
-          <span class="check-room-name">(宿舍名)</span>
+          <span class="check-room-number">{{data.dormitoryId}}寝室</span>
+          <span class="check-room-name">({{data.dormitoryName}})</span>
         </div>
         <div>
-          <span class="check-room-person">4人</span>
+          <span class="check-room-person">{{data.totalStudent}}人</span>
           <img class="check-room-icon" src="../assets/selectRight.png">
         </div>
       </div>
       <div class="check-room-line"></div>
       <div class="check-room-body">
         <div class="check-room-not-arrive">
-          <div class="check-room-state-number color-danger">2</div>
+          <div class="check-room-state-number color-danger">{{data.layOutStudent}}</div>
           <div class="check-room-text">未归人数</div>
         </div>
         <div class="check-room-late">
-          <div class="check-room-state-number color-warning">3</div>
+          <div class="check-room-state-number color-warning">{{data.layOutLayStudent}}</div>
           <div class="check-room-text">晚归人数</div>
         </div>
-        <div class="check-room-state">未查寝</div>
+        <div class="check-room-state not-check-style" v-if="data.hasChecked===false">未查寝</div>
+        <div class="check-room-state al-check-style" v-else="data.hasChecked===true">已查寝</div>
       </div>
     </div>
 </template>
 
 <script>
 export default {
-  name: 'check-room-list'
+  name: 'check-room-list',
+  props:['data','userId'],
+  methods:{
+    /*进入房间详情页*/
+    roomDetailsFun(){
+      this.$router.push({
+        name:'RoomDetails',
+        params:{
+          roomDetails:this.data,
+          userId:this.userId
+        }
+      })
+    }
+  }
 }
 </script>
 
@@ -93,14 +107,18 @@ export default {
   .check-room-state{
     width:162px;
     height:52px;
-    background:rgba(211,37,37,1);
-    /*background:rgba(149,149,149,1);*/
     border-radius:8px;
     text-align: center;
     line-height: 52px;
     font-size:36px;
     font-family:PingFang-SC-Medium;
     color:rgba(255,255,255,1);
+  }
+  .not-check-style{
+    background:rgba(211,37,37,1);
+  }
+  .al-check-style{
+    background:rgba(149,149,149,1);
   }
 .check-room-state-number{
   font-size:56px;

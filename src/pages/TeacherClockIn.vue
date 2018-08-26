@@ -69,7 +69,7 @@
         }).then(function (res) {
           if(res){
             this.pageData.clockStatus = res.data.data
-            if(res.data.data!==2&&res.data.data!==3&&res.data.data!==4){
+            if(res.data.data===1){
               const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
               if(nowClockStartTime<this.pageData.checkClockStartTime){
                 this.pageData.clockStatus = 0

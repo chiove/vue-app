@@ -13,11 +13,11 @@
           <img :src="dormitoryActive?selectIconActive:selectIcon">
         </div>
         <div class="search-select-item" @click="checkFun">
-          <span :class="{'color-primary':checkActive}">{{checkTitle}}</span>
+          <span :class="{'color-primary':checkActive}">{{sortTitle}}</span>
           <img :src="checkActive?selectIconActive:selectIcon">
         </div>
         <div class="search-select-item" @click="sortFun">
-          <span :class="{'color-primary':sortActive}">{{sortTitle}}</span>
+          <span :class="{'color-primary':sortActive}">{{checkTitle}}</span>
           <img :src="sortActive?selectIconActive:selectIcon">
         </div>
         <div class="number-select-icon" @click="dormitoryFun">
@@ -27,27 +27,22 @@
       </div>
     </div>
     <div class="search-container">
-      <div class="search-select-container" v-if="checkActive" @click="getSearchValue($event,'check')">
-        <div class="list-item">全部查寝状态</div>
-        <div class="list-item" v-for="(item,index) in checkData" :data-index="item.id">{{item.text}}</div>
-      </div>
-      <div class="search-select-container" v-if="sortActive" @click="getSearchValue($event,'sort')">
-        <div class="list-item">考寝状态</div>
+      <div class="search-select-container" v-if="checkActive" @click="getSearchValue($event,'sort')">
+        <div class="list-item">排序查询</div>
         <div class="list-item" v-for="(item,index) in sortData" :data-index="item.id">{{item.text}}</div>
       </div>
+      <div class="search-select-container" v-if="sortActive" @click="getSearchValue($event,'check')">
+        <div class="list-item">考勤状态</div>
+        <div class="list-item" v-for="(item,index) in checkData" :data-index="item.id">{{item.text}}</div>
+      </div>
       <div class="search-select-container" v-if="dormitoryActive">
-        <dormitory-select></dormitory-select>
+        <dormitory-select :data="buildingList" @sendParams="listenParamsEvent"></dormitory-select>
       </div>
       <div class="search-result-list">
-        <check-room-list></check-room-list>
-        <check-room-list></check-room-list>
-        <check-room-list></check-room-list>
-        <check-room-list></check-room-list>
-        <check-room-list></check-room-list>
-        <check-room-list></check-room-list>
+        <check-room-list v-for="(item,index) in roomListData" v-bind:key="index" :data="item" :userId="userId"></check-room-list>
       </div>
     </div>
-    <teacher-check-tab :pageName="pageName"></teacher-check-tab>
+    <teacher-check-tab></teacher-check-tab>
   </div>
 </template>
 
@@ -55,14 +50,16 @@
 import teacherCheckTab from '../components/TeacherCheckTab'
 import dormitorySelect from '../components/DormitorySelect'
 import checkRoomList from '../components/CheckRoomList'
-import axios from 'axios'
 export default {
   components: {teacherCheckTab, dormitorySelect, checkRoomList},
   name: 'check-dormitory',
+  mounted:function(){
+    this.getBuildingList()/*查询楼栋*/
+    this.getRoomListData()/*查询宿舍列表*/
+  },
   data () {
     return {
       inputState: true,
-      pageName: 'CheckDormitory',
       selectIcon: require('../assets/selectDown.png'),
       numberIcon: require('../assets/numberSelect.png'),
       selectIconActive: require('../assets/selectDownActive.png'),
@@ -74,44 +71,46 @@ export default {
       dormitoryActive: false,
       sortActive: false,
       checkActive: false,
-      params: {},
       userId:100725,
-      checkData: [
-        {
-          id: '1',
-          text: '已查寝'
-        },
-        {
-          id: '2',
-          text: '未查寝'
-        }
-      ],
+      buildingId:1,/*楼栋ID*/
+      floorNumber:'',/*楼层*/
+      dormitoryId:'',/*宿舍ID*/
+      orderBy:'',/*考勤状态查询*/
+      descOrAsc:'asc',/*宿舍号升序降序 asc升序，desc降序*/
       sortData: [
         {
-          id: '1',
-          text: '未归人数从高到低'
+          id: 'desc',
+          text: '升序'
         },
         {
-          id: '2',
-          text: '未归人数从低到高'
-        },
-        {
-          id: '3',
-          text: '晚归人数从高到低'
-        },
-        {
-          id: '4',
-          text: '晚归人数从低到高'
+          id: 'asc',
+          text: '降序'
         }
-      ]
+      ],
+      checkData: [
+        {
+          id: 'dormitoryCode ',
+          text: '宿舍号'
+        },
+        {
+          id: 'stayOutNum ',
+          text: '未归人数'
+        },
+        {
+          id: 'stayOutLateNum',
+          text: '晚归人数'
+        }
+      ],
+      buildingList:[],/*楼栋列表,传入子组件*/
+      roomListData:[],/*查询出宿舍列表*/
     }
   },
   methods: {
     inputContent: function () {
       this.$router.push({
         name: 'SearchStudents',
-        params:{
-          userId:this.userId
+        params: {
+          userId: this.userId
         }
       })
     },
@@ -120,7 +119,6 @@ export default {
       this.sortActive = false
       this.checkActive = false
       this.dormitoryActive ? this.dormitoryActive = false : this.dormitoryActive = true
-      console.log(this.$http.getSystemConfig())
     },
     checkFun: function () {
       this.sortActive = false
@@ -138,16 +136,60 @@ export default {
       } else {
         if (type === 'check') {
           this.checkTitle = e.target.innerText
+          this.orderBy = e.target.dataset.index
         }
         if (type === 'sort') {
           this.sortTitle = e.target.innerText
+          this.descOrAsc = e.target.dataset.index
         }
-        this.params[type] = e.target.dataset.index
+        this.getRoomListData()
       }
       this.sortActive = false
       this.checkActive = false
       this.dormitoryActive = false
-    }
+    },
+    /*根据Id查询楼栋*/
+    getBuildingList() {
+      this.$http.get('/api/dormitory-building/query-by-user', {
+        params: {
+          userId: this.userId
+        }
+      }).then(function (res) {
+        if (res) {
+          this.buildingList = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    /*监听查询参数*/
+    listenParamsEvent(data) {
+      this.buildingId = data.buildingId
+      this.floorNumber = data.floorNumber
+      this.dormitoryId = data.dormitoryId
+      this.dormitoryTitle = data.buildingName
+      this.dormitoryChildTitle = data.dormitoryName
+      this.getRoomListData()
+      this.dormitoryActive = false
+    },
+    getRoomListData(){
+      this.$http.get('/api/dormitory-list-query',{
+        params:{
+          buildingId:this.buildingId,
+          floorNumber:this.floorNumber,
+          dormitoryId:this.dormitoryId,
+          descOrAsc:this.descOrAsc,
+          orderBy:this.orderBy,
+          userId:this.userId
+        }
+      }).then(function (res) {
+        if(res){
+            this.roomListData = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
   }
 }
 </script>
@@ -247,6 +289,8 @@ export default {
     top: 0;
     width: 100%;
     max-width: 1125px;
+    height: 450px;
+    overflow: auto;
   }
   .search-result-list{
     padding: 0 30px;

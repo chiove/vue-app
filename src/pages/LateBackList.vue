@@ -6,7 +6,7 @@
         <span>{{clockStatusText}}{{studentsNumber}}人</span>
       </div>
       <div class="late-back-list" @click="studentDetailsFun">
-        <div class="late-back-list-item" v-for="(item,index) in studentsList" v-bind:key="index" :data-index="item.studentId">
+        <div class="late-back-list-item" v-for="(item,index) in studentsList" v-bind:key="index" :data-index="JSON.stringify(item)">
           <div>{{item.studentName}}</div>
           <img class="late-back-list-icon" src="../assets/selectRight.png" alt="">
         </div>
@@ -20,18 +20,31 @@ export default {
   name: 'LateBackList',
   mounted:function () {
     /*接受路由传参*/
-    this.userId = this.$route.params.userId
-    this.clockStatus = this.$route.params.clockStatus
-    this.weekNumber = this.$route.params.weekNumber
+    console.log( this.$route.params)
+    this.userId = localStorage.getItem('userId')
+    this.clockStatus = localStorage.getItem('clockStatus')
+    this.weekNumber = localStorage.getItem('weekNumber')
     if(this.clockStatus===3){
       this.clockStatusText = '晚归'
-      this.studentsNumber = this.$route.params.stayOutLateNumber
+      this.studentsNumber = localStorage.getItem('stayOutLateNumber')
     }else if(this.clockStatus===4){
       this.clockStatusText = '未归'
-      this.studentsNumber = this.$route.params.stayOutNumber
+      this.studentsNumber = localStorage.getItem('stayOutNumber')
     }
-    const studentsList = this.$http.getWeekStudentList(this.userId,this.clockStatus,this.weekNumber)
-    this.studentsList = studentsList.data
+    this.getStudentsList()/*查询学生列表*/
+  },
+  activated:function(){
+    this.userId = localStorage.getItem('userId')
+    this.clockStatus = localStorage.getItem('clockStatus')
+    this.weekNumber = localStorage.getItem('weekNumber')
+    if(this.clockStatus===3){
+      this.clockStatusText = '晚归'
+      this.studentsNumber = localStorage.getItem('stayOutLateNumber')
+    }else if(this.clockStatus===4){
+      this.clockStatusText = '未归'
+      this.studentsNumber = localStorage.getItem('stayOutNumber')
+    }
+    this.getStudentsList()/*查询学生列表*/
   },
   data(){
     return {
@@ -45,14 +58,25 @@ export default {
   },
   methods:{
     studentDetailsFun:function (e) {
-      const studentId = e.target.dataset.index
-      const _this = this
+      const studentId = JSON.parse(e.target.dataset.index).studentId
+      localStorage.setItem('studentId',studentId)
       this.$router.push({
-        name:'weekPersonalInformation',
+        name:'WeekPersonalInformation',
+      })
+    },
+    getStudentsList(){
+      this.$http.get('/api/dormitory-check/week-stat/student',{
         params:{
-          studentId:studentId,
-          weekNumber:_this.weekNumber
+          userId:this.userId,
+          clockStatus:this.clockStatus,
+          weekNumber:this.weekNumber
         }
+      }).then(function (res) {
+        if(res){
+          this.studentsList = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
       })
     }
   }

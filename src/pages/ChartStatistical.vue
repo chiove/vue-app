@@ -21,7 +21,7 @@
               <img class="week-statistical-select-down" src="../assets/selectDown.png" alt="">
             </div>
             <div class="week-statistical-total" v-if="weekTotal" @click="confirmWeekFun">
-              <div class="week-statistical-total-item" v-for="(item,index) in weekList" :data-index="item" v-bind:key="index">{{item}}</div>
+              <div class="week-statistical-total-item" v-for="(item,index) in weekList" :data-index="JSON.stringify(item)" v-bind:key="index">{{item.weekNumber}}</div>
             </div>
             <div>应打卡人数：{{needClockNumber}}</div>
           </div>
@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-    <teacher-check-tab :pageName="pageName"></teacher-check-tab>
+    <teacher-check-tab></teacher-check-tab>
   </div>
 </template>
 
@@ -56,7 +56,6 @@ export default {
   components: {teacherCheckTab, chartDateSelect, VeRing},
   name: 'chart-statistical',
   mounted: function () {
-    console.log(this.$http.getSystemConfig())
     /*初始化查询周统计*/
    this.weekSearch()
   },
@@ -73,13 +72,15 @@ export default {
       tabRightActive: false,
       weekTotal:false,/*总周数面板控制*/
       week:1,/*当前第几周*/
-      pageName: 'ChartStatistical',
       needClockNumber:0, /*应打卡人数*/
       lateNumber:0,/*晚归人数*/
       notNumber:0,/*未归人数*/
-      userId:1,/*用户id*/
+      userId:100725,/*用户id*/
       clockStatus:0,/*打卡状态*/
-      weekList:[1,2,3],/*循环周列表*/
+      weekList:[],/*周列表*/
+      year:'',
+      month:'',
+      day:'',
       chartData: {/*图表数据*/
         columns: ['状态', '人数'],
         rows: [
@@ -114,62 +115,89 @@ export default {
       if(e.target.getAttribute('class')==='week-statistical-total'){
         return
       }
-      this.week = e.target.dataset.index
+      this.week = JSON.parse(e.target.dataset.index).weekNumber
       this.weekTotal = false
       /*选择周数查询列表*/
       this.weekSearch()
     },
     /*监听日期选择*/
     listenEvent: function (data) {
-      this.dailySearch(data.year,data.month,data.day,data.userId)
+      this.year = data.year
+      this.month = data.month
+      this.day = data.day
+      this.dailySearch()
     },
     /*图表查询*/
-    dailySearch:function (year,month,day,userId) {
-      const dailyList= this.$http.getDailyTotal(year,month,day,userId)
-      this.chartData.rows = [
-        { '状态': '到勤', '人数': dailyList.data.clockNum},
-        { '状态': '晚归', '人数': dailyList.data.stayOutLateNum },
-        { '状态': '未归', '人数': dailyList.data.stayOutNum }
-      ]
+    dailySearch:function () {
+      this.$http.get('/api/dormitory-check/day-stat',{
+        params:{
+          year:this.year,
+          month:this.month,
+          day:this.day,
+          userId:this.userId
+        }
+      }).then(function (res) {
+        if(res){
+          this.chartData.rows = [
+            { '状态': '到勤', '人数': res.data.data.clockNum},
+            { '状态': '晚归', '人数': res.data.data.stayOutLateNum },
+            { '状态': '未归', '人数': res.data.data.stayOutNum }
+          ]
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+
     },
     /*周统计查询*/
     weekSearch:function () {
       /*查询应打卡人数*/
-      const weekStatistics = this.$http.getWeekTotal(this.userId,this.week);
-      this.needClockNumber = weekStatistics.data.totalNum
-      this.lateNumber =  weekStatistics.data.stayOutLateNum
-      this.notNumber =  weekStatistics.data.stayOutLateNum
+      this.$http.get('/api/dormitory-check/week-stat',{
+        params:{
+          userId:this.userId,
+          weekNumber:this.week
+        }
+      }).then(function (res) {
+        if(res){
+          const data = res.data.data
+          this.needClockNumber = data.totalNum
+          this.lateNumber =  data.stayOutLateNum
+          this.notNumber =  data.stayOutNum
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
       /*周数列表*/
-      const weekTotal = this.$http.getWeekList()
-      for (let week=1;week<weekTotal.length;week++)
-      {
-        this.weekList.push(week)
-      }
+      this.$http.get('/api/select-data/week-info/all').then(function (res) {
+        if(res){
+          this.weekList = res.data.data
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+
+
     },
     /*打开晚归详细页面*/
     stayOutLateFun:function () {
       const _this = this
+      localStorage.setItem('clockStatus',3)
+      localStorage.setItem('userId',_this.userId)
+      localStorage.setItem('weekNumber',_this.week)
+      localStorage.setItem('stayOutLateNumber',_this.lateNumber)
       this.$router.push({
         name:'LateBackList',
-        params:{
-          userId:_this.userId,
-          clockStatus:3,
-          weekNumber:_this.week,
-          stayOutLateNumber:this.lateNumber
-        }
       })
     },
     /*打开未归详细页面*/
     stayOutFun:function () {
       const _this = this
+      localStorage.setItem('clockStatus',4)
+      localStorage.setItem('userId',_this.userId)
+      localStorage.setItem('weekNumber',_this.week)
+      localStorage.setItem('stayOutNumber',_this.notNumber)
       this.$router.push({
         name:'LateBackList',
-        params:{
-          userId:_this.userId,
-          clockStatus:4,
-          weekNumber:_this.week,
-          stayOutNumber:_this.notNumber
-        }
       })
     }
   }

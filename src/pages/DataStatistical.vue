@@ -14,7 +14,6 @@ import signTab from "../components/signTab"
 import dataBanner from "../components/dataBanner"
 import historySelect from "../components/historySelect"
 import historyList from "../components/StudentHistoryList"
-import axios from 'axios'
 export default {
   components: {signTab,dataBanner,historySelect,historyList},
   name: "statistical-data",

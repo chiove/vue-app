@@ -3,9 +3,9 @@
     <data-banner :data="pageData"></data-banner>
     <history-select @selectDate="selectDate"></history-select>
     <div class="history-details-container">
-      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :studentId="$route.params.studentId" :data="item"></history-list>
+      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :studentId="pageData.studentId" :data="item"></history-list>
     </div>
-    <submit-btn :data="$route.params.studentId"></submit-btn>
+    <submit-btn :data="pageData.studentId"></submit-btn>
   </div>
 </template>
 
@@ -14,17 +14,18 @@ import submitBtn from '../components/submitBtn'
 import dataBanner from '../components/dataBanner'
 import historySelect from '../components/historySelect'
 import historyList from '../components/StudentHistoryList'
-import axios from '../units/axios'
 export default {
   components: {submitBtn, dataBanner, historySelect, historyList},
   name: 'teacher-submit',
   mounted:function(){
-    this.getStudentsInfo(this.$route.params.studentId)/*获取学生信息*/
-    this.getClockTimes(this.$route.params.studentId) /*获取晚归，到勤，未归*/
+    this.pageData.studentId = localStorage.getItem('careStudentId')
+    this.getStudentsInfo()/*获取学生信息*/
+    this.getClockTimes() /*获取晚归，到勤，未归*/
   },
   activated(){
-    this.getStudentsInfo(this.$route.params.studentId)/*获取学生信息*/
-    this.getClockTimes(this.$route.params.studentId) /*获取晚归，到勤，未归*/
+    this.pageData.studentId = localStorage.getItem('careStudentId')
+    this.getStudentsInfo()/*获取学生信息*/
+    this.getClockTimes() /*获取晚归，到勤，未归*/
   },
   data: function () {
     return {
@@ -53,8 +54,8 @@ export default {
       this.getHistoryList()/*根据学生ID和日期查询全部历史*/
     },
     /*获取学生信息*/
-    getStudentsInfo(studentId){
-      this.$http.get(`/api/student/${studentId}`).then(function (res) {
+    getStudentsInfo(){
+      this.$http.get(`/api/student/${this.pageData.studentId}`).then(function (res) {
         if(res){
           const data = res.data.data
           this.pageData.profilePhoto = data.profilePhoto
@@ -72,8 +73,8 @@ export default {
       })
     },
     /*获取晚归，到勤，未归*/
-    getClockTimes(studentId){
-      this.$http.get(`/api/student-clock/${studentId}/stat/`).then(function (res) {
+    getClockTimes(){
+      this.$http.get(`/api/student-clock/${this.pageData.studentId}/stat/`).then(function (res) {
         if(res){
           const data = res.data.data
           this.pageData.totalStayOutLate = data.totalStayOutLate

@@ -15,6 +15,7 @@ export default {
   name: "teacher-clock-in-banner",
   watch:{
     'data.isRequested':function(val){
+      console.log(this.data.clockStatus)
       if(this.data.clockStatus===2){
         this.backGroundImg =require("../assets/success.png")
       }else{

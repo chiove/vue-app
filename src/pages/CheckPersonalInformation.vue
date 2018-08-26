@@ -32,7 +32,7 @@
       <div class="data-form-item" @click="checkFun">
         <div>考勤状态</div>
         <div class="color-sucess">
-          <span>到勤</span>
+          <span>{{clockStatusText}}</span>
           <img class="data-form-select" src="../assets/selectRight.png" alt="">
         </div>
       </div>
@@ -42,17 +42,17 @@
         <img class="data-form-select" src="../assets/selectRight.png" alt="">
       </div>
       <div class="data-form-line"></div>
-      <div class="data-form-item">
+      <div class="data-form-item" @click="todyHistoryDetailsFun">
         <div>今日打卡轨迹</div>
         <img class="data-form-select" src="../assets/selectRight.png" alt="">
       </div>
       <div class="data-form-line"></div>
       <div class="data-form-item-remark">备注</div>
       <div class="data-form-remark">
-        <textarea name="" id="" placeholder="请输入"></textarea>
-        <div class="data-form-tips">0/30</div>
+        <textarea ref="remarkDom" placeholder="请输入"  @input="valueChangeFun"></textarea>
+        <div class="data-form-tips">{{textNumber}}/30</div>
       </div>
-      <div class="data-form-submit">提交</div>
+      <div class="data-form-submit" @click="submitRemarkFun">提交</div>
     </div>
     <van-popup v-model="show" position="bottom">
       <van-picker
@@ -67,21 +67,34 @@
 </template>
 
 <script>
-  import { Popup,Picker  } from 'vant'
+  import { Popup,Picker ,Toast } from 'vant'
   import Vue from 'vue'
   Vue.use(Popup)
   Vue.use(Picker)
+  Vue.use(Toast)
   export default {
     components:{Popup,Picker},
     name: "personal-information",
     mounted(){
       this.studentId = this.$route.params.studentId
+      this.userId = this.$route.params.userId
       this.getStudentsInfo(this.studentId)/*获取学生信息*/
+      this.getUserInfo()/*获取用户信息*/
+    },
+    activated(){
+      this.studentId = this.$route.params.studentId
+      this.userId = this.$route.params.userId
+      this.getStudentsInfo(this.studentId)/*获取学生信息*/
+      this.$refs.remarkDom.value = ''
     },
     data(){
       return {
         show:false,
-        studentId:'',
+        userId:'',/*用户ID*/
+        studentId:'',/*学生ID*/
+        userName:'',/*用户名字*/
+        clockStatusText:'未打卡',/*状态显示*/
+        clockStatus:1,/*考勤状态*/
         columns:['到勤','晚归','未归'],
         profilePhoto:'',/*头像地址*/
         studentName:'',/*学生姓名*/
@@ -92,6 +105,12 @@
         studentCode:'',/*学号*/
         dormitoryName:'',/*专业*/
         bedCode:'',/*床号*/
+        date:{
+          year:new Date().getFullYear(),
+          month:new Date().getMonth()+1,
+          day:new Date().getDate()
+        },
+        textNumber:0/*文本框字数*/
       }
     },
     methods:{
@@ -117,11 +136,68 @@
       checkFun:function () {
         this.show = true
       },
-      confirm:function () {
+      confirm:function (data) {
+        this.clockStatusText = data
+        if(data = '到勤'){
+          this.clockStatus = 2
+        }else if(data = '晚归'){
+          this.clockStatus = 3
+        }else if(data = '未归'){
+          this.clockStatus = 4
+        }
+        console.log(data)
         this.show = false
+      },
+      /*今日所有打卡记录*/
+      todyHistoryDetailsFun(){
+        this.$router.push({
+          name:'ClockInDetails',
+          params:{
+            data:this.date,
+            studentId:this.studentId
+          }
+        })
+      },
+      /*查询用户信息*/
+      getUserInfo(){
+        this.$http.get(`/api/select-data/user/${this.userId}`).then(function (res) {
+          if(res){
+            this.userName = res.data.data.name
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      /*提交备注*/
+      submitRemarkFun(){
+        const date = `${this.date.year}-${this.date.month}-${this.date.day}`
+        if(this.$refs.remarkDom.value.length<=30){
+          this.$http.put('/api/student-clock',{
+            appType:1,
+            id:this.studentId,
+            operatorName:this.userName,
+            operatorId:this.userId,
+            remark:this.$refs.remarkDom.value,
+            status:this.clockStatus,
+            clockDate:date
+          }).then(function (res) {
+            if(res){
+              if(res.data.code==='000000'){
+                Toast.success('提交成功')
+              }
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }else{
+          Toast.fail('备注在30字内')
+        }
       },
       cancel:function () {
         this.show = false
+      },
+      valueChangeFun(){
+        this.textNumber = this.$refs.remarkDom.value.length
       }
     }
   }
@@ -130,7 +206,7 @@
 <style scoped>
   .data-banner{
     height: 300px;
-    background: url("../assets/dataBanner.png") 100% 100% no-repeat;
+    background: url("../assets/dataBanner.png")  no-repeat;
     overflow: hidden;
   }
   .data-information{

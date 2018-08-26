@@ -75,9 +75,6 @@
       return {
         show:false,
         columns:['到勤','晚归','未归'],
-
-
-
       }
     },
     methods:{
