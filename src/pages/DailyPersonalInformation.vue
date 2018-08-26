@@ -87,7 +87,6 @@
       cancel:function () {
         this.show = false
       },
-
     }
   }
 </script>

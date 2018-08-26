@@ -49,7 +49,6 @@ export default {
   methods: {
     routerLink: function (e) {
       this.$router.push({path: e.target.dataset.index})
-      console.log(e.target.dataset.index)
     }
   }
 }
