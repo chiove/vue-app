@@ -150,11 +150,11 @@ export default {
     },
     /*更改考勤状态*/
     changCheckClockStatus(){
-      const date = `${this.date.year}-${this.date.month}-${this.date.day}`
+      const date = `${this.date.year}${this.date.month}${this.date.day}`
       this.$http.put('/api/student-clock',{
         appType:1,
         id:this.studentId,
-        operatorName:this.userName,
+        operatorName:this.operatorName,
         operatorId:this.userId,
         status:this.clockStatus,
         clockDate:date
