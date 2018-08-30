@@ -1,15 +1,15 @@
 export default {
-  GetRequest: function () {
-    var url = location.search // 获取url中"?"符后的字串
-    var theRequest = new Object()
-    if (url.indexOf('?') != -1) {
-      var str = url.substr(1)
-      strs = str.split('&')
-      for (var i = 0; i < strs.length; i++) {
-        theRequest[strs[i].split('=')[0]] = unescape(strs[i].split('=')[1])
-      }
+  getPosition:function(lon,lat,radius){
+    const maxlongitude = lon+(radius/1000)/111
+    const minlongitude =lon-(radius/1000)/111
+    const maxlatitude = lat+(radius/1000)/(111*Math.cos(23.14))
+    const minlatitude = lat-(radius/1000)/(111*Math.cos(23.14))
+    return {
+      maxlongitude:maxlongitude,
+      minlongitude:minlongitude,
+      maxlatitude:maxlatitude,
+      minlatitude:minlatitude
     }
-    return theRequest
   },
   getCurrentTime: function getCurrentTime (type) {
     var date = new Date()

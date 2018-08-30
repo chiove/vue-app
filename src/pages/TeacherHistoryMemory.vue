@@ -2,14 +2,16 @@
     <div class="body-container">
       <div class="date-select-container">
         <date-select v-on:selectDate="listenEvent" :padding="padding"></date-select>
+        <div class="memory-title">
+          <span>打卡记录</span>
+        </div>
       </div>
-      <div class="memory-title">
-        <span>打卡记录</span>
-      </div>
-      <div class="memory-content" v-for="(item,index) in dateDataList" v-bind:key="index">
-        <div class="memory-item">
-          <span class="memory-icon"></span>
-          <span class="memory-item-time">{{item}}</span>
+      <div class="list-container">
+        <div class="memory-content" v-for="(item,index) in dateDataList" v-bind:key="index">
+          <div class="memory-item">
+            <span class="memory-icon"></span>
+            <span class="memory-item-time">{{item}}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -82,6 +84,9 @@ export default {
   }
   .memory-item-time{
     margin-left: 10px;
+  }
+  .list-container{
+    flex: 1;
   }
   .memory-icon{
     display: inline-block;

@@ -28,6 +28,13 @@ let jsAndroid = {
       return d
     }
   },
+  device: {
+    getIdfv:function () {
+      var d = jsAndroid.jsAndroidCallback()
+      jsAndroid.is_android() ? window.jsAndroid.getIdfv() : window.webkit.messageHandlers.getIdfv.postMessage('');
+      return d
+    }
+  },
 	//分享
 	share: {
 		//分享连接

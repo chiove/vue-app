@@ -13,8 +13,8 @@
         <div class="sign-in-time">{{sign.timeNow}}</div>
       </div>
       <div class="sign-location">
-        <img class="sign-img" src="../assets/true.png"/>
-        <span class="sign-location-text">已进入签到范围：{{city}}{{district}}{{street}}{{streetnum}}</span>
+        <img class="sign-img" :src="positionImg"/>
+        <span class="sign-location-text">{{positionText}}：{{city}}{{district}}{{street}}{{streetnum}}</span>
         <span class="sign-location-btn" @click="rePositionFun">重新定位</span>
       </div>
     </div>
@@ -44,25 +44,51 @@
 import signTab from '../components/signTab'
 import units from '../units/tools'
 import jsAndroid from '../units/jsAndroid'
+import { Toast } from 'vant';
+import Vue from 'vue'
+Vue.use(Toast)
 export default {
-  components: {signTab},
+  components: {signTab,Toast},
   name: 'students-clock-in',
   mounted: function () {
+    const _this = this
+    /*获取id*/
      if(this.$route.query.userid){
        this.studentId = this.$route.query.userid
      }
     this.studentId = localStorage.setItem('studentClockUserId',this.$route.query.userid)
     this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
+    /*获取deviceId*/
+    jsAndroid.device.getIdfv().then(function (data) {
+      _this.deviceId = data
+    })
+    if (this.deviceId!==this.checkDevice) {
+      this.$router.push({
+        path:'/notClockIn'
+      })
+    }
     this.getStudentClockStatus(this.studentId)/*获取学生当前考勤状态*/
     this.getStudentDetailsListData(this.studentId)/*获取学生信息*/
     this.getStudentsClocktimes(this.studentId)/*获取总打卡次数*/
     this.changeStatus()
     this.changeStyle()
-    const _this = this
     setInterval(function () { /*本地时间*/
       _this.sign.timeNow = units.getCurrentTime("hour")
     },1000)
+  },
+  activated:function(){
+    const _this = this
+    this.getSystemConfig()/*获取系统配置*/
+    /*获取deviceId*/
+    jsAndroid.device.getIdfv().then(function (data) {
+      _this.deviceId = data
+    })
+    if (this.deviceId!==this.checkDevice) {
+      this.$router.push({
+        path:'/notClockIn'
+      })
+    }
   },
   watch:{
     clockStatus:function (val) {
@@ -97,7 +123,10 @@ export default {
         city: "",
         district: "",
         street: "",
-        streetnum: ""
+        streetnum: "",
+        positionText:'',/*提示是否成功*/
+        positionImg:require('../assets/position-no.png'),
+        ClockPositionState:false,/*是否在打卡范围内*/
     }
   },
   methods: {
@@ -202,21 +231,26 @@ export default {
       }
     },
     studentClockFun:function () {
+      const _this = this
       if(this.clockStatus === 1 ){
-        this.$http.post('/api/student-clock',{
-          "deviceId": "",
-          "posLatitude": this.posLatitude,
-          "posLongitude": this.posLongitude,
-          "studentId": this.studentId
-        }).then(function (res) {
-          if(res){
-            if(res.data.data.code === "000000"){
-              this.state = 2
+        if(this.ClockPositionState){
+          this.$http.post('/api/student-clock',{
+            "deviceId": this.deviceId,
+            "posLatitude": this.posLatitude,
+            "posLongitude": this.posLongitude,
+            "studentId": this.studentId
+          }).then(function (res) {
+            if(res){
+              if(res.data.data.code === "000000"){
+                this.state = 2
+              }
             }
-          }
-        }).catch(function (error) {
-          console.log(error)
-        })
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }else{
+          Toast.fail('定位失败');
+        }
       }else{
         return false
       }
@@ -231,6 +265,24 @@ export default {
           _this.district = data.district
           _this.street = data.street
           _this.streetnum = data.streetnum
+      })
+      this.clockAddressSettingList.forEach(function (item,index) {
+        const positionObject = units.getPosition(Number(item.lon),Number(item.lat),Number(item.radius))
+        const maxlongitude= positionObject.maxlongitude
+        const minlongitude= positionObject.minlongitude
+        const maxlatitude= positionObject.maxlatitude
+        const minlatitude= positionObject.minlatitude
+        if(minlatitude<=_this.posLatitude<=maxlatitude&&minlongitude<=_this.posLongitude<=maxlongitude){
+            _this.positionText = '已进入签到范围'
+            _this.positionImg = require('../assets/position-yes.png')
+            _this.ClockPositionState = true
+            Toast.success('定位成功');
+        }else{
+          _this.positionText = '未进入签到范围'
+          _this.positionImg = require('../assets/position-no.png')
+          _this.ClockPositionState = false
+          Toast.fail('定位失败');
+        }
       })
     }
   }
