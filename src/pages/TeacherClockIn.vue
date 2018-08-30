@@ -239,9 +239,10 @@
     line-height: 62px;
   }
   .sign-content{
-    height: 676px;
+    /*height: 676px;*/
     background-color: #f7f7f7;
     position: relative;
+    flex: 1;
   }
   .sign-in{
     width:264px;

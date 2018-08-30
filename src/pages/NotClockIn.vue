@@ -1,7 +1,9 @@
 <template>
  <div class="body-container">
-   <img src="../assets/notClockIn.png">
-   <div class="not-clock-in">今日无需打卡哟！</div>
+   <div>
+     <img src="../assets/notClockIn.png">
+     <div class="not-clock-in">今日无需打卡哟！</div>
+   </div>
  </div>
 </template>
 

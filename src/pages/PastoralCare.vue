@@ -209,8 +209,9 @@
   color:rgba(61,168,245,1);
 }
 .content-container{
-  height: 1083px;
+  /*height: 1083px;*/
   padding: 0 30px;
+  flex: 1;
 }
 .care-item{
   height:162px;

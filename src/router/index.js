@@ -29,7 +29,7 @@ export default new Router({
     },
     {
       path: '/pastoralCare',
-      name: 'pastoralCare',
+      name: 'PastoralCare',
       component: PastoralCare
     },
     {

@@ -283,9 +283,10 @@ export default {
     height: 22px;
   }
   .search-container{
-    height: 901px;
+    /*height: 901px;*/
     overflow-y: auto;
     position: relative;
+    flex: 1;
   }
   .search-select-container{
     position: absolute;

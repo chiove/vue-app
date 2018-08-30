@@ -277,8 +277,9 @@ export default {
   }
   .room-details-body{
     padding: 0 30px;
-    height: 770px;
+    /*height: 770px;*/
     overflow-y: auto;
+    flex: 1;
   }
   .room-details-container{
     display: flex;

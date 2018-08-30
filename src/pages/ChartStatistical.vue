@@ -235,8 +235,9 @@ export default {
     color:rgba(61,168,245,1);
   }
   .content-container{
-    height: 985px;
+    /*height: 985px;*/
     overflow-y: auto;
+    flex: 1;
   }
   .daily-statistical{
     margin-top: 68px;

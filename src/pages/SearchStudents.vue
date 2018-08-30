@@ -132,8 +132,9 @@ export default {
     line-height: 80px;
   }
   .search-result-container{
-    height: 980px;
+    /*height: 980px;*/
     overflow-y: auto;
+    flex: 1;
   }
   .search-result-list{
     background-color: #fff;

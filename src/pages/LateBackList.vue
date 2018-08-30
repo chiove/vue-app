@@ -88,6 +88,7 @@ export default {
   overflow: hidden;
   padding: 0 33px;
   background: #fff;
+  flex: 1;
 }
 .late-back-list-title{
   height: 120px;
@@ -97,7 +98,7 @@ export default {
   color:rgba(153,153,153,1);
 }
 .late-back-list{
-  height: 1000px;
+  height: 100%;
   overflow-y: auto;
 }
 .late-back-list-title-left{

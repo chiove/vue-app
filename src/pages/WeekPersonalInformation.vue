@@ -116,8 +116,8 @@
 
 <style scoped>
   .data-banner{
-    height: 300px;
-    background: url("../assets/dataBanner.png")  no-repeat;
+    height: 340px;
+    background: url("../assets/dataBanner.png") 100% 100% no-repeat;
     overflow: hidden;
   }
   .data-information{
@@ -191,7 +191,8 @@
     text-align: center;
   }
   .data-form{
-    height:890px;
+    /*height:890px;*/
+    flex: 1;
     background:rgba(255,255,255,1);
     padding: 0 32px;
     overflow-y: auto;

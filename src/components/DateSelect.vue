@@ -87,7 +87,7 @@ export default {
   .date-select{
     width: 100%;
     max-width: 1125px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
   }
 </style>

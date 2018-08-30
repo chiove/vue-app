@@ -1,53 +1,53 @@
 <template>
   <div class="body-container background-primary">
-    <div class="data-banner">
-      <div class="data-information">
-        <div class="data-left">
-          <img class="sign-user-img" src="../assets/head.png">
-          <div>
-            <div class="data-name">
-              <span class="data-name-text">刘震云</span>
-              <span class="data-information-text">2018级5班</span>
-            </div>
-            <div class="data-information-text align-middle">
-              <img class="data-school" src="../assets/school.png">
-              <span>重庆工业职业技术学院</span>
-            </div>
-            <div class="data-information-text align-middle">
-              <img class="data-professional" src="../assets/professional.png">
-              <span>视觉与传达专业</span>
-            </div>
-            <div class="data-information-text">
-              <span class="data-information-teacher">辅导员:王老师</span>
-              <span>学号:2018130512</span>
+      <div class="data-banner">
+        <div class="data-information">
+          <div class="data-left">
+            <img class="sign-user-img" src="../assets/head.png">
+            <div>
+              <div class="data-name">
+                <span class="data-name-text">刘震云</span>
+                <span class="data-information-text">2018级5班</span>
+              </div>
+              <div class="data-information-text align-middle">
+                <img class="data-school" src="../assets/school.png">
+                <span>重庆工业职业技术学院</span>
+              </div>
+              <div class="data-information-text align-middle">
+                <img class="data-professional" src="../assets/professional.png">
+                <span>视觉与传达专业</span>
+              </div>
+              <div class="data-information-text">
+                <span class="data-information-teacher">辅导员:王老师</span>
+                <span>学号:2018130512</span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="data-right">
-          608室4床
+          <div class="data-right">
+            608室4床
+          </div>
         </div>
       </div>
-    </div>
-    <div class="data-form">
-      <div class="data-form-item" @click="checkFun">
-        <div>考勤状态</div>
-        <div class="color-sucess">
-          <span>到勤</span>
+      <div class="data-form">
+        <div class="data-form-item" @click="checkFun">
+          <div>考勤状态</div>
+          <div class="color-sucess">
+            <span>到勤</span>
+            <img class="data-form-select" src="../assets/selectRight.png" alt="">
+          </div>
+        </div>
+        <div class="data-form-line"></div>
+        <div class="data-form-item">
+          <div>今日门禁数据</div>
           <img class="data-form-select" src="../assets/selectRight.png" alt="">
         </div>
+        <div class="data-form-line"></div>
+        <div class="data-form-item">
+          <div>今日打卡轨迹</div>
+          <img class="data-form-select" src="../assets/selectRight.png" alt="">
+        </div>
+        <div class="data-form-line"></div>
       </div>
-      <div class="data-form-line"></div>
-      <div class="data-form-item">
-        <div>今日门禁数据</div>
-        <img class="data-form-select" src="../assets/selectRight.png" alt="">
-      </div>
-      <div class="data-form-line"></div>
-      <div class="data-form-item">
-        <div>今日打卡轨迹</div>
-        <img class="data-form-select" src="../assets/selectRight.png" alt="">
-      </div>
-      <div class="data-form-line"></div>
-    </div>
     <van-popup v-model="show" position="bottom">
       <van-picker
         class="data-form-picker"
@@ -93,7 +93,7 @@
 
 <style scoped>
   .data-banner{
-    height: 300px;
+    height: 340px;
     background: url("../assets/dataBanner.png") 100% 100% no-repeat;
     overflow: hidden;
   }
@@ -158,7 +158,8 @@
     text-align: center;
   }
   .data-form{
-    height:910px;
+    /*height:910px;*/
+    flex: 1;
     background:rgba(255,255,255,1);
     border-radius:30px 30px 0 0;
     padding: 0 32px;

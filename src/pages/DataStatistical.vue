@@ -104,8 +104,9 @@ export default {
 
 <style scoped>
   .history-details-container{
-    height: 546px;
+    /*height: 546px;*/
     overflow-y: auto;
     padding: 0 32px;
+    flex: 1;
   }
 </style>

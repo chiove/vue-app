@@ -134,6 +134,7 @@ export default {
   .details-container{
     background-color: #fff;
     overflow-y: auto;
+    flex: 1;
   }
 .item-container{
   padding: 70px 0 20px 127px;

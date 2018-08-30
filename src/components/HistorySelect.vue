@@ -23,6 +23,7 @@
 import Vue from 'vue'
 import { DatetimePicker } from 'vant'
 import units from "../units/tools"
+// import 'vant/lib/vant-css/picker.css';
 Vue.use(DatetimePicker)
 const maxDate = units.getCurrentTime("year")
 export default {
@@ -111,6 +112,6 @@ export default {
     width: 100%;
     max-width: 1125px;
     position: fixed;
-    bottom: 80px;
+    bottom: 0;
   }
 </style>

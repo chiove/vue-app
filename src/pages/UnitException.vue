@@ -1,8 +1,10 @@
 <template>
   <div class="body-container">
-    <img src="../assets/unitException.png">
-    <div class="unit-exception">系统检测到您未使用常用设备登录。</div>
-    <div class="unit-exception">若要正常登录打卡，请更换原设备。</div>
+    <div>
+      <img src="../assets/unitException.png">
+      <div class="unit-exception">系统检测到您未使用常用设备登录。</div>
+      <div class="unit-exception">若要正常登录打卡，请更换原设备。</div>
+    </div>
   </div>
 </template>
 

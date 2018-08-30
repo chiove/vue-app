@@ -1,11 +1,15 @@
 .body-container{
   max-width: 1125px;
   width: 100%;
-  height: 1210px;
+  /*height: 1210px;*/
   position: relative;
   background-color: #F7F7F7;
   overflow: hidden;
   margin: auto;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  flex-flow: column nowrap;
 }
 .icon-default{
   background:rgba(203,203,203,1);

@@ -52,6 +52,8 @@
         <textarea ref="remarkDom" placeholder="请输入"  @input="valueChangeFun"></textarea>
         <div class="data-form-tips">{{textNumber}}/30</div>
       </div>
+    </div>
+    <div class="data-form-submit-container">
       <div class="data-form-submit" @click="submitRemarkFun">提交</div>
     </div>
     <van-popup v-model="show" position="bottom">
@@ -270,11 +272,12 @@
     text-align: center;
   }
   .data-form{
-    height:910px;
+    /*height:910px;*/
     background:rgba(255,255,255,1);
     border-radius:30px 30px 0 0;
     padding: 0 32px;
     overflow-y: auto;
+    flex: 1;
   }
   .data-form-item{
     height: 126px;
@@ -322,12 +325,16 @@
     bottom: 21px;
     right: 11px;
   }
+  .data-form-submit-container{
+    padding: 0 32px;
+    background: #fff;
+  }
   .data-form-submit{
     height:94px;
     background:rgba(61,168,245,1);
     border-radius:8px;
     text-align: center;
-    margin-top: 59px;
+    margin-bottom: 30px;
     line-height: 94px;
     font-size:36px;
     font-family:PingFang-SC-Medium;

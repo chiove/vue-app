@@ -256,9 +256,10 @@ export default {
     color: rgba(255,255,255,.5);
   }
   .sign-content{
-    height: 676px;
+    /*height: 676px;*/
     background-color: #f7f7f7;
     position: relative;
+    flex: 1;
   }
   .sign-in{
     width:264px;
