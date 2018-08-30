@@ -20,6 +20,9 @@ export default {
   name: 'sign-tab',
   props: ['pageName'],
   mounted(){
+    if(this.$route.query.userid){
+      this.userId = this.$route.query.userid
+    }
     const componentName = this.$router.history.current.name
     if(componentName === 'DataStatistical'){
       this.dataViewState.active = true
@@ -41,6 +44,7 @@ export default {
   },
   data: function () {
     return {
+      userId:18500108150888,
       positionState: {
         active: true,
         imgUrlActive: require('../assets/positionActive.png'),
@@ -59,7 +63,12 @@ export default {
       if (flag !== true) {
         this.dataViewState.active = false
         this.positionState.active = true
-        this.$router.push({path: '/studentsClockIn'})
+        this.$router.push({
+          path: '/studentsClockIn',
+          query: {
+            userid: this.userId
+          }
+        })
       }
     },
     dataView: function () {
@@ -67,7 +76,12 @@ export default {
       if (flag !== true) {
         this.positionState.active = false
         this.dataViewState.active = true
-        this.$router.push({path: '/dataStatistical'})
+        this.$router.push({
+          path: '/dataStatistical',
+          query: {
+            userid: this.userId
+          }
+        })
       }
     }
   }

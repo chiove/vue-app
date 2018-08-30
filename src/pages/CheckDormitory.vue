@@ -54,6 +54,9 @@ export default {
   components: {teacherCheckTab, dormitorySelect, checkRoomList},
   name: 'check-dormitory',
   mounted:function(){
+    if(this.$route.query.userid){
+      this.userId = this.$route.query.userid
+    }
     this.getBuildingList()/*查询楼栋*/
     this.getRoomListData()/*查询宿舍列表*/
   },
@@ -109,8 +112,8 @@ export default {
     inputContent: function () {
       this.$router.push({
         name: 'SearchStudents',
-        params: {
-          userId: this.userId
+        query: {
+          userid: this.userId
         }
       })
     },

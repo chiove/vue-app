@@ -26,10 +26,16 @@ export default {
   components: {teacherCheckTab},
   name: 'search-students',
   mounted(){
+    if(this.$route.query.userid){
+      this.studentId = this.$route.query.userid
+    }
     this.$refs.nameNumber.value = ''
     this.resultView = false
   },
   activated(){
+    if(this.$route.query.userid){
+      this.studentId = this.$route.query.userid
+    }
     this.$refs.nameNumber.value = ''
     this.resultView = false
   },

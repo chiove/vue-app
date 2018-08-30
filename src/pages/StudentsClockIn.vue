@@ -14,8 +14,8 @@
       </div>
       <div class="sign-location">
         <img class="sign-img" src="../assets/true.png"/>
-        <span class="sign-location-text">已进入签到范围：重庆工业职业技术...</span>
-        <span class="sign-location-btn">重新定位</span>
+        <span class="sign-location-text">已进入签到范围：{{city}}{{district}}{{street}}{{streetnum}}</span>
+        <span class="sign-location-btn" @click="rePositionFun">重新定位</span>
       </div>
     </div>
     <div class="sign-user-container">
@@ -43,10 +43,16 @@
 <script>
 import signTab from '../components/signTab'
 import units from '../units/tools'
+import jsAndroid from '../units/jsAndroid'
 export default {
   components: {signTab},
   name: 'students-clock-in',
   mounted: function () {
+     if(this.$route.query.userid){
+       this.studentId = this.$route.query.userid
+     }
+    this.studentId = localStorage.setItem('studentClockUserId',this.$route.query.userid)
+    this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
     this.getStudentClockStatus(this.studentId)/*获取学生当前考勤状态*/
     this.getStudentDetailsListData(this.studentId)/*获取学生信息*/
@@ -77,7 +83,7 @@ export default {
         checkDataText:'',
         backgroundColorText:'',
         checkDevice:'',/*检查设备*/
-        studentId:201760230413,/*学生ID*/
+        studentId:'',/*学生ID*/
         clockStartTime:'',/*开始打卡时间*/
         clockEndTime:'',/*结束打卡时间*/
         clockAddressSettingList:[],/*系统设定的打卡地址参数*/
@@ -86,6 +92,12 @@ export default {
         clockStatus:'',/*学生当前考勤状态 0时间未到禁止打卡，1未打卡，2到勤，3晚归，4未归*/
         totalClock:0,/*打卡次数*/
         clockStateCode:''/* 考勤状态*/,
+        latitude: "",
+        longitude: "",
+        city: "",
+        district: "",
+        street: "",
+        streetnum: ""
     }
   },
   methods: {
@@ -191,8 +203,11 @@ export default {
     },
     studentClockFun:function () {
       if(this.clockStatus === 1 ){
-        this.$http.get('/api/student-clock',{
-          params:{}
+        this.$http.post('/api/student-clock',{
+          "deviceId": "",
+          "posLatitude": this.posLatitude,
+          "posLongitude": this.posLongitude,
+          "studentId": this.studentId
         }).then(function (res) {
           if(res){
             if(res.data.data.code === "000000"){
@@ -206,6 +221,18 @@ export default {
         return false
       }
     },
+    /*定位*/
+    rePositionFun(){
+      const _this = this
+      jsAndroid.position.locationService().then(function (data) {
+          _this.latitude = data.latitude
+          _this.longitude =data.longitude
+          _this.city = data.city
+          _this.district = data.district
+          _this.street = data.street
+          _this.streetnum = data.streetnum
+      })
+    }
   }
 }
 </script>

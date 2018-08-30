@@ -18,6 +18,8 @@ export default {
   components: {signTab,dataBanner,historySelect,historyList},
   name: "statistical-data",
   mounted:function () {
+    this.userId = localStorage.getItem('studentClockUserId')
+    console.log(this.userId)
     this.getStudentsInfo(this.pageData.studentId)/*获取学生信息*/
     this.getClockTimes(this.pageData.studentId) /*获取晚归，到勤，未归*/
   },
@@ -27,7 +29,7 @@ export default {
       selectDateSearch:{},
       historyListData:[],
       pageData:{
-        studentId: 201760230413,/*学生ID*/
+        studentId: '',/*学生ID*/
         profilePhoto:'',/*头像地址*/
         studentName:'',/*学生姓名*/
         classNames:'',/*班级*/

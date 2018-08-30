@@ -56,6 +56,9 @@ export default {
   components: {teacherCheckTab, chartDateSelect, VeRing},
   name: 'chart-statistical',
   mounted: function () {
+    if(this.$route.query.userid){
+      this.userId = this.$route.query.userid
+    }
     /*初始化查询周统计*/
    this.weekSearch()
   },
@@ -75,7 +78,7 @@ export default {
       needClockNumber:0, /*应打卡人数*/
       lateNumber:0,/*晚归人数*/
       notNumber:0,/*未归人数*/
-      userId:100725,/*用户id*/
+      userId:'',/*用户id*/
       clockStatus:0,/*打卡状态*/
       weekList:[],/*周列表*/
       year:'',

@@ -19,6 +19,9 @@
   export default {
     name: "teacher-check-tab",
     mounted:function () {
+      if(this.$route.query.userid){
+        this.userId = this.$route.query.userid
+      }
       const componentName = this.$router.history.current.name
       if(componentName === 'ChartStatistical'){
         this.dataViewState.active=true;
@@ -40,6 +43,7 @@
     },
     data:function () {
       return{
+        userId:'',
         positionState:{
           active:true,
           imgUrlActive:require("../assets/dormitoryActive.png"),
@@ -58,7 +62,12 @@
         if(flag!==true){
           this.dataViewState.active=false;
           this.positionState.active=true;
-          this.$router.push({path:"/checkDormitory"})
+          this.$router.push({
+            path:"/checkDormitory",
+            query: {
+              userid: this.userId
+            }
+          })
         }
       },
       dataView:function () {
@@ -66,7 +75,12 @@
         if(flag!==true){
           this.positionState.active=false;
           this.dataViewState.active=true;
-          this.$router.push({path:"/chartStatistical"})
+          this.$router.push({
+            path:"/chartStatistical",
+            query: {
+              userid: this.userId
+            }
+          })
         }
       }
     }

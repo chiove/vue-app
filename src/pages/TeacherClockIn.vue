@@ -35,10 +35,14 @@
 
 <script>
   import units from '../units/tools'
+  import jsAndroid from '../units/jsAndroid'
   const fullDate = units.getCurrentTime("year")
   export default {
     name: "teacher-clock-in",
     mounted:function(){
+      if(this.$route.query.userid){
+        this.instructorId = this.$route.query.userid
+      }
       this.getTeacherCheckStatus()/*根据辅导员ID查询当前考勤状态*/
       this.getSystemConfig()/*获取系统配置*/
       this.getTeacherClockTimes()/*根据辅导员ID统计总打卡次数*/
@@ -81,10 +85,21 @@
     },
     methods:{
       /*辅导员打卡调原生应用相机*/
-      teacherClockFun:function (data) {
+      teacherClockFun:function () {
+        const _this = this
         if(this.clockTeacherStatus === 1){
-          /* qrCode:0,
-          instructorId:0,*/
+          jsAndroid.barcode.scan().then(function (data) {
+              _this.$http.post('/api/instructor-clock',{
+                qrCode:data,
+                instructorId:_this.instructorId
+                }).then(function (res) {
+                  if(res.data.code==='000000'){
+                    _this.clockTeacherStatus = 2
+                  }
+              }).catch(function (error) {
+                console.log(error)
+              })
+          })
         }else{
           return false
         }
