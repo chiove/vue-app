@@ -64,6 +64,7 @@
     mounted: function () {
       if(this.$route.query.userid){
         this.instructorId = this.$route.query.userid
+       localStorage.setItem('pastoralCareUserId',this.$route.query.userid)
       }
       this.initGetList(1)
       this.initGetList(2)

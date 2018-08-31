@@ -26,15 +26,15 @@ export default {
   components: {teacherCheckTab},
   name: 'search-students',
   mounted(){
-    if(this.$route.query.userid){
-      this.studentId = this.$route.query.userid
+    if(localStorage.getItem('checkDormitoryUserId')){
+      this.userId = localStorage.getItem('checkDormitoryUserId')
     }
     this.$refs.nameNumber.value = ''
     this.resultView = false
   },
   activated(){
-    if(this.$route.query.userid){
-      this.studentId = this.$route.query.userid
+    if(localStorage.getItem('checkDormitoryUserId')){
+      this.userId = localStorage.getItem('checkDormitoryUserId')
     }
     this.$refs.nameNumber.value = ''
     this.resultView = false

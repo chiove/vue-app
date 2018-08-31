@@ -56,11 +56,16 @@ export default {
   components: {teacherCheckTab, chartDateSelect, VeRing},
   name: 'chart-statistical',
   mounted: function () {
-    if(this.$route.query.userid){
-      this.userId = this.$route.query.userid
+    if(localStorage.getItem('checkDormitoryUserId')){
+      this.userId = localStorage.getItem('checkDormitoryUserId')
     }
     /*初始化查询周统计*/
    this.weekSearch()
+  },
+  activated:function(){
+    if(localStorage.getItem('checkDormitoryUserId')){
+      this.userId = localStorage.getItem('checkDormitoryUserId')
+    }
   },
   data () {
     this.chartSettings = {

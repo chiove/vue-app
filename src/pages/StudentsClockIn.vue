@@ -55,8 +55,8 @@ export default {
     /*获取id*/
      if(this.$route.query.userid){
        this.studentId = this.$route.query.userid
+        localStorage.setItem('studentClockUserId',this.$route.query.userid)
      }
-    this.studentId = localStorage.setItem('studentClockUserId',this.$route.query.userid)
     this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
     /*获取deviceId*/

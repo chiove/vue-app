@@ -56,6 +56,7 @@ export default {
   mounted:function(){
     if(this.$route.query.userid){
       this.userId = this.$route.query.userid
+      localStorage.setItem('checkDormitoryUserId',this.$route.query.userid)
     }
     this.getBuildingList()/*查询楼栋*/
     this.getRoomListData()/*查询宿舍列表*/

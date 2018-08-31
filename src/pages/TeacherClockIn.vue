@@ -42,6 +42,7 @@
     mounted:function(){
       if(this.$route.query.userid){
         this.instructorId = this.$route.query.userid
+        localStorage.setItem('teacherClockInUserId',this.$route.query.userid)
       }
       this.getTeacherCheckStatus()/*根据辅导员ID查询当前考勤状态*/
       this.getSystemConfig()/*获取系统配置*/

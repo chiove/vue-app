@@ -18,7 +18,9 @@ export default {
   components: {signTab,dataBanner,historySelect,historyList},
   name: "statistical-data",
   mounted:function () {
-    this.pageData.studentId = localStorage.getItem('studentClockUserId')
+    if(localStorage.getItem('studentClockUserId')){
+      this.pageData.studentId = localStorage.getItem('studentClockUserId')
+    }
     this.getStudentsInfo(this.pageData.studentId)/*获取学生信息*/
     this.getClockTimes(this.pageData.studentId) /*获取晚归，到勤，未归*/
   },
