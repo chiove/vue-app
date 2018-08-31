@@ -53,8 +53,6 @@ export default {
         document.title = '个人信息'
       }else if (val.name==='LateBackList') {
         document.title = '晚归列表'
-      }else if (val.name==='DailyPersonalInformation') {
-        document.title = '个人信息'
       }else if (val.name==='WeekPersonalInformation') {
         document.title = '打卡统计'
       }

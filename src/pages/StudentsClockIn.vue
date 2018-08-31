@@ -93,6 +93,17 @@ export default {
   watch:{
     clockStatus:function (val) {
       this.changeStyle(val)
+    },
+    ClockPositionState:function (val) {
+      if(val){
+        this.positionText = '已进入签到范围'
+        this.positionImg = require('../assets/position-yes.png')
+        Toast.success('定位成功');
+      }else{
+        this.positionText = '未进入签到范围'
+        this.positionImg = require('../assets/position-no.png')
+        Toast.fail('定位失败');
+      }
     }
   },
   data () {
@@ -249,7 +260,7 @@ export default {
             console.log(error)
           })
         }else{
-          Toast.fail('定位失败');
+          Toast.fail('定位未在范围内');
         }
       }else{
         return false
@@ -266,23 +277,13 @@ export default {
           _this.street = data.street
           _this.streetnum = data.streetnum
       })
-      this.clockAddressSettingList.forEach(function (item,index) {
-        const positionObject = units.getPosition(Number(item.lon),Number(item.lat),Number(item.radius))
-        const maxlongitude= positionObject.maxlongitude
-        const minlongitude= positionObject.minlongitude
-        const maxlatitude= positionObject.maxlatitude
-        const minlatitude= positionObject.minlatitude
-        if(minlatitude<=_this.posLatitude<=maxlatitude&&minlongitude<=_this.posLongitude<=maxlongitude){
-            _this.positionText = '已进入签到范围'
-            _this.positionImg = require('../assets/position-yes.png')
-            _this.ClockPositionState = true
-            Toast.success('定位成功');
-        }else{
-          _this.positionText = '未进入签到范围'
-          _this.positionImg = require('../assets/position-no.png')
-          _this.ClockPositionState = false
-          Toast.fail('定位失败');
+      this.$http.get('/api/check-position',{
+        params:{
+          posLongitude:this.longitude,
+          posLatitude:this.latitude
         }
+      }).then(function (res) {
+        _this.ClockPositionState = res.data.data
       })
     }
   }
