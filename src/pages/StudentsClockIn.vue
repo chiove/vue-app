@@ -88,7 +88,7 @@ export default {
     })
     if (this.deviceId!==this.checkDevice) {
       this.$router.push({
-        path:'/notClockIn'
+        path:'/UnitException'
       })
     }
   },
