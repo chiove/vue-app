@@ -237,7 +237,9 @@
     font-family:PingFang-SC-Medium;
     color:rgba(255,255,255,.6);
     text-align: center;
-    line-height: 62px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .sign-content{
     /*height: 676px;*/

@@ -13,11 +13,11 @@
           <img :src="dormitoryActive?selectIconActive:selectIcon">
         </div>
         <div class="search-select-item" @click="checkFun">
-          <span :class="{'color-primary':checkActive}">{{sortTitle}}</span>
+          <span :class="{'color-primary':checkActive}">{{checkTitle}}</span>
           <img :src="checkActive?selectIconActive:selectIcon">
         </div>
         <div class="search-select-item" @click="sortFun">
-          <span :class="{'color-primary':sortActive}">{{checkTitle}}</span>
+          <span :class="{'color-primary':sortActive}">{{sortTitle}}</span>
           <img :src="sortActive?selectIconActive:selectIcon">
         </div>
         <div class="number-select-icon" @click="dormitoryFun">
@@ -27,14 +27,12 @@
       </div>
     </div>
     <div class="search-container">
-      <div class="search-select-container" v-if="checkActive" @click="getSearchValue($event,'sort')">
-        <div class="list-item">排序查询</div>
-        <div class="list-item" v-for="(item,index) in sortData" :data-index="item.id">{{item.text}}</div>
+      <div class="search-select-container" v-if="checkActive" @click="getSearchValue($event,'check')">
+        <div class="list-item" v-for="(item,index) in checkData" :data-index="JSON.stringify(item)" >{{item.text}}</div>
       </div>
-      <div class="search-select-container" v-if="sortActive" @click="getSearchValue($event,'check')">
-        <div class="list-item">考勤状态</div>
-        <div class="list-item" v-for="(item,index) in checkData" :data-index="item.id">{{item.text}}</div>
-      </div>
+      <div class="search-select-container" v-if="sortActive" @click="getSearchValue($event,'sort')">
+        <div class="list-item" v-for="(item,index) in sortData" :data-index="JSON.stringify(item)">{{item.text}}</div>
+       </div>
       <div class="search-select-container" v-if="dormitoryActive">
         <dormitory-select :data="buildingList" @sendParams="listenParamsEvent"></dormitory-select>
       </div>
@@ -69,8 +67,8 @@ export default {
       selectIconActive: require('../assets/selectDownActive.png'),
       numberIconActive: require('../assets/numberSelectActive.png'),
       dormitoryTitle: '宿舍选择',
-      checkTitle: '查寝状态',
-      sortTitle: '考寝状态',
+      checkTitle: '全部查寝状态',
+      sortTitle: '全部考勤状态',
       dormitoryChildTitle: '寝室选择',
       dormitoryActive: false,
       sortActive: false,
@@ -80,29 +78,38 @@ export default {
       floorNumber:'',/*楼层*/
       dormitoryId:'',/*宿舍ID*/
       orderBy:'',/*考勤状态查询*/
-      descOrAsc:'asc',/*宿舍号升序降序 asc升序，desc降序*/
-      sortData: [
-        {
-          id: 'desc',
-          text: '升序'
-        },
-        {
-          id: 'asc',
-          text: '降序'
-        }
-      ],
+      descOrAsc:'',/*宿舍号升序降序 asc升序，desc降序*/
+      checkStatus:null,
       checkData: [
         {
-          id: 'dormitoryCode ',
-          text: '宿舍号'
+          id: true,
+          text: '已查寝'
         },
         {
-          id: 'stayOutNum ',
-          text: '未归人数'
+          id: false,
+          text: '未查寝'
+        }
+      ],
+      sortData: [
+        {
+          id: 'stayOutNum',
+          key: 'desc',
+          text: '未归人数由高到低'
+        },
+        {
+          id: 'stayOutNum',
+          key: 'asc',
+          text: '未归人数由低到高'
         },
         {
           id: 'stayOutLateNum',
-          text: '晚归人数'
+          key: 'desc',
+          text: '晚归人数由高到低'
+        },
+        {
+          id: 'stayOutLateNum',
+          key: 'asc',
+          text: '晚归人数由低到高'
         }
       ],
       buildingList:[],/*楼栋列表,传入子组件*/
@@ -139,12 +146,15 @@ export default {
         return
       } else {
         if (type === 'check') {
+          const data = JSON.parse(e.target.dataset.index)
           this.checkTitle = e.target.innerText
-          this.orderBy = e.target.dataset.index
-        }
-        if (type === 'sort') {
+          console.log('1111', e.target.dataset.index)
+          this.checkStatus = data.id
+        }else if (type === 'sort') {
           this.sortTitle = e.target.innerText
-          this.descOrAsc = e.target.dataset.index
+          const data = JSON.parse(e.target.dataset.index)
+          this.orderBy = data.id
+          this.descOrAsc = data.key
         }
         this.getRoomListData()
       }
@@ -184,7 +194,8 @@ export default {
           dormitoryId:this.dormitoryId,
           descOrAsc:this.descOrAsc,
           orderBy:this.orderBy,
-          userId:this.userId
+          userId:this.userId,
+          checkStatus:this.checkStatus
         }
       }).then(function (res) {
         if(res){
@@ -290,8 +301,8 @@ export default {
     flex: 1;
   }
   .search-select-container{
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 211px;
     width: 100%;
     max-width: 1125px;
     height: 450px;
