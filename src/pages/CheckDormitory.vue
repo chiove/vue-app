@@ -148,7 +148,6 @@ export default {
         if (type === 'check') {
           const data = JSON.parse(e.target.dataset.index)
           this.checkTitle = e.target.innerText
-          console.log('1111', e.target.dataset.index)
           this.checkStatus = data.id
         }else if (type === 'sort') {
           this.sortTitle = e.target.innerText
