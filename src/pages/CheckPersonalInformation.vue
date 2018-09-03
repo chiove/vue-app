@@ -118,7 +118,7 @@
     methods:{
       /*获取学生信息*/
       getStudentsInfo(studentId){
-        this.$http.get(`/api/student/${studentId}`).then(function (res) {
+        this.$http.get(process.env.API_HOST+`student/${studentId}`).then(function (res) {
           if(res){
             const data = res.data.data
             this.profilePhoto = data.profilePhoto
@@ -162,7 +162,7 @@
       },
       /*查询用户信息*/
       getUserInfo(){
-        this.$http.get(`/api/select-data/user/${this.userId}`).then(function (res) {
+        this.$http.get(process.env.API_HOST+`select-data/user/${this.userId}`).then(function (res) {
           if(res){
             this.userName = res.data.data.name
           }
@@ -174,7 +174,7 @@
       submitRemarkFun(){
         const date = `${this.date.year}-${this.date.month}-${this.date.day}`
         if(this.$refs.remarkDom.value.length<=30){
-          this.$http.put('/api/student-clock',{
+          this.$http.put(process.env.API_HOST+'student-clock',{
             appType:1,
             id:this.studentId,
             operatorName:this.userName,

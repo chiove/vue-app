@@ -41,7 +41,7 @@ export default {
     },
     confirm: function () {
       const remark = this.$refs.feedBackValue.value
-      this.$http.put(`/api/care?careId=${this.data}&remark=${remark}`).then(function (res) {
+      this.$http.put(process.env.API_HOST+`care?careId=${this.data}&remark=${remark}`).then(function (res) {
         if(res){
           if(res.data.code==='000000'){
             Toast.success('提交成功');

@@ -54,7 +54,7 @@ export default {
     searchFun: function () {
       const searchParam = this.$refs.nameNumber.value
       this.resultView = true
-      this.$http.get('/api/dormitory-check/query-by-name-code',{
+      this.$http.get(process.env.API_HOST+'dormitory-check/query-by-name-code',{
         params:{
           userId :this.userId,
           nameOrCode:searchParam

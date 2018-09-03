@@ -47,7 +47,7 @@ export default {
       },
       /*查询辅导员历史签到*/
       getTeacherHistoryList(){
-        this.$http.get('/api/instructor-clock/stat-by-year-month',{
+        this.$http.get(process.env.API_HOST+'instructor-clock/stat-by-year-month',{
           params:{
             instructorId:this.instructorId,
             year:this.year,

@@ -104,7 +104,7 @@ export default {
       this.arrivedList = []
       this.stayOutLateList = []
       this.stayOutList = []
-      this.$http.get('/api/student-clock-history',{
+      this.$http.get(process.env.API_HOST+'student-clock-history',{
         params:{
           studentId:this.studentId,
           date:`${this.data.year}-${this.data.month}-${this.data.day}`

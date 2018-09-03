@@ -78,7 +78,7 @@
     methods:{
       /*获取学生信息*/
       getStudentsInfo(){
-        this.$http.get(`/api/student/${this.studentId}`).then(function (res) {
+        this.$http.get(process.env.API_HOST+`student/${this.studentId}`).then(function (res) {
           if(res){
             const data = res.data.data
             this.profilePhoto = data.profilePhoto
@@ -97,7 +97,7 @@
       },
       /*根据学生ID和日期查询全部历史*/
       getHistoryList(){
-          this.$http.get('/api/student-clock/list-by-week',{
+          this.$http.get(process.env.API_HOST+'student-clock/list-by-week',{
           params:{
             weekNumber:this.weekNumber,
             studentId:this.studentId

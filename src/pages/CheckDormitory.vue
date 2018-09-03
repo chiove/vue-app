@@ -154,7 +154,7 @@ export default {
     },
     /*根据Id查询楼栋*/
     getBuildingList() {
-      this.$http.get('/api/dormitory-building/query-by-user', {
+      this.$http.get(process.env.API_HOST+'dormitory-building/query-by-user', {
         params: {
           userId: this.userId
         }
@@ -177,7 +177,7 @@ export default {
       this.dormitoryActive = false
     },
     getRoomListData(){
-      this.$http.get('/api/dormitory-list-query',{
+      this.$http.get(process.env.API_HOST+'dormitory-list-query',{
         params:{
           buildingId:this.buildingId,
           floorNumber:this.floorNumber,

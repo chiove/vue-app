@@ -90,7 +90,7 @@
         const _this = this
         if(this.clockTeacherStatus === 1){
           jsAndroid.barcode.scan().then(function (data) {
-              _this.$http.post('/api/instructor-clock',{
+              _this.$http.post(process.env.API_HOST+'instructor-clock',{
                 qrCode:data,
                 instructorId:_this.instructorId
                 }).then(function (res) {
@@ -107,7 +107,7 @@
       },
       /*根据辅导员ID统计总打卡次数*/
       getTeacherClockTimes(){
-        this.$http.get('/api/instructor-clock/stat-all-count',{
+        this.$http.get(process.env.API_HOST+'instructor-clock/stat-all-count',{
           params:{
             instructorId:this.instructorId
           }
@@ -121,7 +121,7 @@
       },
       /*根据辅导员ID查询基本信息*/
       getTeacherInfo(){
-        this.$http.get(`/api/select-data/user/${this.instructorId}`).then(function (res) {
+        this.$http.get(process.env.API_HOST+`select-data/user/${this.instructorId}`).then(function (res) {
           if(res){
             this.name = res.data.data.name
             this.profilePhoto = res.data.data.profilePhoto
@@ -132,7 +132,7 @@
       },
       /*获取系统配置*/
       getSystemConfig:function () {
-        this.$http.get('/api/system-config').then(function (res) {
+        this.$http.get(process.env.API_HOST+'system-config').then(function (res) {
           if(res){
             const data = res.data.data
             this.checkClockStartTime =  data.checkClockStartTime.substring(0,5)
@@ -143,7 +143,7 @@
         })
       },/*根据辅导员ID查询当前考勤状态*/
       getTeacherCheckStatus(){
-        this.$http.get('/api/instructor-clock-status',{
+        this.$http.get(process.env.API_HOST+'instructor-clock-status',{
           params:{
             instructorId:this.instructorId
           }

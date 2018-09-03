@@ -140,7 +140,7 @@ export default {
     },
     /*查询用户信息*/
     getUserInfo(){
-      this.$http.get(`/api/select-data/user/${this.userId}`).then(function (res) {
+      this.$http.get(process.env.API_HOST+`select-data/user/${this.userId}`).then(function (res) {
         if(res){
           this.operatorName = res.data.data.name
         }
@@ -151,7 +151,7 @@ export default {
     /*更改考勤状态*/
     changCheckClockStatus(){
       const date = `${this.date.year}${this.date.month}${this.date.day}`
-      this.$http.put('/api/student-clock',{
+      this.$http.put(process.env.API_HOST+'student-clock',{
         appType:1,
         id:this.studentId,
         operatorName:this.operatorName,
@@ -170,7 +170,7 @@ export default {
     },
     /*查询学生列表*/
     getRoomDetailsList(){
-      this.$http.get(`/api/dormitory/${this.roomDetails.dormitoryId}/detail/app`,{
+      this.$http.get(process.env.API_HOST+`dormitory/${this.roomDetails.dormitoryId}/detail/app`,{
        params:{
          userId:this.userId
        }
@@ -191,7 +191,7 @@ export default {
     },
     checkAffirm: function () {
       this.endCheck = false
-      this.$http.post('/api/dormitory-check',{
+      this.$http.post(process.env.API_HOST+'dormitory-check',{
         "dormitoryId":this.roomDetails.dormitoryId,
         "operatorId": this.userId,
         "operatorName": this.operatorName

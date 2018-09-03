@@ -137,7 +137,7 @@ export default {
     },
     /*图表查询*/
     dailySearch:function () {
-      this.$http.get('/api/dormitory-check/day-stat',{
+      this.$http.get(process.env.API_HOST+'dormitory-check/day-stat',{
         params:{
           year:this.year,
           month:this.month,
@@ -160,7 +160,7 @@ export default {
     /*周统计查询*/
     weekSearch:function () {
       /*查询应打卡人数*/
-      this.$http.get('/api/dormitory-check/week-stat',{
+      this.$http.get(process.env.API_HOST+'dormitory-check/week-stat',{
         params:{
           userId:this.userId,
           weekNumber:this.week
@@ -176,7 +176,7 @@ export default {
         console.log(error)
       })
       /*周数列表*/
-      this.$http.get('/api/select-data/week-info/all').then(function (res) {
+      this.$http.get(process.env.API_HOST+'select-data/week-info/all').then(function (res) {
         if(res){
           this.weekList = res.data.data
         }

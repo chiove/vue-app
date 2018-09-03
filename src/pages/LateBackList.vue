@@ -65,7 +65,7 @@ export default {
       })
     },
     getStudentsList(){
-      this.$http.get('/api/dormitory-check/week-stat/student',{
+      this.$http.get(process.env.API_HOST+'dormitory-check/week-stat/student',{
         params:{
           userId:this.userId,
           clockStatus:this.clockStatus,

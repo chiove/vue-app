@@ -1,16 +1,4 @@
 export default {
-  getPosition:function(lon,lat,radius){
-    const maxlongitude = lon+(radius/1000)/111
-    const minlongitude =lon-(radius/1000)/111
-    const maxlatitude = lat+(radius/1000)/(111*Math.cos(23.14))
-    const minlatitude = lat-(radius/1000)/(111*Math.cos(23.14))
-    return {
-      maxlongitude:maxlongitude,
-      minlongitude:minlongitude,
-      maxlatitude:maxlatitude,
-      minlatitude:minlatitude
-    }
-  },
   getCurrentTime: function getCurrentTime (type) {
     var date = new Date()
     var month = date.getMonth() + 1

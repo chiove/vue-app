@@ -92,7 +92,7 @@
           pageSize:this.pageSize
         }
 
-        this.$http.get('/api/care-instructor', {
+        this.$http.get(process.env.API_HOST+'care-instructor', {
           params:params
         })
           .then(function (response) {
@@ -118,7 +118,7 @@
           pageNo:this.pageNoRight,
           pageSize:this.pageSize
         }
-        this.$http.get('/api/care-instructor', {
+        this.$http.get(process.env.API_HOST+'care-instructor', {
           params:params
         })
           .then(function (response) {
@@ -138,7 +138,7 @@
       },
       /*初始化请求*/
       initGetList(careStatus){
-        this.$http.get('/api/care-instructor',{
+        this.$http.get(process.env.API_HOST+'care-instructor',{
           params:{
             careStatus:careStatus,
             instructorId:this.instructorId,

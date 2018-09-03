@@ -100,7 +100,7 @@
         },
         /*查询宿舍列表*/
         getRoomList(){
-          this.$http.get('/api/dormitory/all',{
+          this.$http.get(process.env.API_HOST+'dormitory/all',{
             params:{
               buildingId:this.buildingActive,
               floorNumber:this.floorActive,

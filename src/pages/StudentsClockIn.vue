@@ -51,7 +51,11 @@ export default {
   components: {signTab,Toast},
   name: 'students-clock-in',
   mounted: function () {
+    this.checkClockOrNotClock()/*判断当日是否打卡*/
     const _this = this
+    setInterval(function () { /*本地时间*/
+      _this.sign.timeNow = units.getCurrentTime("hour")
+    },1000)
     /*获取id*/
      if(this.$route.query.userid){
        this.studentId = this.$route.query.userid
@@ -73,12 +77,10 @@ export default {
     this.getStudentsClocktimes(this.studentId)/*获取总打卡次数*/
     this.changeStatus()
     this.changeStyle()
-    setInterval(function () { /*本地时间*/
-      _this.sign.timeNow = units.getCurrentTime("hour")
-    },1000)
   },
   activated:function(){
     const _this = this
+    this.checkClockOrNotClock()/*判断当日是否打卡*/
     this.getSystemConfig()/*获取系统配置*/
     /*获取deviceId*/
     jsAndroid.device.getIdfv().then(function (data) {
@@ -143,7 +145,7 @@ export default {
   methods: {
     /*获取系统配置*/
     getSystemConfig:function () {
-      this.$http.get('/api/system-config').then(function (res) {
+      this.$http.get(process.env.API_HOST+'system-config').then(function (res) {
         if(res){
           const data = res.data.data
           this.clockStartTime =  data.clockStartTime.substring(0,5)
@@ -157,7 +159,7 @@ export default {
     },
     /*获取学生信息*/
     getStudentDetailsListData:function (studentId) {
-      this.$http.get(`/api/student/${studentId}`).then(function (res) {
+      this.$http.get(process.env.API_HOST+`student/${studentId}`).then(function (res) {
         if(res){
           this.profilePhoto = res.data.data.profilePhoto
           this.studentName = res.data.data.studentName
@@ -168,7 +170,7 @@ export default {
     },
     /*获取打卡次数*/
     getStudentsClocktimes:function (studentId) {
-      this.$http.get(`/api/student-clock/${studentId}/stat/`).then(function (res) {
+      this.$http.get(process.env.API_HOST+`student-clock/${studentId}/stat/`).then(function (res) {
         if(res){
           this.totalClock = res.data.data.totalClock
         }
@@ -178,7 +180,7 @@ export default {
     },
     /*获取学生当前考勤状态*/
     getStudentClockStatus:function (studentId) {
-      this.$http.get('/api/student-clock-status',{
+      this.$http.get(process.env.API_HOST+'student-clock-status',{
         params:{
           studentId:studentId
         }
@@ -245,7 +247,7 @@ export default {
       const _this = this
       if(this.clockStatus === 1 ){
         if(this.ClockPositionState){
-          this.$http.post('/api/student-clock',{
+          this.$http.post(process.env.API_HOST+'student-clock',{
             "deviceId": this.deviceId,
             "posLatitude": this.posLatitude,
             "posLongitude": this.posLongitude,
@@ -277,13 +279,41 @@ export default {
           _this.street = data.street
           _this.streetnum = data.streetnum
       })
-      this.$http.get('/api/check-position',{
+      this.$http.get(process.env.API_HOST+'check-position',{
         params:{
           posLongitude:this.longitude,
           posLatitude:this.latitude
         }
       }).then(function (res) {
         _this.ClockPositionState = res.data.data
+      })
+    },
+    /*判断几日是否为打卡日期*/
+    checkClockOrNotClock(){
+      this.$http.get(process.env.API_HOST+'clock-day-list-from-curr').then(function (res) {
+          if(res){
+            const list  = []
+            res.data.data.forEach(function (item,index) {
+              list.push(item.toString())
+            })
+            const  date = new Date()
+            let year = date.getFullYear()
+            let month = ''
+            if(date.getMonth()+1<10){
+              month = `0${date.getMonth()+1}`
+            }else{
+              month = date.getMonth()+1
+            }
+            let day = date.getDay()
+            const thisDay = `${year}${month}${day}`
+            if(list.indexOf(thisDay)===-1){
+              this.$router.push({
+                  path:'/UnitException'
+                })
+            }
+          }
+      }).catch(function (error) {
+        console.log(error)
       })
     }
   }
