@@ -308,7 +308,7 @@ export default {
             const thisDay = `${year}${month}${day}`
             if(list.indexOf(thisDay)===-1){
               this.$router.push({
-                  path:'/UnitException'
+                  path:'/NotClockIn'
                 })
             }
           }
