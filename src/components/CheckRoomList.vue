@@ -10,7 +10,7 @@
           <img class="check-room-icon" src="../assets/selectRight.png">
         </div>
       </div>
-      <div class="check-room-line"></div>
+      <div class="check-room-line scale-1px"></div>
       <div class="check-room-body">
         <div class="check-room-not-arrive">
           <div class="check-room-state-number color-danger">{{data.layOutStudent}}</div>
@@ -33,6 +33,7 @@ export default {
   methods:{
     /*进入房间详情页*/
     roomDetailsFun(){
+      localStorage.setItem('checkRoomListUserId',this.userId)
       this.$router.push({
         name:'RoomDetails',
         params:{
@@ -50,7 +51,7 @@ export default {
   height:273px;
   background:rgba(255,255,255,1);
   border-radius:8px;
-  box-shadow:6px 0 13px rgba(40,40,40,0.14);
+  box-shadow:0 6px 13px 0 rgba(40,40,40,0.14);
   margin: 22px 0;
 }
   .check-room-head{
@@ -85,9 +86,10 @@ export default {
   }
   .check-room-line{
     width:655px;
-    height:2px;
-    background:rgba(236,236,236,1);
     margin: 0 auto;
+  }
+  .scale-1px:after{
+    background: rgba(236,236,236,1)
   }
   .check-room-body{
     width:655px;

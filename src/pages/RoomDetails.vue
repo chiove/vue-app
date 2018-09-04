@@ -1,5 +1,5 @@
 <template>
-  <div class="body-container">
+  <div class="body-container" @click="studentId=''">
     <div class="room-details-header-container">
       <div class="room-details-header">
         <div class="room-details-title">
@@ -27,38 +27,41 @@
     </div>
     <div class="room-details-body">
       <div class="room-details-container">
-        <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear">
+        <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear" @click="viewDetails($event,item.studentId)">
           <div class="room-details-check" v-if="item.studentId===studentId"  @click="checkRoom($event,index,item)">
             <div class="room-details-check-btn background-success" data-index="2">到勤</div>
             <div class="room-details-check-btn background-warning" data-index="3">晚归</div>
             <div class="room-details-check-btn background-danger" data-index="4">未归</div>
           </div>
           <div class="room-details-item-img">
-            <img :src="item.profilePhoto" alt="">
+            <div class="room-details-item-img-container">
+              <img :src="item.profilePhoto" alt="">
+            </div>
           </div>
           <div class="room-details-item-information">
             <div class="room-details-item-name">{{item.studentName}}</div>
-            <div  class="room-details-item-state background-default" v-if="item.clockStatus===1">查勤</div>
-            <div  class="room-details-item-state background-sucess" v-else-if="item.clockStatus===2">到勤</div>
+            <div  class="room-details-item-state background-default" v-if="item.clockStatus===1">未打卡</div>
+            <div  class="room-details-item-state background-success" v-else-if="item.clockStatus===2">到勤</div>
             <div  class="room-details-item-state background-warning" v-else-if="item.clockStatus===3">晚归</div>
             <div  class="room-details-item-state background-danger" v-else="item.clockStatus===4">未归</div>
           </div>
           <div class="room-details-study-number">
             学号：{{item.studentCode}}
           </div>
-          <div class="room-details-item-line"></div>
+          <div class="check-room-line scale-1px"></div>
           <div class="room-details-item-position">{{item.bedCode}}床</div>
         </div>
       </div>
     </div>
     <div class="room-details-footer">
-      <div class="room-details-btn" @click="checkBegin">开始查寝</div>
+      <div class="room-details-btn" v-if="beginOrEnd" @click="checkBegin">开始查寝</div>
+      <div class="room-details-btn" v-else="beginOrEnd" @click="checkEnd">结束查寝</div>
     </div>
     <van-popup
       v-model="beginCheck"
       :overlay-style="{'background':'rgba(0,0,0,0)'}"
     >
-      <div class="time-not-arrive">查寝时间未到</div>
+      <div class="time-not-arrive">查寝时间未到或已过</div>
     </van-popup>
     <van-popup
       v-model="endCheck"
@@ -81,6 +84,7 @@
 
 <script>
 import { Popup,Toast } from 'vant'
+import units from '../units/tools'
 import Vue from 'vue'
 Vue.use(Popup)
 Vue.use(Toast)
@@ -90,15 +94,25 @@ export default {
   name: 'room-details',
   mounted:function(){
     this.roomDetails = this.$route.params.roomDetails
-    this.userId = this.$route.params.userId
+    if(this.$route.params.userId){
+      this.userId = this.$route.params.userId
+    }else{
+      this.userId = localStorage.getItem('checkRoomListUserId')
+    }
     this.getUserInfo()/*查询用户名*/
     this.getRoomDetailsList()/*查询学生列表*/
+    this.getSystemConfig()
   },
   activated:function(){
     this.roomDetails = this.$route.params.roomDetails
-    this.userId = this.$route.params.userId
+    if(this.$route.params.userId){
+      this.userId = this.$route.params.userId
+    }else{
+      this.userId = localStorage.getItem('checkRoomListUserId')
+    }
     this.getUserInfo()/*查询用户名*/
     this.getRoomDetailsList()/*查询学生列表*/
+    this.getSystemConfig()
   },
   data () {
     return {
@@ -116,17 +130,41 @@ export default {
       clockStatus:'',/*打卡状态 考勤参数*/
       operatorName:'',/*操作人名字 考勤参数*/
       roomDetailsList:[],
+      beginOrEnd:true,
+      checkClockEndTime: "",
+      checkClockStartTime: "",
     }
   },
   methods: {
+    /*获取系统配置*/
+    getSystemConfig:function () {
+      this.$http.get(process.env.API_HOST+'system-config').then(function (res) {
+        if(res){
+          const data = res.data.data
+          this.checkClockEndTime =  data.checkClockEndTime.substring(0,5)
+          this.checkClockStartTime =  data.checkClockStartTime.substring(0,5)
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
     checkState: function (e, i,data) {
       const _this = this
-      timer = setTimeout(function () {
-        _this.studentId = data.studentId
-      }, 1000)
+      if(!this.beginOrEnd){
+        timer = setTimeout(function () {
+          _this.studentId = data.studentId
+        }, 1000)
+      }
     },
     checkClear: function () {
       clearTimeout(timer)
+    },
+    viewDetails:function(e,studentId){
+      this.$router.push({name:'CheckPersonalInformation',params: {
+          studentId:studentId,
+          userId:this.userId
+        }
+      })
     },
     checkRoom: function (e, i,data) {
       if (e.target.dataset.index !== undefined) {
@@ -182,7 +220,19 @@ export default {
         console.log(error)
       })
     },
-    checkBegin: function () {
+    checkBegin:function(){
+      const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
+      if(nowClockStartTime<this.checkClockStartTime){
+        this.beginCheck = true
+      }else if(this.checkClockStartTime<=nowClockStartTime&&nowClockStartTime<=this.checkClockEndTime){
+        this.beginOrEnd = false
+      }else if(nowClockStartTime>this.checkClockEndTime){
+        this.beginCheck = true
+      }
+
+
+    },
+    checkEnd: function () {
       /* 结束查寝 */
       this.endCheck = true
     },
@@ -228,6 +278,9 @@ export default {
     font-family:PingFang-SC-Medium;
     color:rgba(255,255,255,1);
     line-height: 120px;
+  }
+  .scale-1px:after{
+    background: rgba(236,236,236,1)
   }
   .room-details-room{
     font-family:PingFang-SC-Bold;
@@ -291,7 +344,7 @@ export default {
     height:384px;
     background:rgba(255,255,255,1);
     border-radius:8px;
-    box-shadow:9px 0 13px rgba(181,181,181,0.31);
+    box-shadow:0 9px 13px 0 rgba(181,181,181,0.31);
     margin-bottom: 35px;
     -webkit-touch-callout:none; /*系统默认菜单被禁用*/
     -webkit-user-select:none; /*webkit浏览器*/
@@ -329,14 +382,21 @@ export default {
     text-align: center;
     margin-top: 64px;
   }
+  .room-details-item-img-container{
+    height: 93px;
+    width: 93px;
+    border-radius: 93px;
+    margin: auto;
+  }
   .room-details-item-img img{
     height: 93px;
     width: 93px;
+    border-radius: 93px;
   }
   .room-details-item-information{
     display: flex;
     justify-content: center;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
   }
   .room-details-item-name{
     font-size:40px;
@@ -344,21 +404,22 @@ export default {
     color:rgba(85,85,85,1);
   }
   .room-details-item-state{
-    width:50px;
-    height:24px;
+    padding: 0 4px;
+    height:28px;
     font-size:24px;
     font-family:PingFang-SC-Medium;
     color:rgba(255,255,255,1);
-    line-height: 24px;
-    border-radius: 24px;
+    line-height: 28px;
+    border-radius: 8px;
     margin-top: 24px;
+    text-align: center;
   }
   .room-details-study-number{
     font-size:24px;
     font-family:PingFang-SC-Medium;
     color:rgba(85,85,85,1);
     text-align: center;
-    margin-bottom: 18px;
+    margin-bottom: 26px;
   }
 .room-details-item-line{
   height:2px;

@@ -104,8 +104,8 @@
   }
   .sign-position-img{
     display: block;
-    width: 40px;
-    height: 44px;
+    width: 36px;
+    height: 40px;
     margin: 0 auto;
   }
   .sign-right-all{

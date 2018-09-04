@@ -16,13 +16,13 @@
           <span :class="{'color-primary':checkActive}">{{checkTitle}}</span>
           <img :src="checkActive?selectIconActive:selectIcon">
         </div>
-        <div class="search-select-item" @click="sortFun">
+        <div class="number-select-icon" @click="sortFun">
           <span :class="{'color-primary':sortActive}">{{sortTitle}}</span>
-          <img :src="sortActive?selectIconActive:selectIcon">
+          <img :src="sortActive?numberIconActive:numberIcon">
         </div>
-        <div class="number-select-icon" @click="dormitoryFun">
+        <div class="search-select-item" @click="dormitoryFun">
           <span :class="{'color-primary':dormitoryActive}">{{dormitoryChildTitle}}</span>
-          <img :src="dormitoryActive?numberIconActive:numberIcon">
+          <img :src="dormitoryActive?selectIconActive:selectIcon">
         </div>
       </div>
     </div>

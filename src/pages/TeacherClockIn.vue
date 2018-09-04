@@ -1,6 +1,6 @@
 <template>
   <div class="body-container">
-    <div class="sign-time" :style="{'background':`url(${backGroundImg})`,backgroundSize:'15rem 6rem'}">
+    <div class="sign-time" :style="{backgroundImage:`url(${backGroundImg})`,backgroundSize:'15rem 6rem'}">
       <div class="sign-time-text">{{dateValue}}</div>
       <div class="history-memory-btn" @click="historyList">
         历史记录
@@ -15,7 +15,9 @@
     <div class="sign-user-container">
       <div class="sign-user">
         <div class="sign-user-name">
-          <img class="sign-user-img" :src="profilePhoto">
+          <div class="sign-user-img-container">
+            <img class="sign-user-img" :src="profilePhoto">
+          </div>
           <div class="sign-user-content">
             <div class="sign-user-names">
               {{name}}
@@ -36,7 +38,7 @@
 <script>
   import units from '../units/tools'
   import jsAndroid from '../units/jsAndroid'
-  const fullDate = units.getCurrentTime("year")
+  const fullDate = units.getCurrentTime("date")
   export default {
     name: "teacher-clock-in",
     mounted:function(){
@@ -64,7 +66,7 @@
     data(){
       return {
         backGroundImg:require("../assets/primary.png"),
-        dateValue:`${fullDate.year}年${fullDate.month}月`,
+        dateValue:`${fullDate.year}年${fullDate.month}月${fullDate.day}日`,
         sign:{
           timeNow:""
         },
@@ -173,11 +175,11 @@
           this.backgroundColorText = '#CBCBCB'
         }else if (val===2) {
           this.state.boxShadow = '0px 4px 16px 0px rgba(64,197,130,0.57)'
-          this.state.backgroundColor = 'rgba(67,209,136,1)'
+          this.state.backgroundColor = '#40C582'
           this.state.text = '打卡成功'
           this.backGroundImg =require("../assets/success.png")
           this.checkDataText = '已打卡'
-          this.backgroundColorText = 'rgba(67,209,136,1)'
+          this.backgroundColorText = '#40C582'
         }else if(val===4){
           this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
           this.state.backgroundColor = '#CBCBCB'
@@ -320,9 +322,15 @@
     align-items: center;
     margin-left: 17px;
   }
+  .sign-user-img-container{
+    height: 118px;
+    width: 118px;
+    border-radius: 118px;
+  }
   .sign-user-img{
     height: 118px;
     width: 118px;
+    border-radius: 118px;
   }
   .sign-user-content{
     margin-left: 22px;
@@ -346,7 +354,9 @@
     font-family:PingFang-SC-Medium;
     color:rgba(255,255,255,1);
     box-shadow:18px 0 29px rgba(170,170,170,0.24);
-    line-height: 44px;
     margin-right: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

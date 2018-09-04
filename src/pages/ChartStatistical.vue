@@ -9,9 +9,38 @@
           <div class="daily-statistical">
             <chart-date-select v-on:selectDateChart="listenEvent"></chart-date-select>
             <div class="daily-statistical-charts">
-              <ve-ring :data="chartData" :settings="chartSettings"></ve-ring>
+              <ve-ring :data="chartData" :colors="chartColors" :settings="chartSettings" height="340px"></ve-ring>
             </div>
           </div>
+        <div class="all-data-container">
+          <div class="all-data-item">
+            <div class="all-data-header">
+              {{clockNum}}
+            </div>
+            <div class="all-data-footer">
+              <div class="all-data-icon background-success"></div>
+              <div class="all-data-text color-success">到勤人数</div>
+            </div>
+          </div>
+          <div class="all-data-item">
+            <div class="all-data-header">
+              {{stayOutLateNum}}
+            </div>
+            <div class="all-data-footer">
+              <div class="all-data-icon background-warning"></div>
+              <div class="all-data-text color-warning">晚归人数</div>
+            </div>
+          </div>
+          <div class="all-data-item">
+            <div class="all-data-header">
+              {{stayOutNum}}
+            </div>
+            <div class="all-data-footer">
+              <div class="all-data-icon background-danger"></div>
+              <div class="all-data-text color-danger">未归人数</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="right-container" v-if="tabRightActive">
         <div class="week-statistical">
@@ -76,6 +105,9 @@ export default {
       offsetY: 200
     }
     return {
+      stayOutNum:'0',
+      stayOutLateNum:'0',
+      clockNum:'0',
       tabLeftActive: true,
       tabRightActive: false,
       weekTotal:false,/*总周数面板控制*/
@@ -89,6 +121,7 @@ export default {
       year:'',
       month:'',
       day:'',
+      chartColors:['#40C984','#FC9A16','#FF4141'],
       chartData: {/*图表数据*/
         columns: ['状态', '人数'],
         rows: [
@@ -151,6 +184,9 @@ export default {
             { '状态': '晚归', '人数': res.data.data.stayOutLateNum },
             { '状态': '未归', '人数': res.data.data.stayOutNum }
           ]
+          this.clockNum = res.data.data.clockNum
+          this.stayOutLateNum = res.data.data.stayOutLateNum
+          this.stayOutNum = res.data.data.stayOutNum
         }
       }).catch(function (error) {
         console.log(error)
@@ -313,5 +349,36 @@ export default {
     font-family:PingFang-SC-Medium;
     color:rgba(85,85,85,1);
     align-self: center;
+  }
+  .all-data-container{
+    margin-top: 610px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .all-data-item{
+    margin:0 25px;
+  }
+  .all-data-header{
+    text-align: center;
+    font-size:72px;
+    font-family:PingFang-SC-Medium;
+    font-weight:500;
+    color:rgba(85,85,85,1);
+  }
+  .all-data-footer{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .all-data-icon{
+    height: 20px;
+    width: 20px;
+    margin-right: 12px;
+  }
+  .all-data-text{
+    font-size:30px;
+    font-family:PingFang-SC-Medium;
+    font-weight:500;
   }
 </style>
