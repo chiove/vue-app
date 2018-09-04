@@ -64,13 +64,15 @@ export default {
     this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
     /*获取deviceId*/
-    jsAndroid.device.getIdfv().then(function (data) {
-      _this.deviceId = data
-    })
-    if (this.deviceId!==this.checkDevice) {
-      this.$router.push({
-        path:'/notClockIn'
+    if(this.checkDevice!=1){
+      jsAndroid.device.getIdfv().then(function (data) {
+        _this.deviceId = data
       })
+      if (this.deviceId!==this.checkDevice) {
+        this.$router.push({
+          path:'/notClockIn'
+        })
+      }
     }
     this.getStudentClockStatus(this.studentId)/*获取学生当前考勤状态*/
     this.getStudentDetailsListData(this.studentId)/*获取学生信息*/
@@ -83,13 +85,15 @@ export default {
     this.checkClockOrNotClock()/*判断当日是否打卡*/
     this.getSystemConfig()/*获取系统配置*/
     /*获取deviceId*/
-    jsAndroid.device.getIdfv().then(function (data) {
-      _this.deviceId = data
-    })
-    if (this.deviceId!==this.checkDevice) {
-      this.$router.push({
-        path:'/UnitException'
+    if(this.checkDevice!=1){
+      jsAndroid.device.getIdfv().then(function (data) {
+        _this.deviceId = data
       })
+      if (this.deviceId!==this.checkDevice) {
+        this.$router.push({
+          path:'/notClockIn'
+        })
+      }
     }
   },
   watch:{
