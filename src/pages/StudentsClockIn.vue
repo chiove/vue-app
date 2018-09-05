@@ -64,7 +64,6 @@ export default {
      }
     this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
-    /*获取deviceId*/
     jsAndroid.device.getIdfv().then(function (data) {
       _this.deviceId = data
     })
@@ -92,6 +91,8 @@ export default {
         this.positionImg = require('../assets/position-yes.png')
         Toast.success('定位成功');
       }else{
+        this.clockStatus = 0
+        this.state.text = '未进入签到范围'
         this.positionText = '未进入签到范围'
         this.positionImg = require('../assets/position-no.png')
         Toast.fail('定位失败');
@@ -112,7 +113,7 @@ export default {
         checkDataText:'',
         backgroundColorText:'',
         checkDevice:'',/*检查设备*/
-        studentId:'',/*学生ID*/
+        studentId:201760230413,/*学生ID*/
         clockStartTime:'',/*开始打卡时间*/
         clockEndTime:'',/*结束打卡时间*/
         clockAddressSettingList:[],/*系统设定的打卡地址参数*/
@@ -269,18 +270,24 @@ export default {
     /*定位*/
     rePositionFun(){
       const _this = this
-      jsAndroid.position.locationService().then(function (data) {
+      jsAndroid.position.locationService().then(function (res) {
+        if(typeof res === 'string'){
+          const data = JSON.parse(res)
           _this.latitude = data.latitude
-          _this.longitude =data.longitude
+          _this.longitude = data.longitude
           _this.city = data.city
           _this.district = data.district
           _this.street = data.street
           _this.streetnum = data.streetnum
-      })
-      this.$http.get(process.env.API_HOST+'check-position',{
-        params:{
-          posLongitude:this.longitude,
-          posLatitude:this.latitude
+          _this.checkPositionRight(data.longitude,data.latitude)
+        }else{
+          _this.latitude = res.latitude
+          _this.longitude = res.longitude
+          _this.city = res.city
+          _this.district = res.district
+          _this.street = res.street
+          _this.streetnum = res.streetnum
+          _this.checkPositionRight(res.longitude,res.latitude)
         }
       }).then(function (res) {
         _this.ClockPositionState = res.data.data
@@ -311,6 +318,19 @@ export default {
             }
           }
       }).catch(function (error) {
+        console.log(error)
+      })
+    },
+    checkPositionRight(x,y){
+      this.$http.get(process.env.API_HOST+'check-position',{
+        params:{
+          posLongitude:x,
+          posLatitude:y
+        }
+      }).then(function (res) {
+        this.ClockPositionState = res.data.data
+      }).catch(function (error){
+        alert(JSON.stringify(error))
         console.log(error)
       })
     }
