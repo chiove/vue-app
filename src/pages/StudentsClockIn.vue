@@ -21,7 +21,9 @@
     <div class="sign-user-container">
       <div class="sign-user">
         <div class="sign-user-name">
-          <img class="sign-user-img" :src="profilePhoto">
+          <div class="sign-user-img-container">
+            <img class="sign-user-img" :src="profilePhoto">
+          </div>
           <div class="sign-user-content">
             <div class="sign-user-names">
               {{studentName}}
@@ -51,7 +53,6 @@ export default {
   components: {signTab,Toast},
   name: 'students-clock-in',
   mounted: function () {
-    this.checkClockOrNotClock()/*判断当日是否打卡*/
     const _this = this
     setInterval(function () { /*本地时间*/
       _this.sign.timeNow = units.getCurrentTime("hour")
@@ -64,16 +65,9 @@ export default {
     this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
     /*获取deviceId*/
-    if(this.checkDevice!=1){
-      jsAndroid.device.getIdfv().then(function (data) {
-        _this.deviceId = data
-      })
-      if (this.deviceId!==this.checkDevice) {
-        this.$router.push({
-          path:'/notClockIn'
-        })
-      }
-    }
+    jsAndroid.device.getIdfv().then(function (data) {
+      _this.deviceId = data
+    })
     this.getStudentClockStatus(this.studentId)/*获取学生当前考勤状态*/
     this.getStudentDetailsListData(this.studentId)/*获取学生信息*/
     this.getStudentsClocktimes(this.studentId)/*获取总打卡次数*/
@@ -82,19 +76,11 @@ export default {
   },
   activated:function(){
     const _this = this
-    this.checkClockOrNotClock()/*判断当日是否打卡*/
     this.getSystemConfig()/*获取系统配置*/
-    /*获取deviceId*/
-    if(this.checkDevice!=1){
+      /*获取deviceId*/
       jsAndroid.device.getIdfv().then(function (data) {
         _this.deviceId = data
       })
-      if (this.deviceId!==this.checkDevice) {
-        this.$router.push({
-          path:'/notClockIn'
-        })
-      }
-    }
   },
   watch:{
     clockStatus:function (val) {
@@ -260,6 +246,14 @@ export default {
             if(res){
               if(res.data.data.code === "000000"){
                 this.state = 2
+              }else if(res.data.data.code === "000005"){
+                this.$router.push({
+                  path:'/NotClockIn'
+                })
+              }else if(res.data.data.code === "000009"){
+                this.$router.push({
+                  path:'/UnitException'
+                })
               }
             }
           }).catch(function (error) {
@@ -313,7 +307,7 @@ export default {
             if(list.indexOf(thisDay)===-1){
               this.$router.push({
                   path:'/NotClockIn'
-                })
+              })
             }
           }
       }).catch(function (error) {
@@ -420,6 +414,11 @@ export default {
     justify-content: space-between;
     align-items: center;
     margin-left: 17px;
+  }
+  .sign-user-img-container{
+    height: 118px;
+    width: 118px;
+    border-radius: 118px;
   }
   .sign-user-img{
     height: 118px;

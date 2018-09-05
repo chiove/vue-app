@@ -95,7 +95,7 @@ export default {
   }
   .sign-position-img{
     display: block;
-    width: 36px;
+    width: 32px;
     height: 40px;
     margin: 0 auto;
   }
