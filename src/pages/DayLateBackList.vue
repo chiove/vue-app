@@ -76,7 +76,7 @@
         this.$http.get(process.env.API_HOST+'dormitory-check/day-stat/student',{
           params:{
             userId:this.userId,
-            "clockStatus 2到勤，3晚归，4未归":this.clockStatus,
+            clockStatus:this.clockStatus,
             year:this.dateNumber.year,
             month:this.dateNumber.month,
             day:this.dateNumber.day
