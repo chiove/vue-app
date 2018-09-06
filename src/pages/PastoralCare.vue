@@ -1,13 +1,13 @@
 <template>
   <div class="body-container">
     <div class="title-container">
-      <div :class="{'tab-left':true,'tab-active':tabLeftActive}"  @click="leftActive">已关怀</div>
-      <div :class="{'tab-right':true,'tab-active':tabRightActive}" @click="rightActive">未关怀</div>
+      <div :class="{'tab-left':true,'tab-active':tabLeftActive}"  @click="leftActive">待关怀</div>
+      <div :class="{'tab-right':true,'tab-active':tabRightActive}" @click="rightActive">已关怀</div>
     </div>
     <div class="content-container">
       <div class="left-container" v-if="tabLeftActive" >
         <pull-to :bottom-load-method="refreshLeft" class="file-lists">
-          <div class="care-item" v-for="(item,index) in careListYes" v-bind:key="index" @click="careItemFun($event,item.studentId)">
+          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index" @click="careItemFun($event,item.studentId)">
             <div class="care-item-left">
               <img class="care-item-img" :src="item.profilePhoto">
             </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="right-container" v-if="tabRightActive">
         <pull-to :bottom-load-method="refreshRight" class="file-lists">
-          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index" @click="careItemFun($event,item.studentId)">
+          <div class="care-item" v-for="(item,index) in careListYes" v-bind:key="index" @click="careItemFun($event,item.studentId,'no')">
             <div class="care-item-left">
               <img class="care-item-img" :src="item.profilePhoto">
             </div>
@@ -169,7 +169,8 @@
           this.tabRightActive = true
         }
       },
-      careItemFun:function (e,studentId) {
+      careItemFun:function (e,studentId,boolean) {
+        localStorage.setItem('careState',boolean)
         localStorage.setItem('careStudentId',studentId)
         this.$router.push({
           name:'TeacherSubmit',

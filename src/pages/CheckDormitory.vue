@@ -20,9 +20,9 @@
           <span :class="{'color-primary':sortActive}">{{sortTitle}}</span>
           <img :src="sortActive?selectIconActive:selectIcon">
         </div>
-        <div class="number-select-icon" @click="dormitoryFun">
-          <span :class="{'color-primary':dormitoryActive}">{{dormitoryChildTitle}}</span>
-          <img :src="dormitoryActive?numberIconActive:numberIcon">
+        <div class="number-select-icon" @click="roomSortFun">
+          <span :class="{'color-primary':roomSortActive}" style="width: 1.4rem">宿舍号</span>
+          <img :src="roomSortActive?numberIconActive:numberIcon">
         </div>
       </div>
     </div>
@@ -73,6 +73,7 @@ export default {
       dormitoryActive: false,
       sortActive: false,
       checkActive: false,
+      roomSortActive:false,
       userId:100725,
       buildingId:1,/*楼栋ID*/
       floorNumber:'',/*楼层*/
@@ -160,6 +161,19 @@ export default {
       this.sortActive = false
       this.checkActive = false
       this.dormitoryActive = false
+    },
+    roomSortFun(){
+      this.sortActive = false
+      this.checkActive = false
+      this.dormitoryActive = false
+      this.roomSortActive ? this.roomSortActive = false : this.roomSortActive = true
+      if(this.roomSortActive){
+        this.descOrAsc = 'asc'
+      }else{
+        this.descOrAsc = 'desc'
+      }
+      this.orderBy = 'dormitoryCode'
+      this.getRoomListData()
     },
     /*根据Id查询楼栋*/
     getBuildingList() {

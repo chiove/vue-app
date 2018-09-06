@@ -16,6 +16,7 @@ import RoomDetails from '@/pages/RoomDetails'/* 寝室详情 */
 import CheckPersonalInformation from '@/pages/CheckPersonalInformation'/* 查寝个人信息 */
 import WeekPersonalInformation from '@/pages/WeekPersonalInformation'/* 周统计个人信息 */
 import LateBackList from '@/pages/LateBackList'/* 晚归列表 */
+import DayLateBackList from '@/pages/DayLateBackList'/* 晚归列表 */
 import router from '@/pages/router'/* 路由 */
 Vue.use(Router)
 
@@ -100,6 +101,11 @@ export default new Router({
       path: '/lateBackList',
       name: 'LateBackList',
       component: LateBackList
+    },
+    {
+      path: '/dayLateBackList',
+      name: 'DayLateBackList',
+      component: DayLateBackList
     },
     {
       path: '/weekPersonalInformation',

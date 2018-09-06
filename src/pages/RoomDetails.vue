@@ -27,7 +27,7 @@
     </div>
     <div class="room-details-body">
       <div class="room-details-container">
-        <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear" @click="viewDetails($event,item.studentId)">
+        <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear" @click="viewDetails($event,item.studentId,item.clockStatus)">
           <div class="room-details-check" v-if="item.studentId===studentId"  @click="checkRoom($event,index,item)">
             <div class="room-details-check-btn background-success" data-index="2">到勤</div>
             <div class="room-details-check-btn background-warning" data-index="3">晚归</div>
@@ -93,7 +93,11 @@ export default {
   components: {Popup},
   name: 'room-details',
   mounted:function(){
-    this.roomDetails = this.$route.params.roomDetails
+    if(this.$route.params.roomDetails){
+      this.roomDetails = this.$route.params.roomDetails
+    }else{
+      this.roomDetails = JSON.parse(localStorage.getItem('rooDetails'))
+    }
     if(this.$route.params.userId){
       this.userId = this.$route.params.userId
     }else{
@@ -104,7 +108,11 @@ export default {
     this.getSystemConfig()
   },
   activated:function(){
-    this.roomDetails = this.$route.params.roomDetails
+    if(this.$route.params.roomDetails){
+      this.roomDetails = this.$route.params.roomDetails
+    }else{
+      this.roomDetails = JSON.parse(localStorage.getItem('rooDetails'))
+    }
     if(this.$route.params.userId){
       this.userId = this.$route.params.userId
     }else{
@@ -133,6 +141,7 @@ export default {
       beginOrEnd:true,
       checkClockEndTime: "",
       checkClockStartTime: "",
+      detailsState:true,
     }
   },
   methods: {
@@ -159,12 +168,15 @@ export default {
     checkClear: function () {
       clearTimeout(timer)
     },
-    viewDetails:function(e,studentId){
-      this.$router.push({name:'CheckPersonalInformation',params: {
-          studentId:studentId,
-          userId:this.userId
-        }
-      })
+    viewDetails:function(e,studentId,clockStatus){
+      if(this.detailsState){
+        this.$router.push({name:'CheckPersonalInformation',query: {
+            studentId:studentId,
+            userId:this.userId,
+            clockStatus:clockStatus
+          }
+        })
+      }
     },
     checkRoom: function (e, i,data) {
       if (e.target.dataset.index !== undefined) {
@@ -226,11 +238,10 @@ export default {
         this.beginCheck = true
       }else if(this.checkClockStartTime<=nowClockStartTime&&nowClockStartTime<=this.checkClockEndTime){
         this.beginOrEnd = false
+        this.detailsState = false
       }else if(nowClockStartTime>this.checkClockEndTime){
         this.beginCheck = true
       }
-
-
     },
     checkEnd: function () {
       /* 结束查寝 */

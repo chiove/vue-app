@@ -13,7 +13,7 @@
             </div>
           </div>
         <div class="all-data-container">
-          <div class="all-data-item">
+          <div class="all-data-item" @click="dayClockFun">
             <div class="all-data-header">
               {{clockNum}}
             </div>
@@ -22,7 +22,7 @@
               <div class="all-data-text color-success">到勤人数</div>
             </div>
           </div>
-          <div class="all-data-item">
+          <div class="all-data-item" @click="dayStayOutLateFun">
             <div class="all-data-header">
               {{stayOutLateNum}}
             </div>
@@ -31,7 +31,7 @@
               <div class="all-data-text color-warning">晚归人数</div>
             </div>
           </div>
-          <div class="all-data-item">
+          <div class="all-data-item" @click="dayStayOutFun">
             <div class="all-data-header">
               {{stayOutNum}}
             </div>
@@ -115,7 +115,7 @@ export default {
       needClockNumber:0, /*应打卡人数*/
       lateNumber:0,/*晚归人数*/
       notNumber:0,/*未归人数*/
-      userId:'',/*用户id*/
+      userId:100725,/*用户id*/
       clockStatus:0,/*打卡状态*/
       weekList:[],/*周列表*/
       year:'',
@@ -243,7 +243,40 @@ export default {
       this.$router.push({
         name:'LateBackList',
       })
-    }
+    },
+    /*日统计到勤*/
+    dayClockFun:function () {
+      const _this = this
+      localStorage.setItem('clockStatus',2)
+      localStorage.setItem('userId',_this.userId)
+      localStorage.setItem('dateNumber',JSON.stringify({year:_this.year,month:_this.month,day:_this.day}))
+      localStorage.setItem('clockNumber',_this.clockNum)
+      this.$router.push({
+        name:'DayLateBackList',
+      })
+    },
+    /*日统计打开晚归*/
+    dayStayOutLateFun:function () {
+      const _this = this
+      localStorage.setItem('clockStatus',3)
+      localStorage.setItem('userId',_this.userId)
+      localStorage.setItem('dateNumber',JSON.stringify({year:_this.year,month:_this.month,day:_this.day}))
+      localStorage.setItem('stayOutLateNumber',_this.stayOutLateNum)
+      this.$router.push({
+        name:'DayLateBackList',
+      })
+    },
+    /*日统计打开未归*/
+    dayStayOutFun:function () {
+      const _this = this
+      localStorage.setItem('clockStatus',4)
+      localStorage.setItem('userId',_this.userId)
+      localStorage.setItem('dateNumber',JSON.stringify({year:_this.year,month:_this.month,day:_this.day}))
+      localStorage.setItem('stayOutNumber',_this.stayOutNum)
+      this.$router.push({
+        name:'DayLateBackList',
+      })
+    },
   }
 }
 </script>

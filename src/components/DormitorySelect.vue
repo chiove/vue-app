@@ -59,15 +59,16 @@
         getBuildValue:function (e) {
           this.floorState = true
           /*获取层数*/
-          const floorList  = []
-          const data = JSON.parse(e.target.dataset.index)
-          this.buildingActive = data.buildingId
-          this.buildingName = data.buildingName
-          for (let i=1;i<data.floorNumber+1;i++) {
-            floorList.push(i)
-          }
-          this.floorList = floorList
-
+         if(e.target.dataset.index){
+           const floorList  = []
+           const data = JSON.parse(e.target.dataset.index)
+           this.buildingActive = data.buildingId
+           this.buildingName = data.buildingName
+           for (let i=1;i<data.floorNumber+1;i++) {
+             floorList.push(i)
+           }
+           this.floorList = floorList
+         }
         },
         getFloorValue(e){
           this.roomState = true

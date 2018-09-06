@@ -24,10 +24,10 @@ export default {
     this.userId = localStorage.getItem('userId')
     this.clockStatus = localStorage.getItem('clockStatus')
     this.weekNumber = localStorage.getItem('weekNumber')
-    if(this.clockStatus===3){
+    if(this.clockStatus==3){
       this.clockStatusText = '晚归'
       this.studentsNumber = localStorage.getItem('stayOutLateNumber')
-    }else if(this.clockStatus===4){
+    }else if(this.clockStatus==4){
       this.clockStatusText = '未归'
       this.studentsNumber = localStorage.getItem('stayOutNumber')
     }
@@ -37,10 +37,10 @@ export default {
     this.userId = localStorage.getItem('userId')
     this.clockStatus = localStorage.getItem('clockStatus')
     this.weekNumber = localStorage.getItem('weekNumber')
-    if(this.clockStatus===3){
+    if(this.clockStatus==3){
       this.clockStatusText = '晚归'
       this.studentsNumber = localStorage.getItem('stayOutLateNumber')
-    }else if(this.clockStatus===4){
+    }else if(this.clockStatus==4){
       this.clockStatusText = '未归'
       this.studentsNumber = localStorage.getItem('stayOutNumber')
     }
@@ -58,11 +58,13 @@ export default {
   },
   methods:{
     studentDetailsFun:function (e) {
-      const studentId = JSON.parse(e.target.dataset.index).studentId
-      localStorage.setItem('studentId',studentId)
-      this.$router.push({
-        name:'WeekPersonalInformation',
-      })
+      if(e.target.dataset.index){
+        const studentId = JSON.parse(e.target.dataset.index).studentId
+        localStorage.setItem('studentId',studentId)
+        this.$router.push({
+          name:'WeekPersonalInformation',
+        })
+      }
     },
     getStudentsList(){
       this.$http.get(process.env.API_HOST+'dormitory-check/week-stat/student',{

@@ -2,7 +2,9 @@
     <div class="data-banner">
       <div class="data-information">
         <div class="data-left">
-          <img class="sign-user-img" :src="data.profilePhoto">
+          <div class="sign-user-img-container">
+            <img class="sign-user-img" :src="data.profilePhoto">
+          </div>
           <div>
             <div class="data-name">
               <span class="data-name-text">{{data.studentName}}</span>
@@ -107,6 +109,12 @@ export default {
   }
   .data-information-teacher{
     margin-right: 30px;
+  }
+  .sign-user-img-container{
+    margin-right: 27px;
+    height: 114px;
+    width: 114px;
+    border-radius: 114px;
   }
   .sign-user-img{
     height: 114px;

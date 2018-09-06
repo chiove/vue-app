@@ -34,6 +34,7 @@ export default {
     /*进入房间详情页*/
     roomDetailsFun(){
       localStorage.setItem('checkRoomListUserId',this.userId)
+      localStorage.setItem('rooDetails',JSON.stringify(this.data))
       this.$router.push({
         name:'RoomDetails',
         params:{

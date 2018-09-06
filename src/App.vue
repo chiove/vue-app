@@ -55,6 +55,8 @@ export default {
         document.title = '晚归列表'
       }else if (val.name==='WeekPersonalInformation') {
         document.title = '打卡统计'
+      }else if (val.name==='DayLateBackList') {
+        document.title = '晚归列表'
       }
     }
   }

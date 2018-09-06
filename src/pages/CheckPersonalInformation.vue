@@ -3,7 +3,9 @@
     <div class="data-banner">
       <div class="data-information">
         <div class="data-left">
-          <img class="sign-user-img" :src="profilePhoto">
+            <div class="sign-user-img-container">
+              <img class="sign-user-img" :src="profilePhoto">
+            </div>
           <div>
             <div class="data-name">
               <span class="data-name-text">{{studentName}}</span>
@@ -78,14 +80,34 @@
     components:{Popup,Picker},
     name: "personal-information",
     mounted(){
-      this.studentId = this.$route.params.studentId
-      this.userId = this.$route.params.userId
+      this.studentId = this.$route.query.studentId
+      this.userId = this.$route.query.userId
+      this.clockStatus = this.$route.query.clockStatus
+      if(this.clockStatus==1){
+        this.clockStatusText = '未打卡'
+      }else if(this.clockStatus==2){
+        this.clockStatusText = '到勤'
+      }else if(this.clockStatus==3){
+        this.clockStatusText = '晚归'
+      }else if(this.clockStatus==4){
+        this.clockStatusText = '未归'
+      }
       this.getStudentsInfo(this.studentId)/*获取学生信息*/
       this.getUserInfo()/*获取用户信息*/
     },
     activated(){
-      this.studentId = this.$route.params.studentId
-      this.userId = this.$route.params.userId
+      this.studentId = this.$route.query.studentId
+      this.userId = this.$route.query.userId
+      this.clockStatus = this.$route.query.clockStatus
+      if(this.clockStatus==1){
+        this.clockStatusText = '未打卡'
+      }else if(this.clockStatus==2){
+        this.clockStatusText = '到勤'
+      }else if(this.clockStatus==3){
+        this.clockStatusText = '晚归'
+      }else if(this.clockStatus==4){
+        this.clockStatusText = '未归'
+      }
       this.getStudentsInfo(this.studentId)/*获取学生信息*/
       this.$refs.remarkDom.value = ''
     },
@@ -139,15 +161,15 @@
         this.show = true
       },
       confirm:function (data) {
+        console.log(data)
         this.clockStatusText = data
-        if(data = '到勤'){
+        if(data === '到勤'){
           this.clockStatus = 2
-        }else if(data = '晚归'){
+        }else if(data === '晚归'){
           this.clockStatus = 3
-        }else if(data = '未归'){
+        }else if(data === '未归'){
           this.clockStatus = 4
         }
-        console.log(data)
         this.show = false
       },
       /*今日所有打卡记录*/
@@ -172,7 +194,7 @@
       },
       /*提交备注*/
       submitRemarkFun(){
-        const date = `${this.date.year}-${this.date.month}-${this.date.day}`
+        const date = `${this.date.year}${this.date.month}${this.date.day}`
         if(this.$refs.remarkDom.value.length<=30){
           this.$http.put(process.env.API_HOST+'student-clock',{
             appType:1,
@@ -254,10 +276,15 @@
   .data-information-teacher{
     margin-right: 30px;
   }
+  .sign-user-img-container{
+    margin-right: 27px;
+    height: 114px;
+    width: 114px;
+    border-radius: 114px;
+  }
   .sign-user-img{
     height: 114px;
     width: 114px;
-    margin-right: 27px;
   }
   .data-right{
     width:154px;
