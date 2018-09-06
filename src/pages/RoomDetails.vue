@@ -3,8 +3,8 @@
     <div class="room-details-header-container">
       <div class="room-details-header">
         <div class="room-details-title">
-          <span class="room-details-room">{{roomDetails.dormitoryId}}寝室</span>
-          <span>（{{roomDetails.dormitoryName}}）</span>
+          <span class="room-details-room">{{roomDetails.dormitoryName}}寝室</span>
+          <span>（{{roomDetails.buildingName}}栋）</span>
         </div>
         <div class="room-details-line"></div>
         <div class="room-details-state">

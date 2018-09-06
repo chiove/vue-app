@@ -26,7 +26,7 @@
           </div>
         </div>
         <div class="data-right">
-          {{bedCode}}
+          {{dormitoryName}}室{{bedCode}}床
         </div>
       </div>
     </div>
@@ -58,6 +58,12 @@
     <div class="data-form-submit-container">
       <div class="data-form-submit" @click="submitRemarkFun">提交</div>
     </div>
+    <van-popup
+      v-model="checkTimeState"
+      :overlay-style="{'background':'rgba(0,0,0,0)'}"
+    >
+      <div class="time-not-arrive">查寝时间未到或已过</div>
+    </van-popup>
     <van-popup v-model="show" position="bottom">
       <van-picker
         class="data-form-picker"
@@ -72,6 +78,7 @@
 
 <script>
   import { Popup,Picker ,Toast } from 'vant'
+  import units from '../units/tools'
   import Vue from 'vue'
   Vue.use(Popup)
   Vue.use(Picker)
@@ -80,6 +87,7 @@
     components:{Popup,Picker},
     name: "personal-information",
     mounted(){
+      this.getSystemConfig()
       this.studentId = this.$route.query.studentId
       this.userId = this.$route.query.userId
       this.clockStatus = this.$route.query.clockStatus
@@ -96,6 +104,7 @@
       this.getUserInfo()/*获取用户信息*/
     },
     activated(){
+      this.getSystemConfig()
       this.studentId = this.$route.query.studentId
       this.userId = this.$route.query.userId
       this.clockStatus = this.$route.query.clockStatus
@@ -134,10 +143,26 @@
           month:new Date().getMonth()+1,
           day:new Date().getDate()
         },
-        textNumber:0/*文本框字数*/
+        textNumber:0,/*文本框字数*/
+        checkTime:true,
+        checkTimeState:false,
+        checkClockEndTime:'',
+        checkClockStartTime:''
       }
     },
     methods:{
+      /*获取系统配置*/
+      getSystemConfig:function () {
+        this.$http.get(process.env.API_HOST+'system-config').then(function (res) {
+          if(res){
+            const data = res.data.data
+            this.checkClockEndTime =  data.checkClockEndTime.substring(0,5)
+            this.checkClockStartTime =  data.checkClockStartTime.substring(0,5)
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
       /*获取学生信息*/
       getStudentsInfo(studentId){
         this.$http.get(process.env.API_HOST+`student/${studentId}`).then(function (res) {
@@ -192,8 +217,25 @@
           console.log(error)
         })
       },
+      /*判断时间*/
+      checkTimeFun(){
+
+      },
       /*提交备注*/
       submitRemarkFun(){
+        const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
+        if(nowClockStartTime<this.checkClockStartTime){
+          this.checkTime = false
+          this.checkTimeState = true
+          console.log(0)
+          return
+        }else if(this.checkClockStartTime<=nowClockStartTime&&nowClockStartTime<=this.checkClockEndTime){
+          this.checkTime = true
+        }else if(nowClockStartTime>this.checkClockEndTime){
+          this.checkTime = false
+          this.checkTimeState = true
+          return
+        }
         const date = `${this.date.year}${this.date.month}${this.date.day}`
         if(this.$refs.remarkDom.value.length<=30){
           this.$http.put(process.env.API_HOST+'student-clock',{
@@ -366,5 +408,16 @@
     font-size:36px;
     font-family:PingFang-SC-Medium;
     color:rgba(255,255,255,1);
+  }
+  .time-not-arrive{
+    width:294px;
+    height:80px;
+    background:rgba(0,0,0,.7);
+    border-radius:12px;
+    font-size:28px;
+    font-family:PingFang-SC-Medium;
+    color:rgba(255,255,255,1);
+    text-align: center;
+    line-height: 80px;
   }
 </style>

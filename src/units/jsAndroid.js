@@ -24,6 +24,7 @@ let jsAndroid = {
   position: {
     locationService:function () {
       var d = jsAndroid.jsAndroidCallback()
+      console.log(d)
       jsAndroid.is_android() ? window.jsAndroid.locationService() : window.webkit.messageHandlers.locationService.postMessage('');
       return d
     }

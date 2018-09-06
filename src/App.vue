@@ -24,7 +24,7 @@ export default {
   methods:{
     changeTitle(val){
       if (val.name==='PastoralCare') {
-        document.title = '关怀列表'
+        document.title = '学生关怀'
       }else if (val.name==='StudentsClockIn') {
         document.title = '学生打卡'
       }else if (val.name==='DataStatistical') {

@@ -2,8 +2,8 @@
     <div class="check-room-container" @click="roomDetailsFun">
       <div class="check-room-head">
         <div>
-          <span class="check-room-number">{{data.dormitoryId}}寝室</span>
-          <span class="check-room-name">({{data.dormitoryName}})</span>
+          <span class="check-room-number">{{data.dormitoryName}}寝室</span>
+          <span class="check-room-name">({{data.buildingName}}栋)</span>
         </div>
         <div>
           <span class="check-room-person">{{data.totalStudent}}人</span>

@@ -21,17 +21,17 @@
           <img :src="sortActive?selectIconActive:selectIcon">
         </div>
         <div class="number-select-icon" @click="roomSortFun">
-          <span :class="{'color-primary':roomSortActive}" style="width: 1.4rem">宿舍号</span>
+          <span :class="{'color-primary':roomSortActive}" style="width: 1.4rem">寝室号</span>
           <img :src="roomSortActive?numberIconActive:numberIcon">
         </div>
       </div>
     </div>
     <div class="search-container">
       <div class="search-select-container" v-if="checkActive" @click="getSearchValue($event,'check')">
-        <div class="list-item" v-for="(item,index) in checkData" :data-index="JSON.stringify(item)" >{{item.text}}</div>
+        <div :class="{'list-item':true,'color-primary':colorState===item.text}" v-for="(item,index) in checkData" :data-index="JSON.stringify(item)" >{{item.text}}</div>
       </div>
       <div class="search-select-container" v-if="sortActive" @click="getSearchValue($event,'sort')">
-        <div class="list-item" v-for="(item,index) in sortData" :data-index="JSON.stringify(item)">{{item.text}}</div>
+        <div :class="{'list-item':true,'color-primary':colorState===item.text}"  v-for="(item,index) in sortData" :data-index="JSON.stringify(item)">{{item.text}}</div>
        </div>
       <div class="search-select-container" v-if="dormitoryActive">
         <dormitory-select :data="buildingList" @sendParams="listenParamsEvent"></dormitory-select>
@@ -67,8 +67,8 @@ export default {
       selectIconActive: require('../assets/selectDownActive.png'),
       numberIconActive: require('../assets/numberSelectActive.png'),
       dormitoryTitle: '宿舍选择',
-      checkTitle: '全部查寝状态',
-      sortTitle: '全部考勤状态',
+      checkTitle: '查寝状态',
+      sortTitle: '考勤状态',
       dormitoryChildTitle: '寝室选择',
       dormitoryActive: false,
       sortActive: false,
@@ -81,7 +81,12 @@ export default {
       orderBy:'',/*考勤状态查询*/
       descOrAsc:'',/*宿舍号升序降序 asc升序，desc降序*/
       checkStatus:null,
+      colorState:'',
       checkData: [
+        {
+          id:'',
+          text:'全部查寝状态'
+        },
         {
           id: true,
           text: '已查寝'
@@ -92,6 +97,11 @@ export default {
         }
       ],
       sortData: [
+        {
+          id: '',
+          key: '',
+          text: '全部考勤状态'
+        },
         {
           id: 'stayOutNum',
           key: 'desc',
@@ -148,9 +158,11 @@ export default {
       } else {
         if (type === 'check') {
           const data = JSON.parse(e.target.dataset.index)
+          this.colorState = e.target.innerText
           this.checkTitle = e.target.innerText
           this.checkStatus = data.id
         }else if (type === 'sort') {
+          this.colorState = e.target.innerText
           this.sortTitle = e.target.innerText
           const data = JSON.parse(e.target.dataset.index)
           this.orderBy = data.id
@@ -330,6 +342,9 @@ export default {
     font-family:PingFang-SC-Medium;
     color:rgba(85,85,85,1);
     background-color: #fff;
+  }
+  .color-primary{
+    color: rgba(62, 168, 245, 1)!important;
   }
   .item-active{
     padding: 40px 0 40px 40px;

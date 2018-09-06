@@ -30,7 +30,7 @@ export default {
       selectDateSearch:{},
       historyListData:[],
       pageData:{
-        studentId: '',/*学生ID*/
+        studentId: 201760230413,/*学生ID*/
         profilePhoto:'',/*头像地址*/
         studentName:'',/*学生姓名*/
         classNames:'',/*班级*/

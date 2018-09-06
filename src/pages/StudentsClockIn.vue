@@ -62,6 +62,7 @@ export default {
        this.studentId = this.$route.query.userid
         localStorage.setItem('studentClockUserId',this.$route.query.userid)
      }
+    this.checkClockOrNotClock()/*是否是打卡日*/
     this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
     jsAndroid.device.getIdfv().then(function (data) {
@@ -76,6 +77,8 @@ export default {
   activated:function(){
     const _this = this
     this.getSystemConfig()/*获取系统配置*/
+    this.rePositionFun()/*定位*/
+    this.checkClockOrNotClock()/*是否是打卡日*/
       /*获取deviceId*/
       jsAndroid.device.getIdfv().then(function (data) {
         _this.deviceId = data
@@ -112,7 +115,7 @@ export default {
         },
         checkDataText:'',
         backgroundColorText:'',
-        checkDevice:'',/*检查设备*/
+        checkDevice:1,/*检查设备*/
         studentId:201760230413,/*学生ID*/
         clockStartTime:'',/*开始打卡时间*/
         clockEndTime:'',/*结束打卡时间*/
@@ -131,6 +134,8 @@ export default {
         positionText:'',/*提示是否成功*/
         positionImg:require('../assets/position-no.png'),
         ClockPositionState:false,/*是否在打卡范围内*/
+        posLatitude:125.55555,
+        posLongitude:25.555555
     }
   },
   methods: {
@@ -239,19 +244,19 @@ export default {
       if(this.clockStatus === 1 ){
         if(this.ClockPositionState){
           this.$http.post(process.env.API_HOST+'student-clock',{
-            "deviceId": this.deviceId,
+            "deviceId": this.checkDevice,
             "posLatitude": this.posLatitude,
             "posLongitude": this.posLongitude,
             "studentId": this.studentId
           }).then(function (res) {
             if(res){
-              if(res.data.data.code === "000000"){
+              if(res.data.code === "000000"){
                 this.state = 2
-              }else if(res.data.data.code === "000005"){
+              }else if(res.data.code === "000013"){
                 this.$router.push({
                   path:'/NotClockIn'
                 })
-              }else if(res.data.data.code === "000009"){
+              }else if(res.data.code === "000003"){
                 this.$router.push({
                   path:'/UnitException'
                 })
@@ -309,7 +314,12 @@ export default {
             }else{
               month = date.getMonth()+1
             }
-            let day = date.getDay()
+            let day = ''
+            if(date.getDay()<10){
+              day = `0${date.getMonth()+1}`
+            }else{
+              day = date.getDay()
+            }
             const thisDay = `${year}${month}${day}`
             if(list.indexOf(thisDay)===-1){
               this.$router.push({

@@ -22,7 +22,7 @@
                 任务时间
               </div>
               <div class="care-item-date">
-                {{item.taskDate}}
+                {{item.taskDate.substring(0,10)}}
               </div>
             </div>
           </div>
@@ -45,7 +45,7 @@
                 任务时间
               </div>
               <div class="care-item-date">
-                {{item.taskDate}}
+                {{item.taskDate.substring(0,10)}}
               </div>
             </div>
           </div>
