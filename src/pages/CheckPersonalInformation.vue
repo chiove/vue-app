@@ -223,20 +223,11 @@
       },
       /*提交备注*/
       submitRemarkFun(){
-        const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
-        if(nowClockStartTime<this.checkClockStartTime){
-          this.checkTime = false
-          this.checkTimeState = true
-          console.log(0)
-          return
-        }else if(this.checkClockStartTime<=nowClockStartTime&&nowClockStartTime<=this.checkClockEndTime){
-          this.checkTime = true
-        }else if(nowClockStartTime>this.checkClockEndTime){
-          this.checkTime = false
-          this.checkTimeState = true
-          return
-        }
-        const date = `${this.date.year}${this.date.month}${this.date.day}`
+        let month = '',
+          day=''
+        Number(this.date.month)<10? month = `0${this.date.month}`:month=this.date.month
+        Number(this.date.day)<10? day = `0${this.date.day}`:day=this.date.day
+        const date = `${this.date.year}${month}${day}`
         if(this.$refs.remarkDom.value.length<=30){
           this.$http.put(process.env.API_HOST+'student-clock',{
             appType:1,

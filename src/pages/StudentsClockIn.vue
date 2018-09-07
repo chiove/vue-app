@@ -62,27 +62,14 @@ export default {
        this.studentId = this.$route.query.userid
         localStorage.setItem('studentClockUserId',this.$route.query.userid)
      }
-    this.checkClockOrNotClock()/*是否是打卡日*/
-    this.rePositionFun()/*定位*/
     this.getSystemConfig()/*获取系统配置*/
-    jsAndroid.device.getIdfv().then(function (data) {
-      _this.deviceId = data
-    })
+    this.checkClockOrNotClock()/*是否是打卡日*/
     this.getStudentClockStatus(this.studentId)/*获取学生当前考勤状态*/
     this.getStudentDetailsListData(this.studentId)/*获取学生信息*/
     this.getStudentsClocktimes(this.studentId)/*获取总打卡次数*/
+    setTimeout(_this.rePositionFun(),3000)
     this.changeStatus()
     this.changeStyle()
-  },
-  activated:function(){
-    const _this = this
-    this.getSystemConfig()/*获取系统配置*/
-    this.rePositionFun()/*定位*/
-    this.checkClockOrNotClock()/*是否是打卡日*/
-      /*获取deviceId*/
-      jsAndroid.device.getIdfv().then(function (data) {
-        _this.deviceId = data
-      })
   },
   watch:{
     clockStatus:function (val) {
@@ -116,7 +103,7 @@ export default {
         checkDataText:'',
         backgroundColorText:'',
         checkDevice:1,/*检查设备*/
-        studentId:201760230413,/*学生ID*/
+        studentId:'',/*学生ID*/
         clockStartTime:'',/*开始打卡时间*/
         clockEndTime:'',/*结束打卡时间*/
         clockAddressSettingList:[],/*系统设定的打卡地址参数*/
@@ -134,8 +121,8 @@ export default {
         positionText:'',/*提示是否成功*/
         positionImg:require('../assets/position-no.png'),
         ClockPositionState:false,/*是否在打卡范围内*/
-        posLatitude:125.55555,
-        posLongitude:25.555555
+        posLatitude:'',
+        posLongitude:''
     }
   },
   methods: {
@@ -244,19 +231,19 @@ export default {
       if(this.clockStatus === 1 ){
         if(this.ClockPositionState){
           this.$http.post(process.env.API_HOST+'student-clock',{
-            "deviceId": this.checkDevice,
-            "posLatitude": this.posLatitude,
-            "posLongitude": this.posLongitude,
+            "deviceId": this.deviceId,
+            "posLatitude": this.latitude,
+            "posLongitude": this.longitude,
             "studentId": this.studentId
           }).then(function (res) {
             if(res){
               if(res.data.code === "000000"){
-                this.state = 2
-              }else if(res.data.code === "000013"){
+                this.clockStatus = 2
+              }else if(res.data.code === "00005"){
                 this.$router.push({
                   path:'/NotClockIn'
                 })
-              }else if(res.data.code === "000003"){
+              }else if(res.data.code === "000009"){
                 this.$router.push({
                   path:'/UnitException'
                 })
@@ -276,26 +263,31 @@ export default {
     rePositionFun(){
       const _this = this
       jsAndroid.position.locationService().then(function (res) {
-        if(typeof res === 'string'){
-          const data = JSON.parse(res)
-          _this.latitude = data.latitude
-          _this.longitude = data.longitude
-          _this.city = data.city
-          _this.district = data.district
-          _this.street = data.street
-          _this.streetnum = data.streetnum
-          _this.checkPositionRight(data.longitude,data.latitude)
-        }else{
-          _this.latitude = res.latitude
-          _this.longitude = res.longitude
-          _this.city = res.city
-          _this.district = res.district
-          _this.street = res.street
-          _this.streetnum = res.streetnum
-          _this.checkPositionRight(res.longitude,res.latitude)
-        }
+            const data = JSON.parse(res)
+            _this.latitude = data.latitude
+            _this.longitude = data.longitude
+            _this.city = data.city
+            _this.district = data.district
+            _this.street = data.street
+            _this.streetnum = data.streetnum
+            _this.checkPositionRight(data.longitude,data.latitude)
+        return jsAndroid.device.getIdfv()
       }).then(function (res) {
-        _this.ClockPositionState = res.data.data
+        _this.deviceId = res
+        _this.$http.get(process.env.API_HOST+ '/check-device',{
+          params:{
+            studentId:_this.studentId,
+            deviceId:res
+          }
+        }).then(function (res) {
+          if(res){
+           if(res.data.data===false){
+             _this.$router.push({
+               path:'/UnitException'
+             })
+           }
+          }
+        })
       })
     },
     /*判断几日是否为打卡日期*/
@@ -340,10 +332,9 @@ export default {
       }).then(function (res) {
         this.ClockPositionState = res.data.data
       }).catch(function (error){
-        alert(JSON.stringify(error))
         console.log(error)
       })
-    }
+    },
   }
 }
 </script>

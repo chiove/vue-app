@@ -28,7 +28,7 @@
     <div class="room-details-body">
       <div class="room-details-container">
         <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear" @click="viewDetails($event,item.studentId,item.clockStatus)">
-          <div class="room-details-check" v-if="item.studentId===studentId"  @click="checkRoom($event,index,item)">
+          <div class="room-details-check" v-if="item.studentId===studentId"  @click.stop="checkRoom($event,index,item)">
             <div class="room-details-check-btn background-success" data-index="2">到勤</div>
             <div class="room-details-check-btn background-warning" data-index="3">晚归</div>
             <div class="room-details-check-btn background-danger" data-index="4">未归</div>
@@ -141,7 +141,7 @@ export default {
       beginOrEnd:true,
       checkClockEndTime: "",
       checkClockStartTime: "",
-      detailsState:true,
+      detailsState:false,
     }
   },
   methods: {
@@ -162,6 +162,7 @@ export default {
       if(!this.beginOrEnd){
         timer = setTimeout(function () {
           _this.studentId = data.studentId
+          console.log(data)
         }, 1000)
       }
     },
@@ -200,7 +201,11 @@ export default {
     },
     /*更改考勤状态*/
     changCheckClockStatus(){
-      const date = `${this.date.year}${this.date.month}${this.date.day}`
+      let month = '',
+        day=''
+      Number(this.date.month)<10? month = `0${this.date.month}`:month=this.date.month
+      Number(this.date.day)<10? day = `0${this.date.day}`:day=this.date.day
+      const date = `${this.date.year}${month}${day}`
       this.$http.put(process.env.API_HOST+'student-clock',{
         appType:1,
         id:this.studentId,
@@ -234,12 +239,11 @@ export default {
     },
     checkBegin:function(){
       const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
-      if(nowClockStartTime<this.checkClockStartTime){
-        this.beginCheck = true
-      }else if(this.checkClockStartTime<=nowClockStartTime&&nowClockStartTime<=this.checkClockEndTime){
+      if(nowClockStartTime>this.checkClockStartTime){
         this.beginOrEnd = false
-        this.detailsState = false
-      }else if(nowClockStartTime>this.checkClockEndTime){
+        this.detailsState = true
+        Toast.success('开始查寝')
+      }else{
         this.beginCheck = true
       }
     },

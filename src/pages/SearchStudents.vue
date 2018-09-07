@@ -9,8 +9,8 @@
       <div class="search-submit" @click="searchFun">搜索</div>
     </div>
     <div class="search-result-container">
-      <div class="search-result-list" v-if="resultView" @click="getParams">
-        <div class="result-item" v-for="(item,index) in userList" v-bind:key="index" :data-index="item.studentId">
+      <div class="search-result-list" v-if="resultView">
+        <div class="result-item" v-for="(item,index) in userList" v-bind:key="index" :data-index="item.studentId" @click="getParams($event,item.studentId)">
           <div class="result-name" :data-index="item.studentId">{{item.name}}</div>
           <div class="result-number" :data-index="item.studentId">学号：{{item.code}}</div>
         </div>
@@ -67,16 +67,12 @@ export default {
         console.log(error)
       })
     },
-    getParams: function (e) {
-      if (e.target) {
+    getParams: function (e,studentId) {
        this.$router.push({name:'CheckPersonalInformation',params: {
-            studentId:e.target.dataset.index,
+            studentId:studentId,
             userId:this.userId
           }
-        })
-      } else {
-        return false
-      }
+      })
     }
   }
 }

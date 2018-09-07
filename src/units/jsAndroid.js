@@ -24,7 +24,6 @@ let jsAndroid = {
   position: {
     locationService:function () {
       var d = jsAndroid.jsAndroidCallback()
-      console.log(d)
       jsAndroid.is_android() ? window.jsAndroid.locationService() : window.webkit.messageHandlers.locationService.postMessage('');
       return d
     }
@@ -53,7 +52,7 @@ let jsAndroid = {
 	},
 	//callback回调
 	jsAndroidCallback () {
-		return new Promise((resolve) => {
+		return new Promise((resolve,reject) => {
 			window["receiveMsgFromNative"] = function (msg) {
 				resolve(msg)
 			}
