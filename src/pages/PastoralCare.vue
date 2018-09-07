@@ -85,7 +85,7 @@
       refreshLeft(loaded) {
         this.pageNoLeft++
         const params = {
-          careStatus:2,
+          careStatus:1,
           instructorId:this.instructorId,
           pageNo:this.pageNoLeft,
           pageSize:this.pageSize
@@ -100,7 +100,7 @@
               loaded('done')
             }
             response.data.data.result.forEach(function (item,index) {
-              _this.careListYes.push(item)
+              _this.careListNot.push(item)
             })
             loaded('done')
           })
@@ -126,7 +126,7 @@
               loaded('done')
             }
             response.data.data.result.forEach(function (item,index) {
-              _this.careListNot.push(item)
+              _this.careListYes.push(item)
             })
             loaded('done')
           })
