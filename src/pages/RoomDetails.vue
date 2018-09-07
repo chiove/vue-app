@@ -215,8 +215,7 @@ export default {
         id:studentId,
         operatorName:this.operatorName,
         operatorId:this.userId,
-        status:this.clockStatus,
-        clockDate:date
+        status:this.clockStatus
       }).then(function (res) {
         if(res){
           if(res.data.code==='000000'){
@@ -268,6 +267,7 @@ export default {
         if(res){
           if(res.data.code==='000000'){
             Toast.success('成功')
+            this.$router.go(-1)
           }
         }
       }).catch(function (error) {

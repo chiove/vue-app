@@ -186,7 +186,6 @@
         this.show = true
       },
       confirm:function (data) {
-        console.log(data)
         this.clockStatusText = data
         if(data === '到勤'){
           this.clockStatus = 2
@@ -236,7 +235,6 @@
             operatorId:this.userId,
             remark:this.$refs.remarkDom.value,
             status:this.clockStatus,
-            clockDate:date
           }).then(function (res) {
             if(res){
               if(res.data.code==='000000'){

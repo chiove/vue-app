@@ -80,12 +80,15 @@ export default {
         this.positionText = '已进入签到范围'
         this.positionImg = require('../assets/position-yes.png')
         Toast.success('定位成功');
+        this.ClockPositionState=null
       }else{
-        this.clockStatus = 0
-        this.state.text = '未进入签到范围'
+        this.clockStatus = "定位失败"
+        this.state.text = '禁止打卡'
         this.positionText = '未进入签到范围'
         this.positionImg = require('../assets/position-no.png')
         Toast.fail('定位失败');
+        this.changeStyle()
+        this.ClockPositionState=null
       }
     }
   },
@@ -120,7 +123,7 @@ export default {
         streetnum: "",
         positionText:'',/*提示是否成功*/
         positionImg:require('../assets/position-no.png'),
-        ClockPositionState:false,/*是否在打卡范围内*/
+        ClockPositionState:null,/*是否在打卡范围内*/
         posLatitude:'',
         posLongitude:''
     }
@@ -212,6 +215,12 @@ export default {
         this.state.text = '未归'
         this.checkDataText = '未归'
         this.backgroundColorText = 'rgba(253,85,63,1)'
+      } else{
+        this.backGroundImg = require('../assets/primary.png')
+        this.state.boxShadow = '0px 4px 16px 0px rgba(225,225,225,0.57)'
+        this.state.backgroundColor = '#CBCBCB'
+        this.checkDataText = '未打卡'
+        this.backgroundColorText = '#CBCBCB'
       }
     },
     changeStatus(){
