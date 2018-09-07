@@ -39,7 +39,7 @@ export default {
       data() {
         return {
           datetimePicker:DatetimePicker,
-          currentDate: new Date(maxDate.year,maxDate.month),
+          currentDate: new Date(maxDate.year,maxDate.month-1),
           maxDate:new Date(maxDate.year,maxDate.month),
           displayState:false,
           dateValue:`${maxDate.year}年${maxDate.month}月`,

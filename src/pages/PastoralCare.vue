@@ -51,7 +51,6 @@
           </div>
         </pull-to>
       </div>
-
     </div>
   </div>
 </template>
@@ -86,7 +85,7 @@
       refreshLeft(loaded) {
         this.pageNoLeft++
         const params = {
-          careStatus:1,
+          careStatus:2,
           instructorId:this.instructorId,
           pageNo:this.pageNoLeft,
           pageSize:this.pageSize
@@ -148,9 +147,9 @@
         }).then(function (res) {
           if(res){
             if(careStatus===1){
-              this.careListYes = res.data.data.result
-            }else if(careStatus===2){
               this.careListNot = res.data.data.result
+            }else if(careStatus===2){
+              this.careListYes = res.data.data.result
             }
           }
         }).catch(function (error) {
@@ -213,6 +212,7 @@
 .content-container{
   /*height: 1083px;*/
   padding: 0 30px;
+  overflow: hidden;
   flex: 1;
 }
 .care-item{
