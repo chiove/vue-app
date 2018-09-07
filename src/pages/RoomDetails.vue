@@ -28,7 +28,7 @@
     <div class="room-details-body">
       <div class="room-details-container">
         <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear" @click="viewDetails($event,item.studentId,item.clockStatus)">
-          <div class="room-details-check" v-if="item.studentId===studentId"  @click.stop="checkRoom($event,index,item)">
+          <div class="room-details-check" v-if="item.studentId===studentId" @click.stop="checkRoom($event,index,item)">
             <div class="room-details-check-btn background-success" data-index="2">到勤</div>
             <div class="room-details-check-btn background-warning" data-index="3">晚归</div>
             <div class="room-details-check-btn background-danger" data-index="4">未归</div>
@@ -55,7 +55,7 @@
     </div>
     <div class="room-details-footer">
       <div class="room-details-btn" v-if="beginOrEnd" @click="checkBegin">开始查寝</div>
-      <div class="room-details-btn" v-else="beginOrEnd" @click="checkEnd">结束查寝</div>
+      <div class="room-details-btn" v-else="beginOrEnd" @click="checkEnd" style="background-color: #1670b1">结束查寝</div>
     </div>
     <van-popup
       v-model="beginCheck"
@@ -108,10 +108,13 @@ export default {
     this.getSystemConfig()
   },
   activated:function(){
+
     if(this.$route.params.roomDetails){
       this.roomDetails = this.$route.params.roomDetails
+      this.beginOrEnd = true
     }else{
       this.roomDetails = JSON.parse(localStorage.getItem('rooDetails'))
+      this.beginOrEnd = false
     }
     if(this.$route.params.userId){
       this.userId = this.$route.params.userId
@@ -162,7 +165,6 @@ export default {
       if(!this.beginOrEnd){
         timer = setTimeout(function () {
           _this.studentId = data.studentId
-          console.log(data)
         }, 1000)
       }
     },
@@ -180,11 +182,13 @@ export default {
       }
     },
     checkRoom: function (e, i,data) {
+      const _this =this
+      this.studentId = ''
       if (e.target.dataset.index !== undefined) {
-        this.roomDetailsList[i].clockStatus = Number(e.target.dataset.index)
+      this.roomDetailsList[i].clockStatus = Number(e.target.dataset.index)
         this.clockStatus = Number(e.target.dataset.index)
-        this.roomDetailsList[i].studentId = Number(e.target.dataset.index)
-        this.changCheckClockStatus()/*更改考勤状态*/
+        /*this.roomDetailsList[i].studentId = data.studentId*/
+        this.changCheckClockStatus(this.roomDetailsList[i].studentId)/*更改考勤状态*/
       } else {
         return false
       }
@@ -200,7 +204,7 @@ export default {
       })
     },
     /*更改考勤状态*/
-    changCheckClockStatus(){
+    changCheckClockStatus(studentId){
       let month = '',
         day=''
       Number(this.date.month)<10? month = `0${this.date.month}`:month=this.date.month
@@ -208,7 +212,7 @@ export default {
       const date = `${this.date.year}${month}${day}`
       this.$http.put(process.env.API_HOST+'student-clock',{
         appType:1,
-        id:this.studentId,
+        id:studentId,
         operatorName:this.operatorName,
         operatorId:this.userId,
         status:this.clockStatus,
@@ -239,7 +243,7 @@ export default {
     },
     checkBegin:function(){
       const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
-      if(nowClockStartTime>this.checkClockStartTime){
+      if(nowClockStartTime>this.checkClockStartTime||nowClockStartTime<this.checkClockEndTime){
         this.beginOrEnd = false
         this.detailsState = true
         Toast.success('开始查寝')

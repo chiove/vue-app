@@ -68,7 +68,7 @@ export default {
       })
     },
     getParams: function (e,studentId) {
-       this.$router.push({name:'CheckPersonalInformation',params: {
+       this.$router.push({name:'CheckPersonalInformation',query: {
             studentId:studentId,
             userId:this.userId
           }
