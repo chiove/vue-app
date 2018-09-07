@@ -59,6 +59,9 @@ export default {
     this.getBuildingList()/*查询楼栋*/
     this.getRoomListData()/*查询宿舍列表*/
   },
+  activated:function () {
+    this.getRoomListData()/*查询宿舍列表*/
+  },
   data () {
     return {
       inputState: true,
