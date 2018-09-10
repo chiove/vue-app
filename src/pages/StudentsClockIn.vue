@@ -337,10 +337,16 @@ export default {
       })
     },
     checkPositionRight(x,y){
+      let lnglats=[]
+      new AMap.convertFrom([x,y], 'baidu', function (status, result) {
+        if (result.info === 'ok') {
+          lnglats = result.locations[0]; // Array.<LngLat>
+        }
+      });
       this.$http.get(process.env.API_HOST+'check-position',{
         params:{
-          posLongitude:x,
-          posLatitude:y
+          posLongitude:lnglats.lng,
+          posLatitude:lnglats.lat
         }
       }).then(function (res) {
         this.ClockPositionState = res.data.data

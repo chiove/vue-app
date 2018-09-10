@@ -7982,7 +7982,7 @@ vm-browserify@0.0.4:
 
 vue-amap@^0.5.8:
   version "0.5.8"
-  resolved "http://registry.npm.taobao.org/vue-amap/download/vue-amap-0.5.8.tgz#8d866e39c037b31c85ff7ddc58fcb5aef03c3b6c"
+  resolved "https://registry.yarnpkg.com/vue-amap/-/vue-amap-0.5.8.tgz#8d866e39c037b31c85ff7ddc58fcb5aef03c3b6c"
   dependencies:
     uppercamelcase "^1.1.0"
 

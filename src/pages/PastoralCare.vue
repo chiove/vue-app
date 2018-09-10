@@ -7,7 +7,7 @@
     <div class="content-container">
       <div class="left-container" v-if="tabLeftActive" >
         <pull-to :bottom-load-method="refreshLeft" class="file-lists">
-          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index" @click="careItemFun($event,item.studentId,item.careId)">
+          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index" @click="careItemFun($event,item.studentId,item.careId,'yes')">
             <div class="care-item-left">
               <img class="care-item-img" :src="item.profilePhoto">
             </div>
