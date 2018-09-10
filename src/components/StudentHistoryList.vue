@@ -1,7 +1,7 @@
 <template>
     <div class="history-list" @click="viewDetailsFun">
       <div class="history-icon" :class="classState"></div>
-      <div class="history-text">{{data.year}}年{{data.month}}月{{data.day}}日 {{data.lastUpdateTime}}</div>
+      <div class="history-text">{{data.lastUpdateTime}}</div>
       <div class="history-state" :class="colorState">{{textState}}</div>
       <img class="history-details-img" src="../assets/iconRight.png" >
     </div>

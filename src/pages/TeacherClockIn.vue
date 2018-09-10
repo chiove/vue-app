@@ -39,6 +39,9 @@
   import units from '../units/tools'
   import jsAndroid from '../units/jsAndroid'
   const fullDate = units.getCurrentTime("date")
+  import { Toast } from 'vant'
+  import Vue from 'vue'
+  Vue.use(Toast)
   export default {
     name: "teacher-clock-in",
     mounted:function(){
@@ -98,6 +101,7 @@
                 }).then(function (res) {
                   if(res.data.code==='000000'){
                     _this.clockTeacherStatus = 2
+                    Toast.success('打卡成功');
                   }
               }).catch(function (error) {
                 console.log(error)

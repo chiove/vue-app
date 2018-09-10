@@ -71,26 +71,27 @@ export default {
     this.changeStatus()
     this.changeStyle()
   },
+  activated:function(){
+    setTimeout(this.rePositionFun(),3000)
+  },
   watch:{
     clockStatus:function (val) {
       this.changeStyle(val)
     },
-    ClockPositionState:function (val) {
+    /*ClockPositionState:function (val) {
       if(val){
         this.positionText = '已进入签到范围'
         this.positionImg = require('../assets/position-yes.png')
         Toast.success('定位成功');
-        this.ClockPositionState=null
       }else{
-        this.clockStatus = "定位失败"
+        this.clockStatus = "未在范围内"
         this.state.text = '禁止打卡'
         this.positionText = '未进入签到范围'
         this.positionImg = require('../assets/position-no.png')
         Toast.fail('定位未在范围内');
         this.changeStyle()
-        this.ClockPositionState=null
       }
-    }
+    }*/
   },
   data () {
     return {
@@ -247,7 +248,8 @@ export default {
           }).then(function (res) {
             if(res){
               if(res.data.code === "000000"){
-                this.clockStatus = 2
+                _this.clockStatus = 2
+                Toast.success('打卡成功');
               }else if(res.data.code === "00005"){
                 this.$router.push({
                   path:'/NotClockIn'
@@ -256,6 +258,8 @@ export default {
                 this.$router.push({
                   path:'/UnitException'
                 })
+              }else if(res.data.code === "000013"){
+                Toast.fail(res.data.message);
               }
             }
           }).catch(function (error) {
@@ -287,20 +291,22 @@ export default {
         return jsAndroid.device.getIdfv()
       }).then(function (res) {
         _this.deviceId = res
-        _this.$http.get(process.env.API_HOST+ '/check-device',{
-          params:{
-            studentId:_this.studentId,
-            deviceId:res
-          }
-        }).then(function (res) {
-          if(res){
-           if(res.data.data===false){
-             _this.$router.push({
-               path:'/UnitException'
-             })
-           }
-          }
-        })
+        if(checkDevice==1){
+          _this.$http.get(process.env.API_HOST+ '/check-device',{
+            params:{
+              studentId:_this.studentId,
+              deviceId:res
+            }
+          }).then(function (res) {
+            if(res){
+              if(res.data.data===false){
+                _this.$router.push({
+                  path:'/UnitException'
+                })
+              }
+            }
+          })
+        }
       })
     },
     /*判断几日是否为打卡日期*/
@@ -337,22 +343,34 @@ export default {
       })
     },
     checkPositionRight(x,y){
-      let lnglats=[]
+      const _this = this
       new AMap.convertFrom([x,y], 'baidu', function (status, result) {
         if (result.info === 'ok') {
-          lnglats = result.locations[0]; // Array.<LngLat>
+          const lnglats = result.locations; // Array.<LngLat>
+          _this.$http.get(process.env.API_HOST+'check-position',{
+            params:{
+              posLongitude:lnglats[0].lng,
+              posLatitude:lnglats[0].lat
+            }
+          }).then(function (res) {
+            if(res.data.data){
+              _this.positionText = '已进入签到范围'
+              _this.positionImg = require('../assets/position-yes.png')
+              Toast.success('定位成功');
+            }else{
+              _this.clockStatus = "未在范围内"
+              _this.state.text = '禁止打卡'
+              _this.positionText = '未进入签到范围'
+              _this.positionImg = require('../assets/position-no.png')
+              Toast.fail('定位未在范围内');
+              _this.changeStyle()
+            }
+            _this.ClockPositionState = res.data.data
+          }).catch(function (error){
+            console.log(error)
+          })
         }
       });
-      this.$http.get(process.env.API_HOST+'check-position',{
-        params:{
-          posLongitude:lnglats.lng,
-          posLatitude:lnglats.lat
-        }
-      }).then(function (res) {
-        this.ClockPositionState = res.data.data
-      }).catch(function (error){
-        console.log(error)
-      })
     },
   }
 }
@@ -407,7 +425,7 @@ export default {
   }
   .sign-img-container{
     height: 22px;
-    margin-top: 10px;
+    margin-right: 10px;
   }
   .sign-img{
     display: block;

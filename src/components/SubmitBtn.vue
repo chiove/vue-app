@@ -34,6 +34,7 @@ export default {
   methods: {
     submitAlert: function () {
       this.show = true
+      this.$refs.feedBackValue.value=''
     },
     cancel: function () {
       this.show = false
@@ -41,6 +42,9 @@ export default {
     },
     confirm: function () {
       const remark = this.$refs.feedBackValue.value
+      if(remark.length===0){
+        Toast.fail('反馈结果不能为空');
+      }
       this.$http.put(process.env.API_HOST+`care?careId=${this.data}&remark=${remark}`).then(function (res) {
         if(res){
           if(res.data.code==='000000'){
