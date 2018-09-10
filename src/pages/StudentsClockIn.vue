@@ -72,6 +72,7 @@ export default {
     this.changeStyle()
   },
   activated:function(){
+    this.checkClockOrNotClock()/*是否是打卡日*/
     setTimeout(this.rePositionFun(),3000)
   },
   watch:{
