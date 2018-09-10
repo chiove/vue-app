@@ -13,7 +13,7 @@
         <div class="sign-in-time">{{sign.timeNow}}</div>
       </div>
       <div class="sign-location">
-        <img class="sign-img" :src="positionImg"/>
+        <div class="sign-img-container"><img class="sign-img" :src="positionImg"/></div>
         <span class="sign-location-text">{{positionText}}：{{city}}{{district}}{{street}}{{streetnum}}</span>
         <span class="sign-location-btn" @click="rePositionFun">重新定位</span>
       </div>
@@ -86,7 +86,7 @@ export default {
         this.state.text = '禁止打卡'
         this.positionText = '未进入签到范围'
         this.positionImg = require('../assets/position-no.png')
-        Toast.fail('定位失败');
+        Toast.fail('定位未在范围内');
         this.changeStyle()
         this.ClockPositionState=null
       }
@@ -272,14 +272,18 @@ export default {
     rePositionFun(){
       const _this = this
       jsAndroid.position.locationService().then(function (res) {
-            const data = JSON.parse(res)
-            _this.latitude = data.latitude
-            _this.longitude = data.longitude
-            _this.city = data.city
-            _this.district = data.district
-            _this.street = data.street
-            _this.streetnum = data.streetnum
-            _this.checkPositionRight(data.longitude,data.latitude)
+        if(res){
+          const data = JSON.parse(res)
+          _this.latitude = data.latitude
+          _this.longitude = data.longitude
+          _this.city = data.city
+          _this.district = data.district
+          _this.street = data.street
+          _this.streetnum = data.streetnum
+          _this.checkPositionRight(data.longitude,data.latitude)
+        }else{
+          Toast.fail('定位失败');
+        }
         return jsAndroid.device.getIdfv()
       }).then(function (res) {
         _this.deviceId = res
@@ -378,10 +382,7 @@ export default {
     border-radius: 100%;
     text-align: center;
     overflow: hidden;
-    position: absolute;
-    top: 218px;
-    left: 50%;
-    margin-left: -132px;
+    margin: 220px auto 50px auto;
   }
   .sign-in-text{
     margin-top: 102px;
@@ -393,18 +394,19 @@ export default {
   .sign-location{
     color: #555555;
     font-size: 24px;
-    position: absolute;
-    bottom: 122px;
-    left: 50%;
-    margin-left: -248px;
     white-space: nowrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .sign-img-container{
+    height: 22px;
+    margin-top: 10px;
   }
   .sign-img{
-    display: inline-block;
+    display: block;
     height: 22px;
     width: 22px;
-    position: relative;
-    top: -4px;
   }
   .sign-location-text{
     display: inline-block;
