@@ -5,7 +5,7 @@
     <div class="history-details-container">
       <history-list v-for="(item,index) in historyListData" v-bind:key="index" :studentId="pageData.studentId" :data="item"></history-list>
     </div>
-    <submit-btn :data="pageData.studentId" v-if="careState"></submit-btn>
+    <submit-btn :data="pageData.careId" v-if="careState"></submit-btn>
   </div>
 </template>
 
@@ -19,12 +19,14 @@ export default {
   name: 'teacher-submit',
   mounted:function(){
     this.pageData.studentId = localStorage.getItem('careStudentId')
+    this.pageData.careId = localStorage.getItem('careId')
      localStorage.getItem('careState')==='no'?this.careState =false: this.careState = true
     this.getStudentsInfo()/*获取学生信息*/
     this.getClockTimes() /*获取晚归，到勤，未归*/
   },
   activated(){
     this.pageData.studentId = localStorage.getItem('careStudentId')
+    this.pageData.careId = localStorage.getItem('careId')
     localStorage.getItem('careState')==='no'?this.careState =false: this.careState = true
     this.getStudentsInfo()/*获取学生信息*/
     this.getClockTimes() /*获取晚归，到勤，未归*/
@@ -35,7 +37,8 @@ export default {
       historyListData:[],
       careState:'',
       pageData:{
-        studentId:1,
+        careId:'',
+        studentId:'',
         profilePhoto:'',
         studentName:'',
         classNames:'',

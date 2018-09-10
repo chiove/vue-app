@@ -7,7 +7,7 @@
     <div class="content-container">
       <div class="left-container" v-if="tabLeftActive" >
         <pull-to :bottom-load-method="refreshLeft" class="file-lists">
-          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index" @click="careItemFun($event,item.studentId)">
+          <div class="care-item" v-for="(item,index) in careListNot" v-bind:key="index" @click="careItemFun($event,item.studentId,item.careId)">
             <div class="care-item-left">
               <img class="care-item-img" :src="item.profilePhoto">
             </div>
@@ -30,7 +30,7 @@
       </div>
       <div class="right-container" v-if="tabRightActive">
         <pull-to :bottom-load-method="refreshRight" class="file-lists">
-          <div class="care-item" v-for="(item,index) in careListYes" v-bind:key="index" @click="careItemFun($event,item.studentId,'no')">
+          <div class="care-item" v-for="(item,index) in careListYes" v-bind:key="index" @click="careItemFun($event,item.studentId,item.careId,'no')">
             <div class="care-item-left">
               <img class="care-item-img" :src="item.profilePhoto">
             </div>
@@ -168,9 +168,10 @@
           this.tabRightActive = true
         }
       },
-      careItemFun:function (e,studentId,boolean) {
+      careItemFun:function (e,studentId,careId,boolean) {
         localStorage.setItem('careState',boolean)
         localStorage.setItem('careStudentId',studentId)
+        localStorage.setItem('careId',careId)
         this.$router.push({
           name:'TeacherSubmit',
         })
