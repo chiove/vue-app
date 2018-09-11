@@ -43,7 +43,7 @@ export default {
     return {
       resultView: false,
       userList:[],
-      userId:100725
+      userId:''
     }
   },
   methods: {

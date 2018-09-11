@@ -48,7 +48,7 @@ export default {
   },
   data(){
     return {
-      userId:0,/*用户id*/
+      userId:'',/*用户id*/
       clockStatus:0,/*查勤状态*/
       weekNumber:0,/*当前周数*/
       studentsNumber:0,/*人数*/

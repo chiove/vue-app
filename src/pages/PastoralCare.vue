@@ -81,7 +81,7 @@
         tabLeftActive: true,
         tabRightActive: false,
         careStatus:1,
-        instructorId:100725,
+        instructorId:'',
         pageNoLeft:1,
         pageNoRight:1,
         pageSize:10,

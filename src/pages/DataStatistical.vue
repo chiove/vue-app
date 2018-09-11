@@ -24,13 +24,20 @@ export default {
     this.getStudentsInfo(this.pageData.studentId)/*获取学生信息*/
     this.getClockTimes(this.pageData.studentId) /*获取晚归，到勤，未归*/
   },
+  watch:{
+    timeState:function (val) {
+      if(val){
+        this.getHistoryList()/*根据学生ID和日期查询全部历史*/
+      }
+    }
+  },
   data() {
     return {
       pageName:"StatisticalData",
       selectDateSearch:{},
       historyListData:[],
       pageData:{
-        studentId: 201760230413,/*学生ID*/
+        studentId: '',/*学生ID*/
         profilePhoto:'',/*头像地址*/
         studentName:'',/*学生姓名*/
         classNames:'',/*班级*/
@@ -43,13 +50,15 @@ export default {
         totalStayOutLate:'',/*晚归总数*/
         totalClock:'',/*到勤总数*/
         totalStayOut:'',/*未归总数*/
-      }
+      },
+      timeState:false,/*初始化获取时间监听状态*/
     }
   },
   methods:{
     selectDate:function (data) {
       this.selectDateSearch = data
       this.getHistoryList()/*根据学生ID和日期查询全部历史*/
+      this.timeState = true
     },
     /*获取学生信息*/
     getStudentsInfo(studentId){

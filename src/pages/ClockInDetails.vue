@@ -101,9 +101,7 @@ export default {
   },
   methods:{
     getDayHistoryList(){
-      this.arrivedList = []
-      this.stayOutLateList = []
-      this.stayOutList = []
+
       this.$http.get(process.env.API_HOST+'student-clock-history',{
         params:{
           studentId:this.studentId,
@@ -112,6 +110,9 @@ export default {
       }).then(function (res) {
         if(res){
           const _this = this
+          _this.arrivedList = []
+          _this.stayOutLateList = []
+          _this.stayOutList = []
          res.data.data.forEach(function (item,index) {
             if(item.clockStatus === 2){
               _this.arrivedList.push(item)

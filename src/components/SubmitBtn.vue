@@ -44,6 +44,7 @@ export default {
       const remark = this.$refs.feedBackValue.value
       if(remark.length===0){
         Toast.fail('反馈结果不能为空');
+        return
       }
       this.$http.put(process.env.API_HOST+`care?careId=${this.data}&remark=${remark}`).then(function (res) {
         if(res){
