@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="search-container">
+    <div class="search-container" :style="{backgroundImage:`url(${backGroundImg})`}">
       <div class="search-select-container" v-if="checkActive" @click="getSearchValue($event,'check')">
         <div :class="{'list-item':true,'color-primary':colorState===item.text}" v-for="(item,index) in checkData" :data-index="JSON.stringify(item)" >{{item.text}}</div>
       </div>
@@ -36,7 +36,7 @@
       <div class="search-select-container" v-if="dormitoryActive">
         <dormitory-select :data="buildingList" @sendParams="listenParamsEvent"></dormitory-select>
       </div>
-      <div class="search-result-list">
+      <div class="search-result-list" v-if="listState">
         <check-room-list v-for="(item,index) in roomListData" v-bind:key="index" :data="item" :userId="userId"></check-room-list>
       </div>
     </div>
@@ -48,6 +48,10 @@
 import teacherCheckTab from '../components/TeacherCheckTab'
 import dormitorySelect from '../components/DormitorySelect'
 import checkRoomList from '../components/CheckRoomList'
+import units from '../units/tools'
+import { Toast } from 'vant';
+import Vue from 'vue'
+Vue.use(Toast)
 export default {
   components: {teacherCheckTab, dormitorySelect, checkRoomList},
   name: 'check-dormitory',
@@ -57,10 +61,10 @@ export default {
       localStorage.setItem('checkDormitoryUserId',this.$route.query.userid)
     }
     this.getBuildingList()/*查询楼栋*/
-    this.getRoomListData()/*查询宿舍列表*/
+    this.checkTimeArrivedFun()
   },
   activated:function () {
-    this.getRoomListData()/*查询宿舍列表*/
+    this.checkTimeArrivedFun()
   },
   data () {
     return {
@@ -69,6 +73,8 @@ export default {
       numberIcon: require('../assets/numberSelect.png'),
       selectIconActive: require('../assets/selectDownActive.png'),
       numberIconActive: require('../assets/numberSelectActive.png'),
+      backGroundImg: require('../assets/timeNotArrived.png'),
+      listState:true,
       dormitoryTitle: '宿舍选择',
       checkTitle: '查寝状态',
       sortTitle: '考勤状态',
@@ -77,7 +83,7 @@ export default {
       sortActive: false,
       checkActive: false,
       roomSortActive:false,
-      userId:100725,
+      userId:'',
       buildingId:1,/*楼栋ID*/
       floorNumber:'',/*楼层*/
       dormitoryId:'',/*宿舍ID*/
@@ -85,6 +91,8 @@ export default {
       descOrAsc:'',/*宿舍号升序降序 asc升序，desc降序*/
       checkStatus:null,
       colorState:'',
+      checkClockEndTime:'',
+      checkClockStartTime:'',
       checkData: [
         {
           id:'',
@@ -131,6 +139,18 @@ export default {
     }
   },
   methods: {
+    /*获取系统配置*/
+    getSystemConfig:function () {
+      this.$http.get(process.env.API_HOST+'system-config').then(function (res) {
+        if(res){
+          const data = res.data.data
+          this.checkClockEndTime =  data.checkClockEndTime.substring(0,5)
+          this.checkClockStartTime =  data.checkClockStartTime.substring(0,5)
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },
     inputContent: function () {
       this.$router.push({
         name: 'SearchStudents',
@@ -227,11 +247,33 @@ export default {
         }
       }).then(function (res) {
         if(res){
-            this.roomListData = res.data.data
+            if(res.data.data.length===0){
+              Toast.fail('未查询到的数据');
+              this.listState = false
+              this.backGroundImg = require('../assets/timeNotArrived.png')
+              this.roomListData = res.data.data
+            }else{
+              this.listState = true
+              this.backGroundImg = null
+              this.roomListData = res.data.data
+            }
+
         }
       }).catch(function (error) {
         console.log(error)
       })
+    },
+    checkTimeArrivedFun:function(){
+      const nowClockStartTime = units.getCurrentTime('hour').substring(0,5)
+      if(nowClockStartTime>this.checkClockStartTime||nowClockStartTime<this.checkClockEndTime){
+        this.listState = true
+        this.backGroundImg = null
+        this.getRoomListData() /*查询宿舍列表*/
+      }else{
+        this.listState = false
+        this.backGroundImg = require('../assets/timeNotArrived.png')
+        Toast.fail('查寝时间未到');
+      }
     },
   }
 }
@@ -327,6 +369,9 @@ export default {
     overflow-y: auto;
     position: relative;
     flex: 1;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 60%;
   }
   .search-select-container{
     position: fixed;

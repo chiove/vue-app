@@ -64,7 +64,7 @@
     data(){
       return {
         historyListData:[],
-        studentId:0,/*学生ID*/
+        studentId:'',/*学生ID*/
         weekNumber:1,/*当前周数*/
         profilePhoto:'',/*头像地址*/
         studentName:'',/*学生姓名*/

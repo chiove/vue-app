@@ -68,7 +68,12 @@
           const studentId = JSON.parse(e.target.dataset.index).studentId
           localStorage.setItem('studentId',studentId)
           this.$router.push({
-            name:'WeekPersonalInformation',
+            name:'DailyPersonalInformation',
+            query:{
+              studentId:studentId,
+              userId:this.userId,
+              clockStatus:this.clockStatus
+            }
           })
         }
       },

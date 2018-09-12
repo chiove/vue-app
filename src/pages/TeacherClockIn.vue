@@ -80,7 +80,7 @@
         },
         checkDataText:'',
         backgroundColorText:'',
-        instructorId:100725,
+        instructorId:'',
         clockTeacherStatus:'',/*考勤状态*/
         clockStateCode:'',
         totalClockCount:0,

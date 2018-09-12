@@ -96,6 +96,13 @@ export default {
       this.userId = localStorage.getItem('checkDormitoryUserId')
     }
   },
+  watch:{
+    timeState:function (val) {
+      if(val){
+        this.dailySearch()
+      }
+    }
+  },
   data () {
     this.chartSettings = {
       radius: [40, 80],
@@ -115,7 +122,7 @@ export default {
       needClockNumber:0, /*应打卡人数*/
       lateNumber:0,/*晚归人数*/
       notNumber:0,/*未归人数*/
-      userId:100725,/*用户id*/
+      userId:'',/*用户id*/
       clockStatus:0,/*打卡状态*/
       weekList:[],/*周列表*/
       year:'',
@@ -129,7 +136,8 @@ export default {
           { '状态': '晚归', '人数': 0 },
           { '状态': '未归', '人数': 0 }
         ]
-      }
+      },
+      timeState:false
     }
   },
   methods: {
@@ -167,6 +175,7 @@ export default {
       this.month = data.month
       this.day = data.day
       this.dailySearch()
+      this.timeState = true
     },
     /*图表查询*/
     dailySearch:function () {

@@ -72,8 +72,13 @@ export default {
     this.changeStyle()
   },
   activated:function(){
+    /*获取id*/
+    if(this.$route.query.userid){
+      this.studentId = this.$route.query.userid
+      localStorage.setItem('studentClockUserId',this.$route.query.userid)
+    }
     this.checkClockOrNotClock()/*是否是打卡日*/
-    setTimeout(this.rePositionFun(),3000)
+    this.getStudentsClocktimes(this.studentId)/*获取总打卡次数*/
   },
   watch:{
     clockStatus:function (val) {

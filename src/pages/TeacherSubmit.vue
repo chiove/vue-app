@@ -31,6 +31,13 @@ export default {
     this.getStudentsInfo()/*获取学生信息*/
     this.getClockTimes() /*获取晚归，到勤，未归*/
   },
+  watch:{
+    timeState:function (val) {
+      if(val){
+        this.getHistoryList()/*根据学生ID和日期查询全部历史*/
+      }
+    }
+  },
   data: function () {
     return {
       selectDateSearch:{},
@@ -51,12 +58,14 @@ export default {
         totalStayOutLate:'',
         totalClock:'',
         totalStayOut:'',
-      }
+      },
+      timeState:false
     }
   },
   methods:{
     selectDate:function (data) {
       this.selectDateSearch = data
+      this.timeState = true
       this.getHistoryList()/*根据学生ID和日期查询全部历史*/
     },
     /*获取学生信息*/

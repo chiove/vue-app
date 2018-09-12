@@ -17,6 +17,7 @@ import CheckPersonalInformation from '@/pages/CheckPersonalInformation'/* 查寝
 import WeekPersonalInformation from '@/pages/WeekPersonalInformation'/* 周统计个人信息 */
 import LateBackList from '@/pages/LateBackList'/* 晚归列表 */
 import DayLateBackList from '@/pages/DayLateBackList'/* 晚归列表 */
+import DailyPersonalInformation from '@/pages/DailyPersonalInformation'/* 日个人信息 */
 import router from '@/pages/router'/* 路由 */
 Vue.use(Router)
 
@@ -111,6 +112,11 @@ export default new Router({
       path: '/weekPersonalInformation',
       name: 'WeekPersonalInformation',
       component: WeekPersonalInformation
+    },
+    {
+      path: '/dailyPersonalInformation',
+      name: 'DailyPersonalInformation',
+      component: DailyPersonalInformation
     }
   ]
 })
