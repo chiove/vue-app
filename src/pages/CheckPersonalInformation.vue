@@ -227,6 +227,10 @@
         Number(this.date.month)<10? month = `0${this.date.month}`:month=this.date.month
         Number(this.date.day)<10? day = `0${this.date.day}`:day=this.date.day
         const date = `${this.date.year}${month}${day}`
+        if(this.clockStatus===undefined){
+          Toast.fail('未修改考勤状态')
+          return
+        }
         if(this.$refs.remarkDom.value.length<=30){
           this.$http.put(process.env.API_HOST+'student-clock',{
             appType:1,
@@ -239,6 +243,8 @@
             if(res){
               if(res.data.code==='000000'){
                 Toast.success('提交成功')
+              }else{
+                Toast.fail(res.data.message)
               }
             }
           }).catch(function (error) {

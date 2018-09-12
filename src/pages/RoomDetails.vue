@@ -173,12 +173,14 @@ export default {
     },
     viewDetails:function(e,studentId,clockStatus){
       if(this.detailsState){
-        this.$router.push({name:'CheckPersonalInformation',query: {
-            studentId:studentId,
-            userId:this.userId,
-            clockStatus:clockStatus
-          }
-        })
+        if(!this.roomDetails.hasChecked){
+          this.$router.push({name:'CheckPersonalInformation',query: {
+              studentId:studentId,
+              userId:this.userId,
+              clockStatus:clockStatus
+            }
+          })
+        }
       }
     },
     checkRoom: function (e, i,data) {
@@ -382,6 +384,7 @@ export default {
     display: flex;
     justify-content: center;
     flex-flow:wrap column;
+    z-index: 99;
   }
   .room-details-check-btn{
     width:194px;

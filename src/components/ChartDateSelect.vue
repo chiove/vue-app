@@ -30,7 +30,7 @@ export default {
     const selectDate = {
       year: fullDate.year,
       month: fullDate.month,
-      day:fullDate.day
+      day:fullDate.day-1
     }
     this.$emit('selectDateChart', selectDate)
   },
@@ -39,7 +39,7 @@ export default {
       currentDate: new Date(),
       maxDate: new Date(),
       displayState: false,
-      dateValue: `${fullDate.year}年${fullDate.month}月${fullDate.day}日`
+      dateValue: `${fullDate.year}年${fullDate.month}月${fullDate.day-1}日`
     }
   },
   methods: {

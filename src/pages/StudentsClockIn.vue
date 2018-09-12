@@ -255,7 +255,6 @@ export default {
             if(res){
               if(res.data.code === "000000"){
                 Toast.success('打卡成功');
-                this.getStudentsClocktimes(_this.studentId)/*获取总打卡次数*/
                 _this.clockStatus = 2
               }else if(res.data.code === "00005"){
                 this.$router.push({
