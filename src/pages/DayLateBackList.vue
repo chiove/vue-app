@@ -9,7 +9,6 @@
         <div class="late-back-list-item" v-for="(item,index) in studentsList" v-bind:key="index" :data-index="JSON.stringify(item)">
           <div>{{item.studentName}}</div>
           <div>
-            <span class="late-back-list-times">{{item.count}}次</span>
             <img class="late-back-list-icon" src="../assets/selectRight.png" alt="">
           </div>
         </div>
