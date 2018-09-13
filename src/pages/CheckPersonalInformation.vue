@@ -231,6 +231,10 @@
           Toast.fail('未修改考勤状态')
           return
         }
+        if(this.$refs.remarkDom.value.length===0){
+          Toast.fail('备注不能为空')
+          return
+        }
         if(this.$refs.remarkDom.value.length<=30){
           this.$http.put(process.env.API_HOST+'student-clock',{
             appType:1,

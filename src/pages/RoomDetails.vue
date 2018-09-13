@@ -27,7 +27,8 @@
     </div>
     <div class="room-details-body">
       <div class="room-details-container">
-        <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear" @click="viewDetails($event,item.studentId,item.clockStatus)">
+        <!--@click="viewDetails($event,item.studentId,item.clockStatus)"-->
+        <div class="room-details-item" v-for="(item,index) in roomDetailsList" @touchstart="checkState($event,index,item)" v-bind:key="index" @touchend="checkClear">
           <div class="room-details-check" v-if="item.studentId===studentId" @click.stop="checkRoom($event,index,item)">
             <div class="room-details-check-btn background-success" data-index="2">到勤</div>
             <div class="room-details-check-btn background-warning" data-index="3">晚归</div>
@@ -165,7 +166,7 @@ export default {
       if(!this.beginOrEnd){
         timer = setTimeout(function () {
           _this.studentId = data.studentId
-        }, 1000)
+        }, 800)
       }
     },
     checkClear: function () {
