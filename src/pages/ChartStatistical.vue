@@ -88,8 +88,7 @@ export default {
     if(localStorage.getItem('checkDormitoryUserId')){
       this.userId = localStorage.getItem('checkDormitoryUserId')
     }
-    /*初始化查询周统计*/
-   this.weekSearch()
+    this.getCurrentWeek()
   },
   activated:function(){
     if(localStorage.getItem('checkDormitoryUserId')){
@@ -101,6 +100,10 @@ export default {
       if(val){
         this.dailySearch()
       }
+    },
+    week:function (val) {
+      /*初始化查询周统计*/
+      this.weekSearch()
     }
   },
   data () {
@@ -286,6 +289,19 @@ export default {
         name:'DayLateBackList',
       })
     },
+    /*获取当前周*/
+    getCurrentWeek(){
+      const _this = this
+      this.$http.get(process.env.API_HOST+'select-data/curr-week').then(function (res) {
+        if(res){
+          if(res.data.code==='000000'){
+            _this.week = res.data.data
+          }
+        }
+      }).catch(function (error) {
+        console.log(error)
+      })
+    }
   }
 }
 </script>
