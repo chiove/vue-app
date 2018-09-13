@@ -235,7 +235,7 @@
           Toast.fail('备注不能为空')
           return
         }
-        if(this.$refs.remarkDom.value.length<=30){
+        if(this.$refs.remarkDom.value.length<31){
           this.$http.put(process.env.API_HOST+'student-clock',{
             appType:1,
             id:this.studentId,
