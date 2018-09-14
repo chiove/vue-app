@@ -91,6 +91,7 @@
       this.studentId = this.$route.query.studentId
       this.userId = this.$route.query.userId
       this.clockStatus = this.$route.query.clockStatus
+      this.getClockstatus()
       if(this.clockStatus==1){
         this.clockStatusText = '未打卡'
       }else if(this.clockStatus==2){
@@ -108,6 +109,7 @@
       this.studentId = this.$route.query.studentId
       this.userId = this.$route.query.userId
       this.clockStatus = this.$route.query.clockStatus
+      this.getClockstatus()
       if(this.clockStatus==1){
         this.clockStatusText = '未打卡'
       }else if(this.clockStatus==2){
@@ -263,6 +265,21 @@
       },
       valueChangeFun(){
         this.textNumber = this.$refs.remarkDom.value.length
+      },
+      /*获取打卡状态*/
+      getClockstatus(){
+        const _this = this
+        this.$axios.get(process.env.API_HOST+'student-clock-status',{
+          params:{
+            studentId:this.studentId
+          }
+        }).then(function (res) {
+          if(res){
+            _this.clockStatus = res.data.data
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
       }
     }
   }

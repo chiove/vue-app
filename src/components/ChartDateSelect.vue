@@ -11,6 +11,7 @@
         @cancel="cancel"
         @confirm="confirm"
         :max-date="maxDate"
+        :min-date="minDate"
         :formatter="formatter"
       />
     </div>
@@ -38,6 +39,7 @@ export default {
     return {
       currentDate: new Date(),
       maxDate: new Date(),
+      minDate: new Date('2018','00','01'),
       displayState: false,
       dateValue: `${fullDate.year}年${fullDate.month}月${fullDate.day-1}日`
     }
