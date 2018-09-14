@@ -86,21 +86,25 @@
   export default {
     components:{Popup,Picker},
     name: "personal-information",
+    watch:{
+      clockStatus:function (val) {
+        if(val==1){
+          this.clockStatusText = '未打卡'
+        }else if(val==2){
+          this.clockStatusText = '到勤'
+        }else if(val==3){
+          this.clockStatusText = '晚归'
+        }else if(val==4){
+          this.clockStatusText = '未归'
+        }
+      }
+    },
     mounted(){
       this.getSystemConfig()
       this.studentId = this.$route.query.studentId
       this.userId = this.$route.query.userId
       this.clockStatus = this.$route.query.clockStatus
-      this.getClockstatus()
-      if(this.clockStatus==1){
-        this.clockStatusText = '未打卡'
-      }else if(this.clockStatus==2){
-        this.clockStatusText = '到勤'
-      }else if(this.clockStatus==3){
-        this.clockStatusText = '晚归'
-      }else if(this.clockStatus==4){
-        this.clockStatusText = '未归'
-      }
+      this.getClockStatus()
       this.getStudentsInfo(this.studentId)/*获取学生信息*/
       this.getUserInfo()/*获取用户信息*/
     },
@@ -109,16 +113,7 @@
       this.studentId = this.$route.query.studentId
       this.userId = this.$route.query.userId
       this.clockStatus = this.$route.query.clockStatus
-      this.getClockstatus()
-      if(this.clockStatus==1){
-        this.clockStatusText = '未打卡'
-      }else if(this.clockStatus==2){
-        this.clockStatusText = '到勤'
-      }else if(this.clockStatus==3){
-        this.clockStatusText = '晚归'
-      }else if(this.clockStatus==4){
-        this.clockStatusText = '未归'
-      }
+      this.getClockStatus()
       this.getStudentsInfo(this.studentId)/*获取学生信息*/
       this.$refs.remarkDom.value = ''
     },
@@ -267,15 +262,14 @@
         this.textNumber = this.$refs.remarkDom.value.length
       },
       /*获取打卡状态*/
-      getClockstatus(){
-        const _this = this
-        this.$axios.get(process.env.API_HOST+'student-clock-status',{
+      getClockStatus(){
+        this.$http.get(process.env.API_HOST+'student-clock-status',{
           params:{
             studentId:this.studentId
           }
         }).then(function (res) {
           if(res){
-            _this.clockStatus = res.data.data
+            this.clockStatus = res.data.data
           }
         }).catch(function (error) {
           console.log(error)
