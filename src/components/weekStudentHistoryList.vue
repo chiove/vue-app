@@ -13,15 +13,15 @@
     name: "weekStudentHistoryList",
     props:['data','studentId'],
     mounted:function () {
-      if(this.data.clockStatus===2){
+      if(this.data.clockStatus==2){
         this.classState = 'icon-success'
         this.colorState = 'color-success'
         this.textState = '到勤'
-      }else if(this.data.clockStatus===3){
+      }else if(this.data.clockStatus==3){
         this.classState = 'icon-warning'
         this.colorState = 'color-warning'
         this.textState = '晚归'
-      }else if(this.data.clockStatus===4){
+      }else if(this.data.clockStatus==4){
         this.classState = 'icon-danger'
         this.colorState = 'color-danger'
         this.textState = '未归'

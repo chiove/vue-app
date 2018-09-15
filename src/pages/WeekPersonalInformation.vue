@@ -46,7 +46,7 @@
     name: "week-personal-information",
     mounted:function(){
       this.weekNumber = localStorage.getItem('weekNumber')
-      this.studentId = localStorage.getItem('studentId')
+      this.studentId = localStorage.getItem('weekStudentId')
       /*获取学生信息*/
       this.getStudentsInfo()
       /*根据学生ID和日期查询全部历史*/
@@ -55,7 +55,7 @@
     activated:function(){
       /*接受路由传参*/
       this.weekNumber = localStorage.getItem('weekNumber')
-      this.studentId = localStorage.getItem('studentId')
+      this.studentId = localStorage.getItem('weekStudentId')
       /*获取学生信息*/
       this.getStudentsInfo()
       /*根据学生ID和日期查询全部历史*/

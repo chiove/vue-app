@@ -6,7 +6,7 @@
         <span>{{clockStatusText}}{{studentsNumber}}人</span>
       </div>
       <div class="late-back-list" @click="studentDetailsFun">
-        <div class="late-back-list-item" v-for="(item,index) in studentsList" v-bind:key="index" :data-index="JSON.stringify(item)">
+        <div class="late-back-list-item" v-for="(item,index) in studentsList" v-bind:key="item.studentId" :data-index="JSON.stringify(item)">
           <div>{{item.studentName}}</div>
           <div>
             <span class="late-back-list-times">{{item.count}}次</span>
@@ -63,7 +63,7 @@ export default {
     studentDetailsFun:function (e) {
       if(e.target.dataset.index){
         const studentId = JSON.parse(e.target.dataset.index).studentId
-        localStorage.setItem('studentId',studentId)
+        localStorage.setItem('weekStudentId',studentId)
         this.$router.push({
           name:'WeekPersonalInformation',
         })
@@ -103,7 +103,7 @@ export default {
   color:rgba(153,153,153,1);
 }
 .late-back-list{
-  height: 100%;
+  height: calc(100% - 120px);
   overflow-y: auto;
 }
 .late-back-list-title-left{

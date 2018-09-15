@@ -115,7 +115,7 @@
     color:rgba(153,153,153,1);
   }
   .late-back-list{
-    height: 100%;
+    height: calc(100% - 120px);
     overflow-y: auto;
   }
   .late-back-list-title-left{
