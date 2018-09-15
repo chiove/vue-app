@@ -103,6 +103,9 @@ export default {
     },
     week:function (val) {
       /*初始化查询周统计*/
+      if(val===null){
+        this.week = 1
+      }
       this.weekSearch()
     }
   },
