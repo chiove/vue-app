@@ -246,6 +246,9 @@ export default {
       localStorage.setItem('stayOutLateNumber',_this.lateNumber)
       this.$router.push({
         name:'LateBackList',
+        query:{
+          listName:'晚归列表'
+        }
       })
     },
     /*打开未归详细页面*/
@@ -257,6 +260,9 @@ export default {
       localStorage.setItem('stayOutNumber',_this.notNumber)
       this.$router.push({
         name:'LateBackList',
+        query:{
+          listName:'未归列表'
+        }
       })
     },
     /*日统计到勤*/

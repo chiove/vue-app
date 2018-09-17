@@ -38,7 +38,7 @@ export default {
   data () {
     return {
       currentDate: new Date(),
-      maxDate: new Date(),
+      maxDate: new Date(fullDate.year,fullDate.month,fullDate.day-1),
       minDate: new Date('2018','00','01'),
       displayState: false,
       dateValue: `${fullDate.year}年${fullDate.month}月${fullDate.day-1}日`

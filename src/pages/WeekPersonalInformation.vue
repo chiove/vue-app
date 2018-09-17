@@ -34,7 +34,14 @@
       第{{weekNumber}}周
     </div>
     <div class="data-form">
-      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :data="item" :studentId="studentId"></history-list>
+      <div v-for="(item,index) in historyListData" v-bind:key="index" :data="item">
+        <div class="history-list" @click="viewDetailsFun($event,item)">
+          <div class="history-icon" :class="classState"></div>
+          <div class="history-text">{{item.clockDate}}</div>
+          <div class="history-state" :class="colorState">{{textState}}</div>
+          <img class="history-details-img" src="../assets/iconRight.png" >
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -75,6 +82,10 @@
         studentCode:'',/*学号*/
         dormitoryName:'',/*专业*/
         bedCode:'',/*床号*/
+        clockStatus:'',
+        classState:'',
+        textState:'',
+        colorState:''
       }
     },
     methods:{
@@ -106,12 +117,41 @@
           }
         }).then(function (res) {
           if(res){
+            const _this = this
+            res.data.data.forEach(function (item,index) {
+              if(item.clockStatus==2){
+                _this.classState = 'icon-success'
+                _this.colorState = 'color-success'
+                _this.textState = '到勤'
+              }else if(item.clockStatus==3){
+                _this.classState = 'icon-warning'
+                _this.colorState = 'color-warning'
+                _this.textState = '晚归'
+              }else if(item.clockStatus==4){
+                _this.classState = 'icon-danger'
+                _this.colorState = 'color-danger'
+                _this.textState = '未归'
+              }else{
+                _this.classState = 'icon-default'
+                _this.colorState = 'color-default'
+                _this.textState = '未打卡'
+              }
+            })
             this.historyListData =res.data.data
           }
         }).catch(function (error) {
           console.log(error)
         })
       },
+      viewDetailsFun(e,item){
+        this.$router.push({
+          name:'ClockInDetails',
+          params:{
+            data:item,
+            studentId:this.studentId
+          }
+        })
+      }
     }
   }
 </script>
@@ -205,5 +245,33 @@
     padding: 0 32px;
     overflow-y: auto;
   }
-
+  .history-list{
+    height: 106px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .history-icon{
+    width:14px;
+    height:14px;
+    border-radius: 14px;
+  }
+  .history-text{
+    color: rgba(85, 85, 85, 1);
+    font-size: 28px;
+    margin-left: 20px;
+    margin-right: 136px;
+  }
+  .history-state{
+    width: 100px;
+    font-size:28px;
+    font-family:PingFang-SC-Medium;
+    margin-right: 80px;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .history-details-img{
+    width: 15px;
+    height: 25px;
+  }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <div class="history-list" @click="viewDetailsFun">
       <div class="history-icon" :class="classState"></div>
-      <div class="history-text">{{data.lastUpdateTime}}</div>
+      <div class="history-text">{{data.clockDate}}</div>
       <div class="history-state" :class="colorState">{{textState}}</div>
       <img class="history-details-img" src="../assets/iconRight.png" >
     </div>

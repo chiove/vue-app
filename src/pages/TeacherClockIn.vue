@@ -102,6 +102,7 @@
                   if(res.data.code==='000000'){
                     _this.clockTeacherStatus = 2
                     Toast.success('打卡成功');
+                    this.getTeacherClockTimes()
                   }else if(res.data.code==='000011'){
                     Toast.fail('二维码过期');
                   }else{

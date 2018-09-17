@@ -14,6 +14,7 @@
           @cancel="cancel"
           @confirm="confirm"
           :max-date="maxDate"
+          :min-date="minDate"
           :formatter="formatter"
         />
       </div>
@@ -41,6 +42,7 @@ export default {
           datetimePicker:DatetimePicker,
           currentDate: new Date(),
           maxDate:new Date(),
+          minDate: new Date('2018','00','01'),
           displayState:false,
           dateValue:`${maxDate.year}年${maxDate.month}月`,
           year:new Date().getFullYear(),
