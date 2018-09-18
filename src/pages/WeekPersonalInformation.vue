@@ -36,9 +36,9 @@
     <div class="data-form">
       <div v-for="(item,index) in historyListData" v-bind:key="index" :data="item">
         <div class="history-list" @click="viewDetailsFun($event,item)">
-          <div class="history-icon" :class="classState"></div>
+          <div class="history-icon" :class="item.classState"></div>
           <div class="history-text">{{item.clockDate}}</div>
-          <div class="history-state" :class="colorState">{{textState}}</div>
+          <div class="history-state" :class="item.colorState">{{item.textState}}</div>
           <img class="history-details-img" src="../assets/iconRight.png" >
         </div>
       </div>
@@ -120,21 +120,21 @@
             const _this = this
             res.data.data.forEach(function (item,index) {
               if(item.clockStatus==2){
-                _this.classState = 'icon-success'
-                _this.colorState = 'color-success'
-                _this.textState = '到勤'
+                item.classState = 'icon-success'
+                item.colorState = 'color-success'
+                item.textState = '到勤'
               }else if(item.clockStatus==3){
-                _this.classState = 'icon-warning'
-                _this.colorState = 'color-warning'
-                _this.textState = '晚归'
+                item.classState = 'icon-warning'
+                item.colorState = 'color-warning'
+                item.textState = '晚归'
               }else if(item.clockStatus==4){
-                _this.classState = 'icon-danger'
-                _this.colorState = 'color-danger'
-                _this.textState = '未归'
+                item.classState = 'icon-danger'
+                item.colorState = 'color-danger'
+                item.textState = '未归'
               }else{
-                _this.classState = 'icon-default'
-                _this.colorState = 'color-default'
-                _this.textState = '未打卡'
+                item.classState = 'icon-default'
+                item.colorState = 'color-default'
+                item.textState = '未打卡'
               }
             })
             this.historyListData =res.data.data

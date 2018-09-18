@@ -37,6 +37,7 @@
         this.studentsNumber = localStorage.getItem('stayOutNumber')
       }
       this.getStudentsList()/*查询学生列表*/
+      document.title = this.$route.query.listName
     },
     activated:function(){
       this.userId = localStorage.getItem('userId')
@@ -53,6 +54,7 @@
         this.studentsNumber = localStorage.getItem('stayOutNumber')
       }
       this.getStudentsList()/*查询学生列表*/
+      document.title = this.$route.query.listName
     },
     data(){
       return {

@@ -274,6 +274,9 @@ export default {
       localStorage.setItem('clockNumber',_this.clockNum)
       this.$router.push({
         name:'DayLateBackList',
+        query:{
+          listName:'到勤列表'
+        }
       })
     },
     /*日统计打开晚归*/
@@ -285,6 +288,9 @@ export default {
       localStorage.setItem('stayOutLateNumber',_this.stayOutLateNum)
       this.$router.push({
         name:'DayLateBackList',
+        query:{
+          listName:'晚归列表'
+        }
       })
     },
     /*日统计打开未归*/
@@ -296,6 +302,9 @@ export default {
       localStorage.setItem('stayOutNumber',_this.stayOutNum)
       this.$router.push({
         name:'DayLateBackList',
+        query:{
+          listName:'未归列表'
+        }
       })
     },
     /*获取当前周*/
