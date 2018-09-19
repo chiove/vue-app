@@ -46,11 +46,34 @@ export default {
         Toast.fail('反馈结果不能为空');
         return
       }
-      this.$http.put(process.env.API_HOST+`care?careId=${this.data}&remark=${remark}`).then(function (res) {
+      if(remark.length>50){
+        Toast.fail('反馈结果不能超过50个字符');
+        return
+      }
+      this.$http.put(process.env.API_HOST+'care',{
+          'careId':this.data,
+          'remark':remark
+      }).then(function (res) {
         if(res){
           if(res.data.code==='000000'){
             Toast.success('提交成功');
             this.show = false
+          }
+        }
+      }).catch(function (error) {
+        alert(JSON.stringify(error))
+        console.log(error)
+      })
+    },
+    getRemark(){
+      this.$http.get(process.env.API_HOST+'care',{
+        param:{
+          'careId':this.data,
+        }
+      }).then(function (res) {
+        if(res){
+          if(res.data.code==='000000'){
+            this.$refs.feedBackValue.value = res.data.data
           }
         }
       }).catch(function (error) {
