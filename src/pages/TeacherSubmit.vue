@@ -3,7 +3,15 @@
     <data-banner :data="pageData"></data-banner>
     <history-select @selectDate="selectDate"></history-select>
     <div class="history-details-container">
-      <history-list v-for="(item,index) in historyListData" v-bind:key="index" :studentId="pageData.studentId" :data="item"></history-list>
+      <!--<history-list v-for="(item,index) in historyListData" v-bind:key="index" :studentId="pageData.studentId" :data="item"></history-list>-->
+      <div v-for="(item,index) in historyListData" v-bind:key="index">
+        <div class="history-list" @click="viewDetailsFun($event,item)">
+          <div class="history-icon" :class="item.classState"></div>
+          <div class="history-text">{{item.clockDate}}</div>
+          <div class="history-state" :class="item.colorState">{{item.textState}}</div>
+          <img class="history-details-img" src="../assets/iconRight.png" >
+        </div>
+      </div>
     </div>
     <submit-btn :data="pageData.careId" v-if="careState"></submit-btn>
   </div>
@@ -23,6 +31,7 @@ export default {
      localStorage.getItem('careState')==='no'?this.careState =false: this.careState = true
     this.getStudentsInfo()/*获取学生信息*/
     this.getClockTimes() /*获取晚归，到勤，未归*/
+    this.getHistoryList()
   },
   activated(){
     this.pageData.studentId = localStorage.getItem('careStudentId')
@@ -30,13 +39,14 @@ export default {
     localStorage.getItem('careState')==='no'?this.careState =false: this.careState = true
     this.getStudentsInfo()/*获取学生信息*/
     this.getClockTimes() /*获取晚归，到勤，未归*/
+    this.getHistoryList()
   },
   watch:{
-    timeState:function (val) {
+   /* timeState:function (val) {
       if(val){
-        this.getHistoryList()/*根据学生ID和日期查询全部历史*/
+        this.getHistoryList()/!*根据学生ID和日期查询全部历史*!/
       }
-    }
+    },*/
   },
   data: function () {
     return {
@@ -110,12 +120,40 @@ export default {
         }
       }).then(function (res) {
         if(res){
+          res.data.data.forEach(function (item,index) {
+            if(item.clockStatus===2){
+              item.classState = 'icon-success'
+              item.colorState = 'color-success'
+              item.textState = '到勤'
+            }else if(item.clockStatus===3){
+              item.classState = 'icon-warning'
+              item.colorState = 'color-warning'
+              item.textState = '晚归'
+            }else if(item.clockStatus===4){
+              item.classState = 'icon-danger'
+              item.colorState = 'color-danger'
+              item.textState = '未归'
+            }else{
+              item.classState = 'icon-default'
+              item.colorState = 'color-default'
+              item.textState = '未打卡'
+            }
+          })
           this.historyListData =res.data.data
         }
       }).catch(function (error) {
         console.log(error)
       })
     },
+    viewDetailsFun(e,item){
+      this.$router.push({
+        name:'ClockInDetails',
+        params:{
+          data:item,
+          studentId:this.studentId
+        }
+      })
+    }
   }
 }
 </script>
@@ -126,5 +164,34 @@ export default {
     padding: 0 30px;
     overflow-y: auto;
     flex: 1;
+  }
+  .history-list{
+    height: 106px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .history-icon{
+    width:14px;
+    height:14px;
+    border-radius: 14px;
+  }
+  .history-text{
+    color: rgba(85, 85, 85, 1);
+    font-size: 28px;
+    margin-left: 20px;
+    margin-right: 136px;
+  }
+  .history-state{
+    width: 100px;
+    font-size:28px;
+    font-family:PingFang-SC-Medium;
+    margin-right: 80px;
+    text-align: center;
+    border-radius: 2px;
+  }
+  .history-details-img{
+    width: 15px;
+    height: 25px;
   }
 </style>

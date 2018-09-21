@@ -94,6 +94,7 @@ export default {
   components: {Popup},
   name: 'room-details',
   mounted:function(){
+    this.studentIds=[]
     if(this.$route.params.roomDetails){
       this.roomDetails = this.$route.params.roomDetails
     }else{
@@ -109,7 +110,7 @@ export default {
     this.getSystemConfig()
   },
   activated:function(){
-
+    this.studentIds=[]
     if(this.$route.params.roomDetails){
       this.roomDetails = this.$route.params.roomDetails
       this.beginOrEnd = true
@@ -139,6 +140,7 @@ export default {
         day:new Date().getDate()
       },
       studentId:'',/*学生ID 考勤参数*/
+      studentIds:[],
       clockStatus:'',/*打卡状态 考勤参数*/
       operatorName:'',/*操作人名字 考勤参数*/
       roomDetailsList:[],
@@ -191,7 +193,11 @@ export default {
       this.roomDetailsList[i].clockStatus = Number(e.target.dataset.index)
         this.clockStatus = Number(e.target.dataset.index)
         /*this.roomDetailsList[i].studentId = data.studentId*/
-        this.changCheckClockStatus(this.roomDetailsList[i].studentId)/*更改考勤状态*/
+        this.studentIds.push({
+          studentId: this.roomDetailsList[i].studentId,
+          remark:'',
+          status: Number(e.target.dataset.index)
+        })
       } else {
         return false
       }
@@ -213,17 +219,17 @@ export default {
       Number(this.date.month)<10? month = `0${this.date.month}`:month=this.date.month
       Number(this.date.day)<10? day = `0${this.date.day}`:day=this.date.day
       const date = `${this.date.year}${month}${day}`
-      this.$http.put(process.env.API_HOST+'student-clock',{
+      this.$http.put(process.env.API_HOST+'student-clock/batch',{
         appType:1,
-        id:studentId,
+        updateClockDTOList:studentId,
         operatorName:this.operatorName,
         operatorId:this.userId,
         status:this.clockStatus
       }).then(function (res) {
         if(res){
-          if(res.data.code==='000000'){
+          /*if(res.data.code==='000000'){
             Toast.success('更改成功')
-          }
+          }*/
         }
       }).catch(function (error) {
         console.log(error)
@@ -262,6 +268,7 @@ export default {
     },
     checkAffirm: function () {
       this.endCheck = false
+      this.changCheckClockStatus(this.studentIds)/*更改考勤状态*/
       this.$http.post(process.env.API_HOST+'dormitory-check',{
         "dormitoryId":this.roomDetails.dormitoryId,
         "operatorId": this.userId,

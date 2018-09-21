@@ -248,7 +248,7 @@ export default {
       }).then(function (res) {
         if(res){
             if(res.data.data.length===0){
-              Toast.fail('未查询到的数据');
+              Toast.fail('未查询到数据');
               this.listState = false
               this.backGroundImg = require('../assets/timeNotArrived.png')
               this.roomListData = res.data.data
