@@ -246,7 +246,7 @@
 }
 .care-item-center {
   margin-left: 27px;
-  width: 300px;
+  width: 500px;
   margin-right: 80px;
 }
 .care-item-name{
