@@ -61,10 +61,9 @@ export default {
       localStorage.setItem('checkDormitoryUserId',this.$route.query.userid)
     }
     this.getBuildingList()/*查询楼栋*/
-    this.checkTimeArrivedFun()
   },
   activated:function () {
-    this.checkTimeArrivedFun()
+
   },
   data () {
     return {
@@ -219,6 +218,7 @@ export default {
       }).then(function (res) {
         if (res) {
           this.buildingList = res.data.data
+          this.checkTimeArrivedFun()
         }
       }).catch(function (error) {
         console.log(error)
@@ -268,6 +268,9 @@ export default {
       if(nowClockStartTime>this.checkClockStartTime||nowClockStartTime<this.checkClockEndTime){
         this.listState = true
         this.backGroundImg = null
+        if(this.buildingList.length!==0){
+          this.buildingId = this.buildingList[0].buildingId
+        }
         this.getRoomListData() /*查询宿舍列表*/
       }else{
         this.listState = false
