@@ -12,7 +12,7 @@
              </span>
            </div>
            <div class="details-state">
-             <img src="../assets/details-clock.png" v-if="item.appName==='学生打卡'">
+             <img src="../assets/details-clock.png" v-if="item.appName==='就寝打卡'">
              <img src="../assets/details-check.png" v-else-if="item.appName==='晚归查寝'">
              <img src="../assets/system.png" v-else="item.appName==='平台后台'">
            </div>
@@ -36,7 +36,7 @@
              </span>
            </div>
            <div class="details-state">
-             <img src="../assets/details-clock.png" v-if="item.appName==='学生打卡'">
+             <img src="../assets/details-clock.png" v-if="item.appName==='就寝打卡'">
              <img src="../assets/details-check.png" v-else-if="item.appName==='晚归查寝'">
              <img src="../assets/system.png" v-else="item.appName==='平台后台'">
            </div>
@@ -60,7 +60,7 @@
              </span>
            </div>
            <div class="details-state">
-             <img src="../assets/details-clock.png" v-if="item.appName==='学生打卡'">
+             <img src="../assets/details-clock.png" v-if="item.appName==='就寝打卡'">
              <img src="../assets/details-check.png" v-else-if="item.appName==='晚归查寝'">
              <img src="../assets/system.png" v-else="item.appName==='平台后台'">
            </div>
