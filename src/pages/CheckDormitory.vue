@@ -63,7 +63,9 @@ export default {
     this.getBuildingList()/*查询楼栋*/
   },
   activated:function () {
-
+    if(this.$route.query.path === 'getState'){
+      this.getRoomListData()
+    }
   },
   data () {
     return {

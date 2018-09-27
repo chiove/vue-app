@@ -22,6 +22,9 @@
 
 <script>
 import teacherCheckTab from '../components/TeacherCheckTab'
+import { Toast } from 'vant';
+import Vue from 'vue'
+Vue.use(Toast)
 export default {
   components: {teacherCheckTab},
   name: 'search-students',
@@ -54,6 +57,9 @@ export default {
     searchFun: function () {
       const searchParam = this.$refs.nameNumber.value
       this.resultView = true
+      if(searchParam.length===0){
+        Toast.fail('不能为空');
+      }
       this.$http.get(process.env.API_HOST+'dormitory-check/query-by-name-code',{
         params:{
           userId :this.userId,

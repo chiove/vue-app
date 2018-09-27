@@ -277,7 +277,12 @@ export default {
         if(res){
           if(res.data.code==='000000'){
             Toast.success('成功')
-            this.$router.go(-1)
+            this.$router.push({
+              name:'CheckDormitory',
+              query:{
+                path:'getState'
+              }
+            })
           }
         }
       }).catch(function (error) {
