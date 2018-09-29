@@ -213,7 +213,7 @@ export default {
       })
     },
     /*更改考勤状态*/
-    changCheckClockStatus(studentId){
+    changCheckClockStatus(studentIds){
       let month = '',
         day=''
       Number(this.date.month)<10? month = `0${this.date.month}`:month=this.date.month
@@ -221,10 +221,9 @@ export default {
       const date = `${this.date.year}${month}${day}`
       this.$http.put(process.env.API_HOST+'student-clock/batch',{
         appType:1,
-        updateClockDTOList:studentId,
         operatorName:this.operatorName,
         operatorId:this.userId,
-        status:this.clockStatus
+        updateClockDTOList:studentIds,
       }).then(function (res) {
         if(res){
           /*if(res.data.code==='000000'){
@@ -267,7 +266,21 @@ export default {
       this.endCheck = false
     },
     checkAffirm: function () {
+      const _this = this
       this.endCheck = false
+      this.roomDetailsList.forEach(function (item,index) {
+        if(item.clockStatus==4){
+          _this.studentId.forEach(function (value,key) {
+            if(JSON.stringify(_this.studentId[key])!==JSON.stringify(item)){
+              _this.studentIds.push({
+                studentId: item.studentId,
+                remark:'',
+                status: item.clockStatus
+              })
+            }
+          })
+        }
+      })
       this.changCheckClockStatus(this.studentIds)/*更改考勤状态*/
       this.$http.post(process.env.API_HOST+'dormitory-check',{
         "dormitoryId":this.roomDetails.dormitoryId,
