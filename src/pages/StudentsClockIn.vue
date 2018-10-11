@@ -332,10 +332,10 @@ export default {
               month = date.getMonth()+1
             }
             let day = ''
-            if(date.getDay()<10){
-              day = `0${date.getMonth()+1}`
+            if(date.getDate()<10){
+              day = `0${date.getDate()}`
             }else{
-              day = date.getDay()
+              day = date.getDate()
             }
             const thisDay = `${year}${month}${day}`
             if(list.indexOf(thisDay)===-1){
