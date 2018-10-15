@@ -270,15 +270,13 @@ export default {
       this.endCheck = false
       this.roomDetailsList.forEach(function (item,index) {
         if(item.clockStatus==4){
-          _this.studentId.forEach(function (value,key) {
-            if(JSON.stringify(_this.studentId[key])!==JSON.stringify(item)){
+            if(JSON.stringify(_this.studentId)!==JSON.stringify(item)){
               _this.studentIds.push({
                 studentId: item.studentId,
                 remark:'',
                 status: item.clockStatus
               })
             }
-          })
         }
       })
       this.changCheckClockStatus(this.studentIds)/*更改考勤状态*/
