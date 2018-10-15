@@ -107,6 +107,7 @@
       this.getClockStatus()
       this.getStudentsInfo(this.studentId)/*获取学生信息*/
       this.getUserInfo()/*获取用户信息*/
+      this.valueChangeFun()
     },
     activated(){
       this.getSystemConfig()
@@ -116,6 +117,7 @@
       this.getClockStatus()
       this.getStudentsInfo(this.studentId)/*获取学生信息*/
       this.$refs.remarkDom.value = ''
+      this.valueChangeFun()
     },
     data(){
       return {
